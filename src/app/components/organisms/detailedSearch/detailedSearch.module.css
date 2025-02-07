@@ -1,0 +1,13 @@
+.root {
+
+}
+
+.searchInputRoot {
+    width: 100%; 
+    padding: 1rem 0 0 8px;
+}
+
+.searchInput {
+    border-bottom: 1px solid lightgrey;
+    width: 100%;
+}

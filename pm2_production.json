@@ -1,0 +1,15 @@
+{
+  "apps": [
+    {
+      "name": "ordermanagement",
+      "script": "node_modules/next/dist/bin/next",
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "env": {
+        "NODE_ENV": "production",
+        "PORT": "1630"
+      },
+      "args": "start",
+      "cwd": "./"
+    }
+  ]
+}

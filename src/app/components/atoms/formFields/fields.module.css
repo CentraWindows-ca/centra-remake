@@ -1,0 +1,23 @@
+.customLabel {
+  display: inline-block;
+  margin-right: 8px; /* Adjust spacing between label text and asterisk */
+}
+
+.ant-form-item-required::before {
+  display: inline-block;
+  margin-left: 4px; /* Adjust spacing between label text and asterisk */
+  content: "*";
+}
+
+label.ant-form-item-required {
+  position: relative;
+}
+
+:where(.css-dev-only-do-not-override-1n7nwfa).ant-form-item
+  .ant-form-item-label
+  > label.ant-form-item-required:not(
+    .ant-form-item-required-mark-optional
+  )::before {
+  position: absolute;
+  right: -11px;
+}

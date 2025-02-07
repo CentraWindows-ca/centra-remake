@@ -1,0 +1,23 @@
+.root {
+
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    /*background-color: #2196F3;*/
+    /*padding: 10px;*/
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    grid-gap: 5px;
+}
+
+.gridItem {
+    /*background-color: rgba(255, 255, 255, 0.8);*/
+    /*border: 1px solid lightgrey;*/
+    font-size: 1rem;
+    text-align: center;
+    /*display: flex;*/
+    flex-direction: column;
+    justify-content: space-between;
+}

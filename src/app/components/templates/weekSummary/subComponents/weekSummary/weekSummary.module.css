@@ -1,0 +1,35 @@
+.root {
+
+}
+
+.tableProperty {
+    font-weight: 600 !important;
+}
+
+.tableValue {
+    border-right: 1px solid lightgrey;
+}
+
+.tableIcon {
+    color: grey !important;
+    font-size: 1.5rem !important;
+    margin-top: -0.5rem;
+}
+
+.tableIcon:hover {
+    cursor: pointer;
+}
+
+.header {
+    background-color: var(--lightgrey)
+}
+
+.dateHeader {
+    font-weight: 600;
+}
+
+@media only screen and (max-width: 1024px) {
+
+}
+
+

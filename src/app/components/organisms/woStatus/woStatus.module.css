@@ -1,0 +1,9 @@
+.root {
+
+}
+.workOrderStatus {
+    border-radius: 2px;
+    color: #FFF;
+    cursor: pointer;
+    padding: 0.2rem 0.3rem;
+}

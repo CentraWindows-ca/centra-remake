@@ -1,0 +1,339 @@
+.root {
+
+}
+
+.container {    
+    background-color: #FFF;
+    margin-top: 2px;
+    /*box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;*/
+}
+
+.workOrderOuterContainer {
+    top: 0;
+    background-color: #FFF;
+    z-Index: 2;
+    padding-bottom: 10px;
+}
+
+.workOrderValue {
+    padding: 0 0.5rem;
+    font-weight: 600;
+}
+
+.siteContactContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: -0.1rem;
+}
+
+.siteContactText {
+    padding-left: 3px;
+    padding-top: 3px;
+}
+
+.infoBar {
+    z-Index: 1;
+    background-color: #FFF;
+    font-size: 0.9rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 3fr 2fr;
+    gap: 1rem;
+}
+
+.tableButtonsOuterContainer {    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 5px;
+    padding-left: 3px;
+    margin-top: -6px;
+    position: sticky;
+}
+
+.tableButtonsInnerContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.tableButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #F5F5F5;
+    color: var(--centrablue)
+}
+
+.iconBarOuterContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 0.5rem;
+}
+
+.iconBarInnerContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 5rem;
+    margin-top: -2px;
+}
+
+.divider {
+    margin: 3px;
+    margin-top: 2rem;
+}
+
+.tableButtonsContainer {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 1rem;
+}
+
+.tableTitleContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+}
+
+.tableTitleContainer {
+    border-bottom: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.5rem;
+    width: 10rem;
+}
+
+.tableHeader {
+    background-color: #FFF;
+}
+
+.table {
+    margin-bottom: 0 !important;
+}
+
+.tableTitle {
+    color: var(--centrablue);
+    font-weight: 600;
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+}
+
+.icon {
+    
+}
+
+.icon:hover {
+    cursor: pointer;
+    color: #005db9;
+}
+
+.addDocumentIcon {
+    color: grey;
+}
+
+.addDocumentIcon:hover {
+    cursor: pointer;
+    color: #005db9;
+}
+
+.goToTopIcon {
+    color: lightgrey;
+    font-size: 3rem;
+    opacity: 80%;
+    cursor: pointer;
+}
+
+.rowCheckbox {
+    text-align: center;
+}
+
+.tableButton {
+
+}
+
+.tableButton:hover {
+    cursor: pointer;
+    /*color: var(--centrablue);*/
+    color: #0273e2
+}
+
+.navItem {
+
+}
+
+.textArea {
+    -webkit-box-sizing: border-box !important; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box !important; /* Firefox, other Gecko */
+    box-sizing: border-box !important; /* Opera/IE 8+ */
+    min-height: 5.7rem;
+}
+
+.tabContent {
+    border: 1px solid lightgrey;
+    border-radius: 0 5px 5px 5px;
+    width: 65%;
+    display: inline-block;
+    padding-top: 8px;
+    padding-bottom: 3rem;
+}
+
+.tabContainer {
+    width: 35%;
+    display: inline-block;
+}
+
+.tablesContainer {
+    display: block;
+}
+
+.groupInfo {
+   
+}
+
+.groupOptions {
+}
+
+.groupSchedule {
+}
+
+.groupNotes {
+}
+
+.notesBody {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.notesInnerContainer {
+    width: 50%;
+    padding: 0 0.5rem;
+}
+
+.multilineRoot {
+    width: 50%;
+    padding: 0 0.5rem;
+}
+
+.textArea {
+    border: 1px solid lightgrey;
+    border-radius: 3px;
+    padding: 0.5rem;
+    resize: vertical;
+    width: 100%;
+}
+
+.inputItem {
+    border: 1px solid lightgrey;
+    padding: 0 0.5rem;
+    border-radius: 3px;
+}
+
+.mapModal {
+    width: 600px;
+}
+
+.address {
+    padding-right: 0.7rem;
+}
+
+.address:hover {
+    cursor: pointer;
+}
+
+.mapIcon {
+    color: #C41E3A;
+    padding-left: 5px;
+}
+
+.mapIcon:hover {
+    color: #D22B2B;
+}
+
+.notesItem {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+@media only screen and (max-width: 1600px) {
+    .root {
+    }
+
+    .tableButtonsOuterContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-right: 5px;
+        padding-left: 3px;
+        margin-top: 0;
+    }
+}
+
+@media only screen and (max-width: 1400px) {
+        .root {
+        
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .root {
+        
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .workOrderOuterContainer {
+        flex-direction: column;
+    }
+
+    .workOrderInnerContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+}
+
+@media only screen and (max-width: 940px) {
+    .root {
+        
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+       
+    .siteContactContainer {
+        padding-left: 0;
+    }
+
+
+    .notesBody {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .notesInnerContainer {
+        width: 100%;
+    }   
+}
+
+@media only screen and (max-width: 740px) {
+    .mapModal {
+        width: 400px;
+    }    
+}

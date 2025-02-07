@@ -1,0 +1,119 @@
+.root {
+	overflow: visible;
+	/*padding: 0.5rem 1.5rem;*/
+	/*position: sticky;*/
+	top: 0;
+	width: 100%;
+	z-index: 2;
+	height: 2rem;
+	min-width: 5rem;
+	background-color: #FFF !important;
+}
+
+.inputGroup {
+	/*max-width: 35rem !important;
+	min-width: 15rem !important;*/
+}
+
+.select {
+	border-radius: 3px;
+	height: 2.5rem;
+	width: 100%;
+}
+
+.selectContainer {
+	display: block;
+}
+
+.input {
+	border-left: none !important;
+	border-radius: 0 3px 3px 0;
+	height: 2.5rem;
+	width: 20rem;
+}
+
+.menuIcon {
+	/*color: #D3D3D3;*/
+	font-size: 1.5rem;
+}
+
+.menuIcon:hover {
+	color: #FFF;
+	cursor: pointer;
+}
+
+.userAccountContainer {
+	display: flex; 
+	flex-direction: row;
+	padding-right: 1.1rem;
+}
+
+.userAccountRoot {
+	display: flex;
+	flex-direction: row;
+	padding-right: 1.1rem;
+}
+
+.userAccountIconRoot {
+	color: #FFF;
+	font-size: 1.5rem;
+	padding-right: 0.5rem;
+}
+
+.userAccountLabel {
+	color: #FFF; 
+	padding-top: 11px;
+}
+
+.menuIcon {
+	/*fill: #FFF;*/
+	margin-left: 8px;
+	cursor: pointer;
+	margin-top: -2.5rem;
+}
+
+.searchIcon {
+	fill: #FFF;
+	/*margin-left: 6px;*/
+	cursor: pointer;
+	font-size: 2rem;
+	/*margin-left: 0.5rem;*/
+	/*margin-top: 12px;*/
+	margin-top: -4px;
+	margin-right: -10px;
+}
+
+.searchIcon:hover {
+	fill: var(--centrablue);
+}
+
+.buttonSearch:active {
+	outline: none !important;
+	border: none !important;
+	width: 5rem;
+	border-radius: 3px;
+}
+
+.buttonSearch:focus {
+	outline: none !important;
+	box-shadow: none !important;
+	border: none !important;
+}
+
+.inputIcon {
+	font-size: 2rem;
+	margin-left: 0.4rem;
+	fill: darkgrey;
+	margin-top: -4px;
+}
+
+.inputIcon:hover {
+	fill: var(--centrablue);
+	cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+	.selectContainer {
+		display: none;
+	}
+}

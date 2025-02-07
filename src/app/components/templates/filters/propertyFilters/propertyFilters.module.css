@@ -1,0 +1,53 @@
+.root {
+    height: 100%;
+    font-size: 0.9rem;
+}
+
+.buttonGroupRoot {
+    padding-top: 0.5rem;
+    margin-left: -1rem;
+    justify-content: flex-start !important;
+}
+
+.buttonLabel {
+    border-radius: 0 !important;
+    border: none !important;
+    max-height: 35px;
+    font-size: 0.9rem !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.buttonLabel:active {
+    background-color: red !important;
+}
+
+.buttonLabel:hover {
+    background-color: #A1A8AE !important;
+}
+
+.buttonCheck {
+    border-radius: 2px !important;
+}
+
+.checkboxRoot {
+    padding: 1rem 0 0 1rem;
+    border-left: 1px solid lightgrey;
+    max-width: 15rem;
+}
+
+.checkboxLabelRoot {
+    display: block;
+    padding: 0.2rem;
+}
+
+.checkboxLabel {
+    padding-left: 0.5rem;
+    color: var(--darkgrey);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 7rem;
+    padding-top: 4px;
+}

@@ -1,0 +1,100 @@
+.root {
+	width: 100%;
+	padding-bottom: 1rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.locationSelectionContainer {
+	max-width: 20.5rem;
+	border-radius: 4px;
+}
+
+.dayMonthYearSelectionContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	min-width: 18rem;
+	width: 18rem;
+}
+
+.weekYearSelectionContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	min-width: 21rem;
+	width: 21rem;
+}
+
+.monthYearSelectionContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	min-width: 14rem;
+	width: 14rem;
+}
+
+.todayButton {
+	background-color: var(--bootstrap-primary);
+	border-radius: 4px;
+	color: #FFF;
+	font-size: 0.8rem !important;
+	font-weight: 600;
+	margin: 2px 0 2px 0;	
+	padding: 2px 10px 2px 10px;
+}
+
+.calendarMonthWeekDayViewContainer {
+	min-width: 18rem;
+}
+
+.daySelect {
+	width: 4rem !important;
+}
+
+.weekSelect {
+	width: 15rem !important;
+}
+
+.monthSelect {
+	width: 8.5rem !important;
+}
+
+.yearSelect {
+	width: 6rem !important;
+}
+
+@media only screen and (max-width: 1024px) {
+	.root {
+		width: 100%;
+		padding-bottom: 1rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.locationSelectionContainer {		
+		margin-top: 0.5rem;
+		max-width: 20.5rem;
+	}
+
+	.monthYearSelectionContainer {
+		padding-top: 0.5rem;		
+		width: 282px;
+	}
+
+	.calendarMonthWeekDayViewContainer {
+		padding-top: 0.5rem;		
+		width: 100%;
+		justify-content: flex-start;
+	}
+
+	.monthSelect {
+		width: 100% !important;
+	}
+
+	.yearSelect {
+		width: 100% !important;
+	}
+}

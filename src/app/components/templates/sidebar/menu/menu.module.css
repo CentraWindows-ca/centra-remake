@@ -1,0 +1,42 @@
+.root {
+	
+}
+
+.accordion {
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+.accordion:before {
+	opacity: 0 !important;
+}
+
+.accordionIcon {
+	fill: #FFF;
+}
+
+.accordionIcon {
+	fill: var(--darkgrey)
+}
+
+.accordionLabel {
+	font-family: inherit;
+	font-size: 0.9rem !important;
+}
+
+.accordionRoot {
+	height: 100%;
+	border-radius: 5px;
+}
+
+.accordionSummary {
+	color: #212529;
+	font-family: inherit;
+	background-color: #F5F5F5 !important;
+	border-radius: 5px !important;
+	margin-top: 0.5rem !important;
+}
+
+.accordionSummary:hover {
+	color: #0063A5;
+}

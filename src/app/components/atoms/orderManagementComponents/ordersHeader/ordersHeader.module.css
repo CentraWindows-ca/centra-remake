@@ -1,0 +1,107 @@
+.root {
+	width: 100%;
+	padding-bottom: 1rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.calendarTypeSelectionContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	min-width: 10rem !important;
+	/*width: 28rem !important;*/
+}
+
+.dayMonthYearSelectionContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	min-width: 18rem;
+	width: 18rem;
+}
+
+.weekYearSelectionContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	min-width: 21rem;
+	width: 21rem;
+}
+
+.monthYearSelectionContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	min-width: 14rem;
+	width: 14rem;
+}
+
+.todayButton {
+	background-color: var(--bootstrap-primary);
+	border-radius: 4px;
+	color: #FFF;
+	font-size: 0.8rem !important;
+	font-weight: 600;
+	margin: 2px 0 2px 0;
+	margin-right: 1rem;
+	padding: 2px 10px 2px 10px;
+}
+
+.calendarMonthWeekDayViewContainer {
+	min-width: 18rem;
+}
+
+.daySelect {
+	width: 4rem !important;
+}
+
+.weekSelect {
+	width: 15rem !important;
+}
+
+.monthSelect {
+	width: 8.5rem !important;
+}
+
+.yearSelect {
+	width: 6rem !important;
+}
+
+.test > div > label {
+	background-color: red;
+}
+
+@media only screen and (max-width: 1024px) {
+	.root {
+		width: 100%;
+		padding-bottom: 1rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.calendarTypeSelectionContainer {		
+		width: 282px !important;
+	}
+
+	.monthYearSelectionContainer {
+		padding-top: 0.5rem;		
+		width: 282px;
+	}
+
+	.calendarMonthWeekDayViewContainer {
+		padding-top: 0.5rem;
+		justify-content: flex-start;
+		width: 100%;
+	}
+
+	.monthSelect {
+		width: 100% !important;
+	}
+
+	.yearSelect {
+		width: 100% !important;
+	}
+}

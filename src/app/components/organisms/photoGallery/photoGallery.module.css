@@ -1,0 +1,12 @@
+.galleryContainer {
+  max-height: 24vh;
+}
+
+.photosColumn {
+  max-height: 50vh;
+  min-height: 50%;
+}
+
+.fullheight {
+  height: 100%;
+}

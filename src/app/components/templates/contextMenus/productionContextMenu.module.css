@@ -1,0 +1,24 @@
+.root {
+	
+}
+
+.contextMenuItemsContainer {
+	height: 100%;
+	min-width: 12rem;
+}
+
+.contextMenuIcon {	
+	margin-right: 0.5rem !important;
+}
+
+.contextMenuItem {	
+	padding-left: 3px;
+}
+
+.contextMenuItem:hover {
+	background-color: var(--lightgrey);
+	border-radius: 3px;
+	color: var(--centrablue);
+}
+
+

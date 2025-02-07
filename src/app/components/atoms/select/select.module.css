@@ -1,0 +1,9 @@
+.root {
+	cursor: pointer;
+	padding-right: 1.8rem !important;
+	text-overflow: ellipsis;
+}
+
+.option {
+	font-size: 0.9rem !important;
+}

@@ -1,0 +1,67 @@
+.root {
+	display: flex !important;
+	flex-direction: row !important;
+}
+
+.calendarInnerContainer {
+	padding: 0.5rem 1rem;
+	background-color: #FFF;
+	border-radius: 5px;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
+
+.calendarOuterContainer {
+	/*padding: 1rem 2rem;*/
+	height: 100%;
+	background-color: var(--lightblue);
+	width: 100%;
+	min-width: 18rem;
+}
+
+.accordion {
+	border-radius: 0 !important;
+	box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px !important;	
+}
+
+.drawer {
+	height: 100%;
+	width: 28rem;
+	min-width: 28rem;
+	background: var(--lightblue);
+}
+
+.belowNav {
+	height: calc(100vh - 75px);
+	display: flex;
+	flex-direction: row; 
+}
+
+.tableProperty {
+	font-weight: 600 !important;
+}
+
+.contextMenuItem {
+	cursor: pointer;
+	height: 1.5rem;
+	padding-left: 5px;
+	border-radius: 3px;
+	padding-top: 2px;
+}
+
+.contextMenuItem:hover {
+	background-color: var(--lightgrey) !important;
+}
+
+@media only screen and (max-width: 1024px) {
+	.drawer {
+		height: 100%;
+		width: 100%;
+		padding-right: 2rem;
+	}
+	.belowNav {
+		height: 100%;
+		display: flex;
+		flex-direction: column;		
+	}
+}
+
