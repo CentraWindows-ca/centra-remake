@@ -1,12 +1,12 @@
 {
   "apps": [
     {
-      "name": "staging_ordermanagement",
+      "name": "staging_remake",
       "script": "node_modules/next/dist/bin/next",
       "log_date_format": "YYYY-MM-DD HH:mm Z",
       "env": {
         "NODE_ENV": "staging",
-        "PORT": "1631"
+        "PORT": "1830"
       },
       "args": "start",
       "cwd": "./"
