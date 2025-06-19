@@ -312,7 +312,7 @@ export default function InnerLayout({ children }) {
           <Drawer
             title=""
             placement={"left"}
-            width={drawerOpen ? 280 : 55}
+            width={drawerOpen ? 280 : 62}
             onClose={() => dispatch(updateDrawerOpen(false))}
             open={true}
             bodyStyle={{ padding: 0 }}
