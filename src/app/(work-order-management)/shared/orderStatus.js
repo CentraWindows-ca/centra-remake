@@ -7,7 +7,6 @@ import Tooltip from "app/components/atoms/tooltip/tooltip";
 import ConfirmationModal from "app/components/atoms/confirmationModal/confirmationModal";
 
 import { Popover } from "antd";
-import ScheduleOrderModal from "../service/subComponents/scheduleOrderModal";
 
 export default function OrderStatus(props) {
   const {
@@ -148,13 +147,7 @@ export default function OrderStatus(props) {
         </div>
       </ConfirmationModal>
 
-      <ScheduleOrderModal
-        moduleName={moduleName}
-        showAssignModal={showScheduleConfirmation}
-        onConfirm={handleScheduleOk}
-        onCancel={handleScheduleCancel}
-        id={id}
-      />
+      
     </>
   );
 }

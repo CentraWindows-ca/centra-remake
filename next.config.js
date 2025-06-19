@@ -1,13 +1,19 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const dotenv = require('dotenv');
+const path = require('path');
 
-module.exports = {
-  webpack(config) {
+const envPath = path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`);
+dotenv.config({ path: envPath });
+
+const nextConfig = {
+  output: 'export',  // <--- This tells Next.js to export static HTML when you run `next build`
+
+  webpack(config, { isServer }) {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
       use: ['@svgr/webpack'],
-    })
+    });
     config.module.rules.push({
       test: /\.webp$/,
       use: [
@@ -21,9 +27,28 @@ module.exports = {
         },
       ],
     });
-    return config
+
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false
+      };
+    }
+
+    return config;
   },
+
   images: {
     unoptimized: true,
+  },
+
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_ENV: process.env.NEXT_PUBLIC_ENV,
+  },
+
+  compiler: {
+    styledComponents: true
   }
 };
+
+module.exports = nextConfig;
