@@ -18,12 +18,11 @@ export default function OrdersMenuList(props) {
 
   const handleStatusFilterChange = (status, assignedToMe = false) => {
     if (status.length > 0)
-      router.push(`/${department.toLowerCase()}?status=${status}`, undefined, {
+      router.push(`?status=${status}`, undefined, {
         shallow: true,
       });
     else {
-      let _url = `/${department.toLowerCase()}${
-        assignedToMe ? `?assignedToMe=1` : ""
+      let _url = `${assignedToMe ? `?assignedToMe=1` : ""
       }`;
       router.push(_url, undefined, { shallow: true });
     }

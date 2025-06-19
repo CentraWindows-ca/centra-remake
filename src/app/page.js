@@ -150,7 +150,7 @@ export default function Remakes() {
   const onEditClick = useCallback(
     (orderId) => {
       router.push(
-        `/remake${statusView.length > 0 ? `?status=${statusView}&` : "?"
+        `${statusView.length > 0 ? `?status=${statusView}&` : "?"
         }orderId=${orderId}&mode=edit`,
         undefined,
         { shallow: true }
@@ -183,7 +183,7 @@ export default function Remakes() {
   const onShareLinkClick = useCallback(
     (orderId) => {
       const baseUrl = window.location.origin; // Get the current base URL
-      const link = `${baseUrl}/remake${statusView.length > 0 ? `?status=${statusView}&` : "?"
+      const link = `${baseUrl}/${statusView.length > 0 ? `?status=${statusView}&` : "?"
         }orderId=${orderId}&mode=edit`;
 
       // Copy the link to the clipboard
@@ -207,7 +207,7 @@ export default function Remakes() {
   const onCloseClick = useCallback(() => {
     dispatch(closeModal());
     router.push(
-      `/remake${statusView.length > 0 ? `?status=${statusView}` : ""}`,
+      `${statusView.length > 0 ? `?status=${statusView}` : ""}`,
       undefined,
       { shallow: true }
     );

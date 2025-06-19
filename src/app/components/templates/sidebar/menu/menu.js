@@ -346,7 +346,7 @@ export default function Menu(props) {
                     type="primary"
                     onClick={(e) => {
                       e.preventDefault();
-                      router.push("/remake");
+                      router.push("/");
                       //dispatch(menuSlice.actions.updateIsLoading(true));
                     }}
                   >
