@@ -9,6 +9,8 @@ import { fetchUsersByDepartment } from "app/api/usersApis";
 import _ from "lodash";
 import { useAuthData } from "context/authContext";
 
+import styled from "styled-components";
+
 export default function UserSelectField(props) {
   const {
     value,
@@ -25,6 +27,20 @@ export default function UserSelectField(props) {
     onChange,
     required,
   } = props;
+
+  const CustomSelect = styled(Select)`
+    .ant-select-selector {
+      font-size: 12px !important;
+      padding: 1px 8px !important;
+      height: auto !important;      
+    }
+
+    /* Dropdown options */
+    .ant-select-item {
+      font-size: 12px !important;
+      padding: 0px 8px !important;
+    } 
+  `;
 
   const { loggedInUser } = useAuthData();
 
@@ -173,15 +189,15 @@ export default function UserSelectField(props) {
       rules={
         !disabled
           ? [
-              {
-                required: required,
-                //message: `${label} is required`,
-              },
-            ]
+            {
+              required: required,
+              //message: `${label} is required`,
+            },
+          ]
           : null
       }
     >
-      <Select
+      <CustomSelect
         mode={isMultiSelect ? "multiple" : ""}
         disabled={
           isLoadingServiceUsers ||
@@ -195,9 +211,9 @@ export default function UserSelectField(props) {
         placeholder={`Select ${label}`}
         showSearch
         value={value ?? ""}
-        style={{ width: "100%" }}
+        style={{ width: "90%" }}
         onChange={handleChange}
-        size={size}
+        size={"small"}
         filterOption={filterOption}
       >
         {options.map((group, groupIndex) => (
@@ -224,7 +240,7 @@ export default function UserSelectField(props) {
             </OptGroup>
           </>
         ))}
-      </Select>
+      </CustomSelect>
       {showAssignToMe && !disabled ? (
         <div
           className="text-centraBlue text-xs hover:text-blue-500 hover:underline cursor-pointer flex my-2"

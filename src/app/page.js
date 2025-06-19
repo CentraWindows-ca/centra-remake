@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
@@ -365,7 +365,9 @@ export default function Remakes() {
         key: "assignedTo",
         width: 140,
         render: (assignedTo, order) => (
-          <UserSelectField style={{ width: 200 }} />
+          <div className="text-center">
+            <UserSelectField />
+          </div>
         ),
       });
     }
@@ -375,16 +377,16 @@ export default function Remakes() {
       key: "status",
       dataIndex: "status",
       key: "status",
-      width: 150,
+      width: "90px",
       render: (status, order) => (
         <div className="text-center">
           <OrderStatus
             statusKey={mapRemakeRowStateToKey(status)}
-            statusList={RemakeRowStates}
-            style={{ width: "90%" }}
+            statusList={RemakeRowStates}            
             updateStatusCallback={updateStatus}
             orderId={order.id}
             handleStatusCancelCallback={() => { }}
+            style={{ width: "100%" }}
           />
         </div>
       ),

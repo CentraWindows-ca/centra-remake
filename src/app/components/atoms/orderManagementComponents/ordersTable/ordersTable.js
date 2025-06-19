@@ -1,5 +1,6 @@
 import { Pagination, Table } from "antd";
 import styles from "./ordersTable.module.css";
+import styled from "styled-components";
 import { Button } from "react-bootstrap";
 
 import {
@@ -46,6 +47,16 @@ export default function OrdersTable(props) {
     }
   };
 
+  const CustomTable = styled(Table)`
+    .ant-table {      
+      font-size: 13px !important;
+    }
+    .ant-table-tbody > tr > td {
+      font-size: 12px !important;
+      padding: 0px 8px !important;
+    }    
+  `;
+
   return (
     <div className={"bg-white rounded-sm p-3"}>
       <div className="flex flex-col space-y-2">
@@ -71,8 +82,8 @@ export default function OrdersTable(props) {
             />
           </div>
         </div>
-        <div style={{ height: "calc(100vh - 195px)" }} className="overflow-auto">
-          <Table
+        <div style={{ height: "calc(100vh - 195px)" }} className="overflow-auto text-xs w-full">
+          <CustomTable
             columns={columns}
             dataSource={data}
             size="small"
@@ -81,6 +92,10 @@ export default function OrdersTable(props) {
             loading={isLoading}            
             onChange={onTableChange}
             sticky
+            bordered
+            scroll={{
+              x: "max-content",
+            }}
           />
         </div>
       </div>
