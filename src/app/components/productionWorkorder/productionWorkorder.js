@@ -36,7 +36,7 @@ import BackorderItems from "./subComponents/backorderItems";
 import GlassItems from "./subComponents/glassItems";
 import Notes from "./subComponents/notes";
 import OrderInfo from "./subComponents/orderInfo";
-import OrderOptions from "./subComponents/orderOptions";
+/*import OrderOptions from "./subComponents/orderOptions";*/
 import OrderSummary from "./subComponents/orderSummary";
 import OrderSchedule from "./subComponents/orderSchedule";
 import Documents from "./subComponents/documents";
@@ -941,7 +941,7 @@ export default function ProductionWorkOrder(props) {
                         isSearchView={!viewConfig.stickyHeader}
                       />
                     </InView>
-
+                    {/*
                     <OrderOptions
                       inputData={inputData}
                       handleCheckboxChange={handleCheckboxChange}
@@ -949,7 +949,7 @@ export default function ProductionWorkOrder(props) {
                       orderChangeItems={orderChangeItems}
                       isSearchView={!viewConfig.stickyHeader}
                     />
-
+                    */}
                     <Documents
                       documents={documents}
                       setDocuments={setDocuments}

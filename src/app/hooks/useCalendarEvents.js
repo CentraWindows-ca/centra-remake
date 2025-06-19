@@ -27,10 +27,10 @@ import moment from "moment";
 import { updateState, updateEventDates } from "app/api/productionApis";
 
 // -- Service API
-import {
-  updateServiceWorkOrderState,
-  updateServiceWorkOrderSchedule,
-} from "app/api/serviceApis";
+//import {
+//  updateServiceWorkOrderState,
+//  updateServiceWorkOrderSchedule,
+//} from "app/api/serviceApis";
 
 import {
   updateFilters,

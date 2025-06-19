@@ -15,7 +15,7 @@ import QuickSearch from "app/components/quickSearch/quickSearch";
 import Tooltip from "app/components/tooltip/tooltip";
 import RootHeader from "app/components/rootHeader/rootHeader";
 
-import { SearchIcon } from "app/utils/icons";
+/*import { SearchIcon } from "app/utils/icons";*/
 import { Collapse } from "@mui/material";
 
 import { Button, Segmented, Breadcrumb, Badge, Popover } from "antd";
@@ -233,7 +233,7 @@ export default function OrdersHeader(props) {
               show ? "text-blue-700" : "text-gray-500"
             }`}
           >
-            <SearchIcon />
+            {/*<SearchIcon />*/}
           </span>
         </div>
       </div>
