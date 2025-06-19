@@ -124,9 +124,11 @@ export default function OrderStatus(props) {
               justifyContent: "center",
               alignItems: "center",
               ...style,
+              padding: "1px",
+              margin:"2px"
             }}
           >
-            <div>{statusList[statusKey]?.label}</div>
+            <div className="">{statusList[statusKey]?.label}</div>
             {!viewMode ? <i className="fa-solid fa-caret-down" /> : <></>}
           </span>
         </Popover>

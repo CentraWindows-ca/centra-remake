@@ -56,10 +56,7 @@ export default function OrdersTable(props) {
       padding: 0px 8px !important;
     }    
     .ant-table-thead > tr > th {
-      font-size: 13px !important;
-      padding: 4px !important;
-      background-color: #fafafa; /* example background */
-      font-weight: 600; /* example font weight */
+      font-size: 12px !important;
   }
   `;
 

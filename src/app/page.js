@@ -269,36 +269,38 @@ export default function Remakes() {
 
   const PopoverContent = useCallback((order) => {
     return (
-      <div>
+      <div className="text-slate-600">
         <div
-          className="text-sm w-full hover:bg-[#F5F5F5] p-1 hover:cursor-pointer rounded"
+          className="text-xs w-full hover:underline hover:text-sky-700 p-1 hover:cursor-pointer rounded"
           onClick={() => {
             onEditClick(order.id);
             handleClosePopover(); // close popover
           }}
         >
-          <i className="fa-solid fa-pen"></i>
-          <span className="pl-2">{`Edit ${moduleName}`}</span>
+          <i className="fa-solid fa-pen text-sky-700"></i>
+          <span className="pl-3">{`Edit ${moduleName}`}</span>
         </div>
+        {false &&
+          <div
+            className="text-xs w-full hover:underline hover:text-sky-700 p-1 hover:cursor-pointer rounded"
+            onClick={() => {
+              onShareLinkClick(order.id);
+              handleClosePopover(); // close popover
+            }}
+          >
+            <i className="fas fa-link"></i>
+            <span className="pl-2">Copy Link</span>
+          </div>
+        }
         <div
-          className="text-sm w-full hover:bg-[#F5F5F5] p-1 hover:cursor-pointer rounded"
-          onClick={() => {
-            onShareLinkClick(order.id);
-            handleClosePopover(); // close popover
-          }}
-        >
-          <i className="fas fa-link"></i>
-          <span className="pl-2">Copy Link</span>
-        </div>
-        <div
-          className="text-sm w-full hover:bg-[#F5F5F5] p-1 hover:cursor-pointer rounded"
+          className="text-xs w-full hover:underline hover:text-sky-700 p-1 hover:cursor-pointer rounded"
           onClick={() => {
             onDeleteClick(order.id);
             handleClosePopover(); // close popover
           }}
         >
-          <i className="fa fa-trash"></i>
-          <span className="pl-2">Delete</span>
+          <i className="fa fa-trash text-red-700"></i>
+          <span className="pl-3">Delete</span>
         </div>
       </div>
     );
@@ -313,10 +315,9 @@ export default function Remakes() {
         key: `id`,
         width: 120,
         fixed: 'left',
-        align: "center", 
         render: (remakeId, order) => (
           <Popover
-            placement="bottom"
+            placement="right"
             title=""
             content={PopoverContent(order)}
             trigger="click"
@@ -325,7 +326,7 @@ export default function Remakes() {
               setOpenPopoverId(visible ? order.id : null);
             }}
           >
-            <span className="text-blue-700 hover:underline hover:cursor-pointer" onClick={() => handlePopoverToggle(order.id)}>{remakeId}</span>
+            <span className="text-sky-700 hover:underline hover:cursor-pointer" onClick={() => handlePopoverToggle(order.id)}>{remakeId}</span>
           </Popover>
         ),
         sorter: (a, b) => parseInt(a.remakeId) - parseInt(b.remakeId),
@@ -338,7 +339,7 @@ export default function Remakes() {
         render: (originalWorkOrderNo) => (
           <Tooltip title="Open Work Order in New Tab">
             <div
-              className="w-full flex-wrap truncate text-centraBlue cursor-pointer hover:underline"
+              className="w-full flex-wrap truncate hover:text-centraBlue cursor-pointer hover:underline"
               onClick={() => openWOLink(originalWorkOrderNo)}
             >
               {originalWorkOrderNo ? originalWorkOrderNo : ""}
@@ -353,7 +354,7 @@ export default function Remakes() {
         width: 120,
         render: (itemNo, order) => (
           <div
-            className="w-full flex-wrap truncate text-centraBlue cursor-pointer hover:underline"
+            className="w-full flex-wrap truncate hover:text-centraBlue cursor-pointer hover:underline"
             onClick={() => onEditClick(order.id)}
           >
             {itemNo}
