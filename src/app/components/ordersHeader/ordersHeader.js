@@ -11,7 +11,7 @@ import {
   updateShowMessage,
 } from "app/redux/orders";
 
-import QuickSearch from "app/components/templates/quickSearch/quickSearch";
+import QuickSearch from "app/components/quickSearch/quickSearch";
 import Tooltip from "app/components/atoms/tooltip/tooltip";
 import RootHeader from "app/components/organisms/rootHeader/rootHeader";
 
@@ -20,7 +20,7 @@ import { Collapse } from "@mui/material";
 
 import { Button, Segmented, Breadcrumb, Badge, Popover } from "antd";
 import { getIcon } from "app/utils/utils";
-import Filters from "app/components/templates/filters/filters";
+import Filters from "app/components/filters/filters";
 import UserAvatar from "app/components/organisms/users/userAvatar";
 import { useAuthData } from "context/authContext";
 

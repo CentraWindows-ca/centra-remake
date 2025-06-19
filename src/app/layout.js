@@ -10,7 +10,7 @@ import { CookiesProvider } from "react-cookie";
 import { QueryClientProvider, QueryClient } from "react-query";
 
 import InnerLayout from "../app/innerLayout";
-import Fallback from "app/components/templates/fallback/fallback";
+import Fallback from "app/components/fallback/fallback";
 import { AuthDataProvider } from "../context/authContext";
 
 const inter = Inter({ subsets: ["latin"] });

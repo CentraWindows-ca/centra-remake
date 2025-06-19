@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import moment from "moment";
 import AntDatePicker from "app/components/atoms/datePicker/datePicker";
 import WOSelection from "app/components/organisms/woSelection/woSelection";
-import ProductionWorkOrder from "app/components/templates/productionWorkorder/productionWorkorder";
+import ProductionWorkOrder from "app/components/productionWorkorder/productionWorkorder";
 import { Space, Typography } from "antd";
 
 import { fetchProductionWorkOrders } from "app/api/productionApis";

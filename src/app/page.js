@@ -26,8 +26,8 @@ import { updateResult } from "app/redux/orders";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { AppModes, RemakeRowStates } from "app/utils/constants";
-import OrdersHeader from "app/components/atoms/orderManagementComponents/ordersHeader/ordersHeader";
-import OrdersTable from "app/components/atoms/orderManagementComponents/ordersTable/ordersTable";
+import OrdersHeader from "app/components/ordersHeader/ordersHeader";
+import OrdersTable from "app/components/ordersTable/ordersTable";
 import UserSelectField from "app/components/organisms/users/userSelect";
 import OrderStatus from "app/components/remake/orderStatus";
 import Tooltip from "app/components/atoms/tooltip/tooltip";

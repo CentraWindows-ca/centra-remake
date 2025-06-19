@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./sidebar.module.css";
 import { AppModes } from "app/utils/constants";
 
-import OrdersMenu from "app/components/atoms/orderManagementComponents/ordersMenu/ordersMenu";
+import OrdersMenu from "app/components/ordersMenu/ordersMenu";
 
 export default function Sidebar(props) {
   const { style } = props;
