@@ -12,9 +12,9 @@ import {
   Space,
 } from 'antd';
 
-import ActionModal from "app/components/atoms/actionModal/actionModal";
+import ActionModal from "app/components/actionModal/actionModal";
 import BackorderItem from "./backorderItem";
-import LockButton from "app/components/atoms/lockButton/lockButton";
+import LockButton from "app/components/lockButton/lockButton";
 
 import { useAuthData } from "context/authContext";
 

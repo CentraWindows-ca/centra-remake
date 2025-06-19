@@ -2,10 +2,10 @@
 import styles from '../productionWorkorder.module.css';
 import React, { useMemo } from "react";
 
-import Group from "app/components/atoms/workorderComponents/group";
-import CheckboxItem from "app/components/atoms/workorderComponents/checkboxItem";
+import Group from "app/components/workorderComponents/group";
+import CheckboxItem from "app/components/workorderComponents/checkboxItem";
 
-import Tooltip from "app/components/atoms/tooltip/tooltip";
+import Tooltip from "app/components/tooltip/tooltip";
 
 import {
   ShapesIcon,

@@ -1,5 +1,5 @@
 import RowStatus from "../subComponents/rowState";
-import ImageGallery from "app/components/organisms/imageGallery/imageGallery";
+import ImageGallery from "app/components/imageGallery/imageGallery";
 
 import { YMDDateFormat, getKeyFromVal } from "app/utils/utils";
 import { RemakeRowStates, BackorderRowStates, ProductionRowStates, GlassRowStates } from "app/utils/constants";

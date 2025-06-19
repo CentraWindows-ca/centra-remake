@@ -11,15 +11,15 @@ import { useQuery } from "react-query";
 import { Button, Popconfirm, Spin } from "antd";
 import { ProductionRemakeOptions, RemakeRowStates } from "app/utils/constants";
 
-import LockButton from "app/components/atoms/lockButton/lockButton";
+import LockButton from "app/components/lockButton/lockButton";
 import { mapRemakeRowStateToKey, openBlob, openWOLink } from "app/utils/utils";
 import OrderModalHeader from "app/components/remake/orderModalHeader";
-import Group from "app/components/atoms/workorderComponents/group";
-import SelectItem from "app/components/atoms/workorderComponents/selectItem";
-import DateItem from "app/components/atoms/workorderComponents/dateItem";
-import TextAreaItem from "app/components/atoms/workorderComponents/textareaItem";
-import Document from "app/components/atoms/document/document";
-import LabelItem from "app/components/atoms/workorderComponents/labelItem";
+import Group from "app/components/workorderComponents/group";
+import SelectItem from "app/components/workorderComponents/selectItem";
+import DateItem from "app/components/workorderComponents/dateItem";
+import TextAreaItem from "app/components/workorderComponents/textareaItem";
+import Document from "app/components/document/document";
+import LabelItem from "app/components/workorderComponents/labelItem";
 
 import Divider from "app/components/remake/divider";
 
@@ -32,10 +32,10 @@ import {
   fetchAttachments,
   saveAttachment,
 } from "app/api/genericApis/attachmentsApi";
-import ActionModal from "app/components/atoms/actionModal/actionModal";
-import DocumentUploadNew from "app/components/organisms/documentUpload/documentUploadNew";
+import ActionModal from "app/components/actionModal/actionModal";
+import DocumentUploadNew from "app/components/documentUpload/documentUploadNew";
 import { saveAs } from "file-saver";
-import ConfirmationModal from "app/components/atoms/confirmationModal/confirmationModal";
+import ConfirmationModal from "app/components/confirmationModal/confirmationModal";
 
 export default function EditRemakeOrder(props) {
   const { orderId, onClose, onShareLinkClick } = props;

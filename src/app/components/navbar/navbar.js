@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import styles from "./navbar.module.css";
 
 import Fade from "@mui/material/Grow";
-import Select from "app/components/atoms/select/select";
+import Select from "app/components/select/select";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import SearchIcon from "@mui/icons-material/Search";

@@ -1,4 +1,4 @@
-import UserAvatar from "app/components/organisms/users/userAvatar";
+import UserAvatar from "app/components/users/userAvatar";
 import OrdersMenuItem from "./ordersMenuItem";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";

@@ -6,7 +6,7 @@ import { Button } from "antd";
 
 import { OrderFilters, ManufacturingFacilityFilter } from "app/utils/constants";
 
-import Title from "app/components/atoms/title/title";
+import Title from "app/components/title/title";
 import PropertyFilters from "app/components/templates/filters/propertyFilters/propertyFilters";
 
 import {

@@ -2,8 +2,8 @@
 import styles from '../productionWorkorder.module.css';
 import React from "react";
 
-import Group from "app/components/atoms/workorderComponents/group";
-import LabelItem from "app/components/atoms/workorderComponents/labelItem";
+import Group from "app/components/workorderComponents/group";
+import LabelItem from "app/components/workorderComponents/labelItem";
 
 export default function OrderSummary (props) {
     const { inputData, style } = props;

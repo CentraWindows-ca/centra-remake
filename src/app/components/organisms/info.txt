@@ -1,3 +1,0 @@
-What goes in here:
-
-Reuseable components containing a combination of atoms and/or molecules

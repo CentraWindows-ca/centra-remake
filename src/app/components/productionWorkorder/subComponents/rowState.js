@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback } from "react";
 
-import Tooltip from "app/components/atoms/tooltip/tooltip";
+import Tooltip from "app/components/tooltip/tooltip";
 
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';

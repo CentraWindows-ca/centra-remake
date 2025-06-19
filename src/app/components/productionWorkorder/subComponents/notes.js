@@ -3,13 +3,13 @@ import styles from '../productionWorkorder.module.css';
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import CollapsibleGroup from "app/components/atoms/workorderComponents/collapsibleGroup";
+import CollapsibleGroup from "app/components/workorderComponents/collapsibleGroup";
 import Collapse from '@mui/material/Collapse';
-import MultilineInputItem from "app/components/atoms/workorderComponents/multilineInputItem";
-import MultilineDateInputItem from "app/components/atoms/workorderComponents/multilineDateInputItem";
+import MultilineInputItem from "app/components/workorderComponents/multilineInputItem";
+import MultilineDateInputItem from "app/components/workorderComponents/multilineDateInputItem";
 
-import Tooltip from "app/components/atoms/tooltip/tooltip";
-import LockButton from "app/components/atoms/lockButton/lockButton";
+import Tooltip from "app/components/tooltip/tooltip";
+import LockButton from "app/components/lockButton/lockButton";
 
 import { Tag } from "antd";
 

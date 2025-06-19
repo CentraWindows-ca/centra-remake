@@ -2,9 +2,9 @@
 import styles from '../productionWorkorder.module.css';
 import React from "react";
 
-import Group from "app/components/atoms/workorderComponents/group";
-import LabelItem from "app/components/atoms/workorderComponents/labelItem";
-import DateItem from "app/components/atoms/workorderComponents/dateItem";
+import Group from "app/components/workorderComponents/group";
+import LabelItem from "app/components/workorderComponents/labelItem";
+import DateItem from "app/components/workorderComponents/dateItem";
 
 import { YMDDateFormat } from "app/utils/utils";
 

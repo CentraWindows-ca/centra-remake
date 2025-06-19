@@ -26,10 +26,10 @@ import {
   updateProductionItems,
 } from "app/api/productionApis";
 
-import CollapsibleGroup from "app/components/atoms/workorderComponents/collapsibleGroup";
-import ActionModal from "app/components/atoms/actionModal/actionModal";
-import ConfirmationModal from "app/components/atoms/confirmationModal/confirmationModal";
-import DocumentUpload from "app/components/organisms/documentUpload/documentUpload";
+import CollapsibleGroup from "app/components/workorderComponents/collapsibleGroup";
+import ActionModal from "app/components/actionModal/actionModal";
+import ConfirmationModal from "app/components/confirmationModal/confirmationModal";
+import DocumentUpload from "app/components/documentUpload/documentUpload";
 import ProductionItems from "./subComponents/productionItems";
 import RemakeItems from "./subComponents/remakeItems";
 import BackorderItems from "./subComponents/backorderItems";
@@ -40,10 +40,10 @@ import OrderOptions from "./subComponents/orderOptions";
 import OrderSummary from "./subComponents/orderSummary";
 import OrderSchedule from "./subComponents/orderSchedule";
 import Documents from "./subComponents/documents";
-import LockButton from "app/components/atoms/lockButton/lockButton";
-import WOInfoBar from "app/components/atoms/workorderComponents/woInfoBar";
-import CustomerInfoBar from "app/components/atoms/workorderComponents/customerInfoBar";
-import WORoot from "app/components/atoms/workorderComponents/woRoot";
+import LockButton from "app/components/lockButton/lockButton";
+import WOInfoBar from "app/components/workorderComponents/woInfoBar";
+import CustomerInfoBar from "app/components/workorderComponents/customerInfoBar";
+import WORoot from "app/components/workorderComponents/woRoot";
 
 import Collapse from "@mui/material/Collapse";
 

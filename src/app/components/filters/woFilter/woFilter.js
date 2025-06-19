@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Empty } from "antd";
 
-import ProductionEvent from "app/components/organisms/events/productionEvent";
-import WOSelection from "app/components/organisms/woSelection/woSelection";
+import ProductionEvent from "app/components/events/productionEvent";
+import WOSelection from "app/components/woSelection/woSelection";
 
 import useCalendarEvents from "app/hooks/useCalendarEvents";
 import { Pages } from "app/utils/constants";

@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "react-query";
 import moment from "moment";
-import AntDatePicker from "app/components/atoms/datePicker/datePicker";
-import WOSelection from "app/components/organisms/woSelection/woSelection";
+import AntDatePicker from "app/components/datePicker/datePicker";
+import WOSelection from "app/components/woSelection/woSelection";
 import ProductionWorkOrder from "app/components/productionWorkorder/productionWorkorder";
 import { Space, Typography } from "antd";
 

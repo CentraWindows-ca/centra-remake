@@ -6,8 +6,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Sidebar from "app/components/sidebar/sidebar";
-import Tooltip from "app/components/atoms/tooltip/tooltip";
-import MobileMenu from "app/components/organisms/mobileMenu/mobileMenu";
+import Tooltip from "app/components/tooltip/tooltip";
+import MobileMenu from "app/components/mobileMenu/mobileMenu";
 
 import { Pages } from "app/utils/constants";
 

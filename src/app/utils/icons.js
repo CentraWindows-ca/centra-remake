@@ -25,8 +25,8 @@ import {
 
 import SensorWindowIcon from '@mui/icons-material/SensorWindow';
 
-import FontAwesomeEventIcon from "app/components/organisms/events/fontAwesomeEventIcon";
-import Tooltip from "app/components/atoms/tooltip/tooltip";
+import FontAwesomeEventIcon from "app/components/events/fontAwesomeEventIcon";
+import Tooltip from "app/components/tooltip/tooltip";
 
 import Image from "next/image";
 

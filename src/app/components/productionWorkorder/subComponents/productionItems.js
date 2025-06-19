@@ -10,11 +10,11 @@ import {
   fetchProductionDoors,
   updateProductionItems,
 } from "app/api/productionApis";
-import Tooltip from "app/components/atoms/tooltip/tooltip";
-import LockButton from "app/components/atoms/lockButton/lockButton";
+import Tooltip from "app/components/tooltip/tooltip";
+import LockButton from "app/components/lockButton/lockButton";
 import CreateRemake from "../subComponents/createRemake";
 import CreateBackorder from "../subComponents/createBackorder";
-import Modal from "app/components/atoms/modal/modal";
+import Modal from "app/components/modal/modal";
 
 import { getTableColumns } from "../utils/productionUtils";
 

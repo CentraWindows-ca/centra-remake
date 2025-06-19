@@ -6,9 +6,9 @@ import { useSelector } from "react-redux";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import saveAs from "file-saver";
 
-import Attachment from "app/components/atoms/attachment/attachment";
-import LoadingIndicator from "app/components/atoms/loadingIndicator/loadingIndicator";
-import Group from "app/components/atoms/workorderComponents/group";
+import Attachment from "app/components/attachment/attachment";
+import LoadingIndicator from "app/components/loadingIndicator/loadingIndicator";
+import Group from "app/components/workorderComponents/group";
 import { openBlob, convertBase64ToFile } from "app/utils/utils";
 
 import { fetchProductionDocuments } from 'app/api/productionApis';
@@ -25,7 +25,6 @@ export default function Documents(props) {
   } = props;
 
   const { result } = useSelector(state => state.calendar);
-  const { isReadOnly } = useSelector(state => state.app);
 
   const { isFetching,
     data: documentList,

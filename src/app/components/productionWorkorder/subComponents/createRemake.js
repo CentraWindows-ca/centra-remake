@@ -6,10 +6,10 @@ import moment from "moment";
 
 import { Popconfirm, Button, Popover, Checkbox, Space } from "antd";
 
-import DocumentUpload from "app/components/organisms/documentUpload/documentUpload";
-import ActionModal from "app/components/atoms/actionModal/actionModal";
+import DocumentUpload from "app/components/documentUpload/documentUpload";
+import ActionModal from "app/components/actionModal/actionModal";
 import RemakeItem from "./remakeItem";
-import LockButton from "app/components/atoms/lockButton/lockButton";
+import LockButton from "app/components/lockButton/lockButton";
 
 import { useAuthData } from "context/authContext";
 

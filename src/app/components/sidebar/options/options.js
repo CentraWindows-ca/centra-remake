@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./options.module.css";
 
-import IconSwitch from "app/components/atoms/iconSwitch/iconSwitch";
+import IconSwitch from "app/components/iconSwitch/iconSwitch";
 import {
   EventsShownOptions,
   CalendarFontSizeOptions,

@@ -3,8 +3,8 @@ import styles from "./orderStatus.module.css";
 import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import Tooltip from "app/components/atoms/tooltip/tooltip";
-import ConfirmationModal from "app/components/atoms/confirmationModal/confirmationModal";
+import Tooltip from "app/components/tooltip/tooltip";
+import ConfirmationModal from "app/components/confirmationModal/confirmationModal";
 
 import { Popover } from "antd";
 

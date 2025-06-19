@@ -2,10 +2,10 @@
 import styles from '../productionWorkorder.module.css';
 import React from "react";
 
-import Group from "app/components/atoms/workorderComponents/group";
-import SelectItem from "app/components/atoms/workorderComponents/selectItem";
-import InputItem from "app/components/atoms/workorderComponents/inputItem";
-import LabelItem from "app/components/atoms/workorderComponents/labelItem";
+import Group from "app/components/workorderComponents/group";
+import SelectItem from "app/components/workorderComponents/selectItem";
+import InputItem from "app/components/workorderComponents/inputItem";
+import LabelItem from "app/components/workorderComponents/labelItem";
 
 export default function OrderInfo(props) {
   const {

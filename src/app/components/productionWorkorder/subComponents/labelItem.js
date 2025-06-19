@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import Tooltip from "app/components/atoms/tooltip/tooltip";
+import Tooltip from "app/components/tooltip/tooltip";
 
 export default function LabelItem(props) {
   const { emphasizeValue, label, labelWidth, value, className } = props;

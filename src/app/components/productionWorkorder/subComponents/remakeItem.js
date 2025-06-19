@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 
 import { ProductionRemakeOptions } from "app/utils/constants";
 import LabelItem from "../subComponents/labelItem";
-import ImageGallery from "app/components/organisms/imageGallery/imageGallery";
+import ImageGallery from "app/components/imageGallery/imageGallery";
 
 const { TextArea } = Input;
 

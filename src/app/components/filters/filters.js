@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Button } from "antd";
 
-import Title from "app/components/atoms/title/title";
+import Title from "app/components/title/title";
 import PropertyFilters from "app/components/filters/propertyFilters/propertyFilters";
 
 import {

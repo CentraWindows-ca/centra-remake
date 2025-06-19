@@ -12,8 +12,8 @@ import {
 } from "app/redux/orders";
 
 import QuickSearch from "app/components/quickSearch/quickSearch";
-import Tooltip from "app/components/atoms/tooltip/tooltip";
-import RootHeader from "app/components/organisms/rootHeader/rootHeader";
+import Tooltip from "app/components/tooltip/tooltip";
+import RootHeader from "app/components/rootHeader/rootHeader";
 
 import { SearchIcon } from "app/utils/icons";
 import { Collapse } from "@mui/material";
@@ -21,7 +21,7 @@ import { Collapse } from "@mui/material";
 import { Button, Segmented, Breadcrumb, Badge, Popover } from "antd";
 import { getIcon } from "app/utils/utils";
 import Filters from "app/components/filters/filters";
-import UserAvatar from "app/components/organisms/users/userAvatar";
+import UserAvatar from "app/components/users/userAvatar";
 import { useAuthData } from "context/authContext";
 
 export default function OrdersHeader(props) {

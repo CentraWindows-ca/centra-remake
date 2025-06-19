@@ -1,3 +1,0 @@
-What goes in here:
-
-Simple, reuseable components
