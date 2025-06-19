@@ -82,7 +82,7 @@ export default function OrdersTable(props) {
             />
           </div>
         </div>
-        <div style={{ height: "calc(100vh - 195px)" }} className="overflow-auto text-xs w-full">
+        <div style={{ height: "calc(100vh - 195px)" }} className="overflow-auto text-xs">
           <CustomTable
             columns={columns}
             dataSource={data}
@@ -93,8 +93,9 @@ export default function OrdersTable(props) {
             onChange={onTableChange}
             sticky
             bordered
+            tableLayout="fixed"
             scroll={{
-              x: "max-content",
+              x: 'max-content'
             }}
           />
         </div>

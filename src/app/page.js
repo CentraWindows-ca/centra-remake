@@ -231,7 +231,8 @@ export default function Remakes() {
         title: `Remake #`,
         dataIndex: `remakeId`,
         key: `id`,
-        width: 90,
+        width: 120,
+        fixed: 'left',
         render: (remakeId, order) => (
           <DropdownButton
             id="dropdown-basic-button-lite-transparent"
@@ -265,7 +266,7 @@ export default function Remakes() {
         title: `WO #`,
         dataIndex: "workOrderNo",
         key: "workOrderNo",
-        width: 80,
+        width: 120,
         render: (originalWorkOrderNo) => (
           <Tooltip title="Open Work Order in New Tab">
             <div
@@ -281,7 +282,7 @@ export default function Remakes() {
         title: `Item`,
         dataIndex: "itemNo",
         key: "itemNo",
-        width: 70,
+        width: 120,
         render: (itemNo, order) => (
           <div
             className="w-full flex-wrap truncate text-centraBlue cursor-pointer hover:underline"
@@ -301,26 +302,25 @@ export default function Remakes() {
         title: `System`,
         dataIndex: "systemValue",
         key: "systemValue",
-        width: 70,
+        width: 120,
       },
       {
         title: `Size`,
         dataIndex: "size",
         key: "size",
-        width: 100,
+        width: 200,
       },
       {
         title: `Description`,
         dataIndex: "description",
         key: "description",
-        width: 100,
         ellipsis: true,
       },
       {
         title: `Product`,
         dataIndex: "product",
         key: "product",
-        width: 80,
+        width: 150,
       },
     ];
 
@@ -345,7 +345,7 @@ export default function Remakes() {
         title: `Scheduled Date`,
         dataIndex: "scheduleDate",
         key: "scheduleDate",
-        width: 100,
+        width: 120,
         render: (date) => (
           <div className=" text-gray-400">{moment(date).format("ll")}</div>
         ),
@@ -363,9 +363,9 @@ export default function Remakes() {
         key: "assignedTo",
         dataIndex: "assignedTo",
         key: "assignedTo",
-        width: 140,
+        width: 180,
         render: (assignedTo, order) => (
-          <div className="text-center">
+          <div className="text-center p-0 m-0">
             <UserSelectField />
           </div>
         ),
@@ -377,17 +377,18 @@ export default function Remakes() {
       key: "status",
       dataIndex: "status",
       key: "status",
-      width: "90px",
+      width: 150,
+      fixed: 'right',
       render: (status, order) => (
-        <div className="text-center">
+        <div className="text-center">          
           <OrderStatus
             statusKey={mapRemakeRowStateToKey(status)}
-            statusList={RemakeRowStates}            
+            statusList={RemakeRowStates}
             updateStatusCallback={updateStatus}
             orderId={order.id}
             handleStatusCancelCallback={() => { }}
             style={{ width: "100%" }}
-          />
+          />          
         </div>
       ),
     });

@@ -31,8 +31,7 @@ export default function UserSelectField(props) {
   const CustomSelect = styled(Select)`
     .ant-select-selector {
       font-size: 12px !important;
-      padding: 1px 8px !important;
-      height: auto !important;      
+      padding: 0px 8px !important;      
     }
 
     /* Dropdown options */
@@ -171,7 +170,7 @@ export default function UserSelectField(props) {
       label={label}
       name={fieldName}
       labelAlign="left"
-      style={{ margin: "3px 0px" }}
+      style={{ margin: "0px 0px" }}
       labelCol={
         label
           ? labelPos === "left"
