@@ -345,7 +345,7 @@ export default function Remakes() {
         title: `Scheduled Date`,
         dataIndex: "scheduleDate",
         key: "scheduleDate",
-        width: 120,
+        width: 130,
         render: (date) => (
           <div className=" text-gray-400">{moment(date).format("ll")}</div>
         ),
