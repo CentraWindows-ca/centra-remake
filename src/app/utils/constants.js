@@ -748,7 +748,7 @@ export const ServiceStates = {
     label: "Service Complete",
     transitionKey: "MovetoComplete",
     transitionTo: ["inProgress", "managerReview", "closed"],
-    icon: "fa-regular fa-circle-check",
+    icon: "fa-solid fa-circle-check",
     columns: ["Completed Date", "Assignee", "Scheduled End"],
   },
   cancelled: {
@@ -794,7 +794,7 @@ export const RemakeRowStates = {
     label: "New Order",
     transitionKey: "NewOrder",
     transitionTo: ["inProgress"],
-    icon: "fa-regular fa-note-sticky",
+    icon: "fa-solid fa-note-sticky",
     columns: [],
   }, // Blue
   inProgress: {
@@ -810,7 +810,7 @@ export const RemakeRowStates = {
     label: "Completed",
     transitionKey: "NewOrder",
     transitionTo: ["onHold", "inProgress"],
-    icon: "fa-regular fa-circle-check",
+    icon: "fa-solid fa-circle-check",
     columns: [],
   }, // Orange
   onHold: {
@@ -818,7 +818,7 @@ export const RemakeRowStates = {
     label: "On Hold",
     transitionKey: "onHold",
     transitionTo: ["inProgress", "completed"],
-    icon: "fa-regular fa-hourglass",
+    icon: "fa-solid fa-hourglass",
     columns: [],
   }, // Red
 };

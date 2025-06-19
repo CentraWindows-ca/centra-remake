@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
+import styled from "styled-components";
+
 import { LoadingOutlined } from "@ant-design/icons";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
-import { Popconfirm } from "antd";
+import { Popconfirm, Popover, Modal } from "antd";
 import styles from "./home.module.css";
 
 import { updateAppMode, updateDrawerOpen } from "app/redux/app";
@@ -31,7 +31,6 @@ import OrdersTable from "app/components/ordersTable/ordersTable";
 import UserSelectField from "app/components/users/userSelect";
 import OrderStatus from "app/components/remake/orderStatus";
 import Tooltip from "app/components/tooltip/tooltip";
-import OrderModal from "app/components/remake/orderModal";
 import CreateRemakeOrder from "app/components/remake/createRemakeOrder";
 import EditRemakeOrder from "app/components/remake/editRemakeOrder";
 import {
@@ -50,6 +49,41 @@ import {
 
 import { useAuthData } from "context/authContext";
 
+const CustomModal = styled(Modal).attrs({
+  motion: {
+    motionName: 'custom-fade',
+    motionAppear: true,
+    motionEnter: true,
+    motionLeave: true,
+    motionDeadline: 500, // fade duration in ms
+  },
+  maskMotion: {
+    motionName: 'custom-fade',
+    motionAppear: true,
+    motionEnter: true,
+    motionLeave: true,
+    motionDeadline: 500,
+  },
+})`
+  .custom-fade-appear,
+  .custom-fade-enter {
+    @apply opacity-0;
+  }
+
+  .custom-fade-appear-active,
+  .custom-fade-enter-active {
+    @apply transition-opacity duration-500 ease-in-out opacity-100;
+  }
+
+  .custom-fade-leave {
+    @apply opacity-100;
+  }
+
+  .custom-fade-leave-active {
+    @apply transition-opacity duration-500 ease-in-out opacity-0;
+  }
+`;
+
 export default function Remakes() {
   const moduleName = "Remake";
   const router = useRouter();
@@ -58,6 +92,7 @@ export default function Remakes() {
   const { loggedInUser } = useAuthData();
 
   const [filteredOrders, setFilteredOrders] = useState([]);
+  const [openPopoverId, setOpenPopoverId] = useState(null);
 
   // for sorting & filtering & pagination
 
@@ -224,6 +259,51 @@ export default function Remakes() {
     dispatch(updateStatusView(statusParam));
   }, [dispatch, statusParam]);
 
+  const handlePopoverToggle = (orderId) => {
+    setOpenPopoverId(orderId);
+  };
+
+  const handleClosePopover = () => {
+    setOpenPopoverId(null);
+  };
+
+  const PopoverContent = useCallback((order) => {
+    return (
+      <div>
+        <div
+          className="text-sm w-full hover:bg-[#F5F5F5] p-1 hover:cursor-pointer rounded"
+          onClick={() => {
+            onEditClick(order.id);
+            handleClosePopover(); // close popover
+          }}
+        >
+          <i className="fa-solid fa-pen"></i>
+          <span className="pl-2">{`Edit ${moduleName}`}</span>
+        </div>
+        <div
+          className="text-sm w-full hover:bg-[#F5F5F5] p-1 hover:cursor-pointer rounded"
+          onClick={() => {
+            onShareLinkClick(order.id);
+            handleClosePopover(); // close popover
+          }}
+        >
+          <i className="fas fa-link"></i>
+          <span className="pl-2">Copy Link</span>
+        </div>
+        <div
+          className="text-sm w-full hover:bg-[#F5F5F5] p-1 hover:cursor-pointer rounded"
+          onClick={() => {
+            onDeleteClick(order.id);
+            handleClosePopover(); // close popover
+          }}
+        >
+          <i className="fa fa-trash"></i>
+          <span className="pl-2">Delete</span>
+        </div>
+      </div>
+    );
+  }, [onEditClick, onShareLinkClick, onDeleteClick, handleClosePopover, moduleName]);
+      
   // build table columns
   useEffect(() => {
     let _columns = [
@@ -233,32 +313,20 @@ export default function Remakes() {
         key: `id`,
         width: 120,
         fixed: 'left',
+        align: "center", 
         render: (remakeId, order) => (
-          <DropdownButton
-            id="dropdown-basic-button-lite-transparent"
-            size="sm"
-            title={<span className="w-full">{remakeId}</span>}
-            className="flex justify-between w-full"
+          <Popover
+            placement="bottom"
+            title=""
+            content={PopoverContent(order)}
+            trigger="click"
+            open={openPopoverId === order.id}
+            onOpenChange={(visible) => {
+              setOpenPopoverId(visible ? order.id : null);
+            }}
           >
-            <Dropdown.Item onClick={() => onEditClick(order.id)}>
-              <div className="text-sm w-full">
-                <i className="fa-solid fa-pen"></i>
-                <span className="pl-2">{`Edit ${moduleName}`}</span>
-              </div>
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => onShareLinkClick(order.id)}>
-              <div className="text-sm w-full">
-                <i className="fas fa-link"></i>
-                <span className="pl-2">Copy Link</span>
-              </div>
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => onDeleteClick(order.id)}>
-              <div className="text-sm w-full">
-                <i className="fa fa-trash"></i>
-                <span className="pl-2">Delete</span>
-              </div>
-            </Dropdown.Item>
-          </DropdownButton>
+            <span className="text-blue-700 hover:underline hover:cursor-pointer" onClick={() => handlePopoverToggle(order.id)}>{remakeId}</span>
+          </Popover>
         ),
         sorter: (a, b) => parseInt(a.remakeId) - parseInt(b.remakeId),
       },
@@ -394,7 +462,7 @@ export default function Remakes() {
     });
     setColumns(_columns);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [statusView]);
+  }, [statusView, openPopoverId]);
 
   // handle query param changes
   useEffect(() => {
@@ -492,19 +560,20 @@ export default function Remakes() {
         isLoading={tableLoading}
       />
 
-      <OrderModal
+      <CustomModal
         open={showOrderModal}
-        onClose={onCloseClick}
+        onCancel={onCloseClick}
         moduleName={department}
+        width={1000}
       >
         <EditRemakeOrder
           orderId={selectedOrderId}
           onClose={onCloseClick}
           onShareLinkClick={onShareLinkClick}
         />
-      </OrderModal>
+      </CustomModal>
 
-      <OrderModal
+      <Modal
         open={showCreateModal}
         onClose={onCloseClick}
         moduleName={department}
@@ -521,7 +590,7 @@ export default function Remakes() {
           onClose={onCloseClick}
           isEditMode={editMode}
         />
-      </OrderModal>
+      </Modal>
     </div>
   );
 }

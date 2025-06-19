@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
-
+import styled from "styled-components";
 import moment from "moment";
 
-import { Popconfirm, Button, Popover, Checkbox, Space } from "antd";
+import { Popconfirm, Button, Popover, Checkbox, Space, Modal } from "antd";
 
 import DocumentUpload from "app/components/documentUpload/documentUpload";
-import ActionModal from "app/components/actionModal/actionModal";
+
 import RemakeItem from "./remakeItem";
 import LockButton from "app/components/lockButton/lockButton";
 
@@ -19,6 +19,16 @@ import { addRemakes, addRemakePhotos } from "app/api/productionApis";
 
 import { v4 as uuidv4 } from "uuid";
 import { YMDDateFormat } from "app/utils/utils";
+
+const CustomModal = styled(Modal)`
+  .ant-modal {
+    @apply transition-all duration-300 ease-in-out opacity-0 translate-y-5;
+  }
+
+  .ant-modal-open .ant-modal {
+    @apply opacity-100 translate-y-0;
+  }
+`;
 
 export default function CreateRemake(props) {
   const { selected, setShowCreateRemakes, customerName, style, branch } = props;
@@ -526,7 +536,7 @@ export default function CreateRemake(props) {
           );
         })}
       </div>
-      <ActionModal
+      <Modal
         title={`Add attachments to item ${inputData?.items[currentItemIndex]?.item}`}
         open={showPhotoUpload}
         showCancel={false}
@@ -549,7 +559,7 @@ export default function CreateRemake(props) {
         }
       >
         <DocumentUpload documents={[]} skipRedux={true} />
-      </ActionModal>
+      </Modal>
     </div>
   );
 }

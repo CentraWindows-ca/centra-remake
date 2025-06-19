@@ -57,7 +57,7 @@ export default function OrdersMenuList(props) {
           </>
         ) : (
           <div className="">
-            <Tooltip title="Assigned To Me" placement="right" zIndex={9999}>
+            <Tooltip title="Assigned To Me" placement="right" zIndex={20}>
               <UserAvatar username={loggedInUser?.name ?? "test"} />
             </Tooltip>
           </div>

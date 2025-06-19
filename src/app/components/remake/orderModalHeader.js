@@ -78,30 +78,6 @@ export default function OrderModalHeader(props) {
             handleStatusCancelCallback={() => {}}
           />
         </div>
-
-        <Popconfirm
-          placement="left"
-          title={"Close window"}
-          description={
-            <div className="pb-2">
-              <div>Unsaved changes will be lost.</div>Proceed anyway?
-            </div>
-          }
-          //onClick={() => onClose(moduleName)}
-          okText="Yes"
-          cancelText="No"
-          onConfirm={() => onClose(moduleName)}
-        >
-          <i
-            className="bi bi-x hover:cursor-pointer pr-1"
-            style={{
-              fontSize: "2rem",
-              marginTop: "-0.5rem",
-              marginRight: "-0.5rem",
-              color: "darkgrey",
-            }}
-          />
-        </Popconfirm>
       </div>
     </div>
   );

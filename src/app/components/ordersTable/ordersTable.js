@@ -98,7 +98,7 @@ export default function OrdersTable(props) {
             loading={isLoading}            
             onChange={onTableChange}
             sticky
-            bordered
+            //bordered
             tableLayout="fixed"
             scroll={{
               x: 'max-content'
