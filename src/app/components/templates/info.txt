@@ -1,3 +1,0 @@
-What goes in here:
-
-Non-reusable implementation of a combination of atoms, molecules and organisms
