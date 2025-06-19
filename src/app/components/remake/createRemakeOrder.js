@@ -9,7 +9,7 @@ import { Space, Typography } from "antd";
 
 import { fetchProductionWorkOrders } from "app/api/productionApis";
 const { Text } = Typography;
-import { updateWorkOrderData } from "../../../../app/redux/orders";
+import { updateWorkOrderData } from "app/redux/orders";
 
 export default function CreateRemakeOrder(props) {
   const dispatch = useDispatch();

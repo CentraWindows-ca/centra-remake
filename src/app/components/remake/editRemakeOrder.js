@@ -13,7 +13,7 @@ import { ProductionRemakeOptions, RemakeRowStates } from "app/utils/constants";
 
 import LockButton from "app/components/atoms/lockButton/lockButton";
 import { mapRemakeRowStateToKey, openBlob, openWOLink } from "app/utils/utils";
-import OrderModalHeader from "../../shared/orderModalHeader";
+import OrderModalHeader from "app/components/remake/orderModalHeader";
 import Group from "app/components/atoms/workorderComponents/group";
 import SelectItem from "app/components/atoms/workorderComponents/selectItem";
 import DateItem from "app/components/atoms/workorderComponents/dateItem";
@@ -21,7 +21,7 @@ import TextAreaItem from "app/components/atoms/workorderComponents/textareaItem"
 import Document from "app/components/atoms/document/document";
 import LabelItem from "app/components/atoms/workorderComponents/labelItem";
 
-import Divider from "../../shared/divider";
+import Divider from "app/components/remake/divider";
 
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
