@@ -6,7 +6,7 @@
       "log_date_format": "YYYY-MM-DD HH:mm Z",
       "env": {
         "NODE_ENV": "production",
-        "PORT": "3005"
+        "PORT": "3055"
       },
       "args": "start",
       "cwd": "./"

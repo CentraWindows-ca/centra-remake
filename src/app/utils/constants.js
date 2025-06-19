@@ -1,11 +1,6 @@
 import { RotateRightIcon, TruckFastIcon } from "./icons";
 
-export const BASE_URL =
-  process.env.NEXT_PUBLIC_ENV === "development" || !process.env.NEXT_PUBLIC_ENV
-    ? "https://localhost:7244"
-    : process.env.NEXT_PUBLIC_ENV === "staging"
-    ? "https://staging-remakeapi.centra.ca"
-    : "https://remakeapi.centra.ca"; // Production
+export const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const CalendarTypes = [
   { key: "production", value: "Production", type: "single" },
