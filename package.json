@@ -7,7 +7,7 @@
     "lint": "next lint",
     "build": "NODE_ENV=development next build&&next export",
     "build:stagingtest": "NODE_ENV=staging next build",
-    "build:staging": "NEXT_PUBLIC_ENV=staging next build&&next export",
+    "build:staging": "cp .env.staging .env.local&&NODE_ENV=production next build",
     "build:production": "NEXT_PUBLIC_ENV=production next build&&next export",
     "build:win": "next build&&next export",
     "dev": "next dev -p 3055",
