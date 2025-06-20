@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import moment from "moment";
 import AntDatePicker from "app/components/datePicker/datePicker";
 import WOSelection from "app/components/woSelection/woSelection";
-import ProductionWorkOrder from "app/components/productionWorkorder/productionWorkorder";
+
 import { Space, Typography } from "antd";
 
 import { fetchProductionWorkOrders } from "app/api/productionApis";
@@ -126,22 +126,7 @@ export default function CreateRemakeOrder(props) {
         )}
         {workOrderNumber && (
           <div className="pt-3">
-            <ProductionWorkOrder
-              viewConfig={{
-                hideCustomerInfo: true,
-                hideOrder: true,
-                hideNotes: true,
-                hideRemake: true,
-                hideBackorder: true,
-                hideGlass: true,
-                stickyHeader: false,
-                width: "75vw",
-                hideNavigation: true,
-                hideLoading: true,
-                expanded: true,
-              }}
-              action={action}
-            />
+            Production WO
           </div>
         )}
       </div>

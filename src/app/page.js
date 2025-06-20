@@ -366,6 +366,11 @@ export default function Remakes() {
         dataIndex: "subQty",
         key: "subQty",
         width: 70,
+        render: (text) => (
+          <div className="truncate">
+            {text}
+          </div>
+        ),
       },
       {
         title: `System`,

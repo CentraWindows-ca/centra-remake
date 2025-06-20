@@ -7,7 +7,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Sidebar from "app/components/sidebar/sidebar";
 import Tooltip from "app/components/tooltip/tooltip";
-import MobileMenu from "app/components/mobileMenu/mobileMenu";
 
 import { Pages } from "app/utils/constants";
 
@@ -327,10 +326,6 @@ export default function InnerLayout({ children }) {
               }
             />
           </Drawer>
-          <div>
-            {children}
-            {isMobile && <MobileMenu />}
-          </div>
         </div>
       </ConfigProvider>
     </div>
