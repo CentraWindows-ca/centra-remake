@@ -98,7 +98,7 @@ export default function UserSelectField(props) {
   });
 
   const handleChange = (value) => {
-    onChange(fieldName, value);
+    onChange(value);
   };
 
   const handleAssignToMeClick = () => {

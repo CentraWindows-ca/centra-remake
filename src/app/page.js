@@ -39,6 +39,7 @@ import {
   fetchRemakeWorkOrders,
   updateRemakeWorkOrderState,
   deleteRemakeWorkOrder,
+  updateRemakeWorkOrder
 } from "app/api/remakeApis";
 
 import {
@@ -97,7 +98,7 @@ export default function Remakes() {
   // for sorting & filtering & pagination
 
   const [sort, setSort] = useState({ sortBy: "RemakeId", isDescending: true });
-  const [columns, setColumns] = useState([]);
+  //const [columns, setColumns] = useState([]);
   const [location, setLocation] = useState("All");
   const [selectedRows, setSelectedRows] = useState([]);
   // VGuan-SWD-2270_delete_remake
@@ -315,170 +316,185 @@ export default function Remakes() {
       </div>
     );
   }, [onEditClick, onShareLinkClick, onDeleteClick, handleClosePopover, moduleName]);
-      
-  // build table columns
-  useEffect(() => {
-    let _columns = [
-      {
-        title: `Remake #`,
-        dataIndex: `remakeId`,
-        key: `id`,
-        width: 120,
-        fixed: 'left',
-        render: (remakeId, order) => (
-          <Popover
-            placement="bottom"
-            title=""
-            content={PopoverContent(order)}
-            trigger="hover"
-            open={openPopoverId === order.id}
-            onOpenChange={(visible) => {
-              setOpenPopoverId(visible ? order.id : null);
-            }}
+
+  const handleAssignedToChange = useCallback((user, order) => {
+    setFilteredOrders((prevOrders) => {
+      let _prevOrders = [...prevOrders];
+      let orderIndex = _prevOrders.findIndex((o) => o.id === order?.id);
+      if (orderIndex !== -1) {
+        _prevOrders[orderIndex].assignedTo = user;
+      }
+      return _prevOrders;
+    });
+
+    let orderData = filteredOrders.find((o) => o.id === order?.id);    
+    
+    if (orderData) {
+      orderData.assignedTo = user || "";
+
+      updateRemakeWorkOrder(
+        [orderData]
+      ).then(() => {
+        refetchOrders();
+      });
+    }    
+  }, [filteredOrders]);
+           
+  const columns = [
+    {
+      title: `Remake #`,
+      dataIndex: `remakeId`,
+      key: `id`,
+      width: 90,
+      fixed: 'left',
+      render: (remakeId, order) => (
+        <Popover
+          placement="right"
+          title=""
+          content={PopoverContent(order)}
+          trigger="click"
+          open={openPopoverId === order?.id}
+          onOpenChange={(visible) => {
+            setOpenPopoverId(visible ? order?.id : null);
+          }}
+        >
+          <span
+            className="text-sky-700 hover:underline hover:cursor-pointer"
+            onClick={() => handlePopoverToggle(order?.id)}
           >
-            <span className="text-sky-700 hover:underline hover:cursor-pointer" onClick={() => handlePopoverToggle(order.id)}>{remakeId}</span>
-          </Popover>
-        ),
-        sorter: (a, b) => parseInt(a.remakeId) - parseInt(b.remakeId),
-      },
-      {
-        title: `WO #`,
-        dataIndex: "workOrderNo",
-        key: "workOrderNo",
-        width: 120,
-        render: (originalWorkOrderNo) => (
-          <Tooltip title="Open Work Order in New Tab">
-            <div
-              className="w-full flex-wrap truncate hover:text-centraBlue cursor-pointer hover:underline"
-              onClick={() => openWOLink(originalWorkOrderNo)}
-            >
-              {originalWorkOrderNo ? originalWorkOrderNo : ""}
-            </div>
-          </Tooltip>
-        ),
-      },
-      {
-        title: `Item`,
-        dataIndex: "itemNo",
-        key: "itemNo",
-        width: 120,
-        render: (itemNo, order) => (
+            {remakeId}
+          </span>
+        </Popover>
+      ),
+      sorter: (a, b) => parseInt(a.remakeId) - parseInt(b.remakeId),
+    },
+    {
+      title: `WO #`,
+      dataIndex: "workOrderNo",
+      key: "workOrderNo",
+      width: 120,
+      render: (originalWorkOrderNo) => (
+        <Tooltip title={`Open ${originalWorkOrderNo} in New Tab`}>
           <div
             className="w-full flex-wrap truncate hover:text-centraBlue cursor-pointer hover:underline"
-            onClick={() => onEditClick(order.id)}
+            onClick={() => openWOLink(originalWorkOrderNo)}
           >
-            {itemNo}
+            {originalWorkOrderNo || ""}
           </div>
-        ),
-      },
-      {
-        title: `SubQty`,
-        dataIndex: "subQty",
-        key: "subQty",
-        width: 70,
-        render: (text) => (
-          <div className="truncate">
-            {text}
-          </div>
-        ),
-      },
-      {
-        title: `System`,
-        dataIndex: "systemValue",
-        key: "systemValue",
-        width: 120,
-      },
-      {
-        title: `Size`,
-        dataIndex: "size",
-        key: "size",
-        width: 200,
-      },
-      {
-        title: `Description`,
-        dataIndex: "description",
-        key: "description",
-        ellipsis: true,
-      },
-      {
-        title: `Product`,
-        dataIndex: "product",
-        key: "product",
-        width: 150,
-      },
-    ];
-
-    if (
-      statusView.length > 0 &&
-      RemakeRowStates[statusView].columns.includes("City")
-    ) {
-      _columns.push({
+        </Tooltip>
+      ),
+    },
+    {
+      title: `Item`,
+      dataIndex: "itemNo",
+      key: "itemNo",
+      width: 120,
+      render: (itemNo, order) => (
+        <div
+          className="w-full flex-wrap truncate hover:text-centraBlue cursor-pointer hover:underline"
+          onClick={() => onEditClick(order?.id)}
+        >
+          {itemNo}
+        </div>
+      ),
+    },
+    {
+      title: `SubQty`,
+      dataIndex: "subQty",
+      key: "subQty",
+      width: 70,
+      render: (text) => <div className="truncate">{text}</div>,
+    },
+    {
+      title: `System`,
+      dataIndex: "systemValue",
+      key: "systemValue",
+      width: 120,
+    },
+    {
+      title: `Size`,
+      dataIndex: "size",
+      key: "size",
+      width: 200,
+    },
+    {
+      title: `Description`,
+      dataIndex: "description",
+      key: "description",
+      ellipsis: true,
+    },
+    {
+      title: `Product`,
+      dataIndex: "product",
+      key: "product",
+      width: 150,
+    },
+    ...(statusView.length > 0 && RemakeRowStates[statusView]?.columns.includes("City")
+      ? [{
         title: "City",
         dataIndex: "city",
         key: "city",
         width: 150,
-        render: (text) => <>{text.toUpperCase()}</>,
-      });
-    }
-
-    if (
-      statusView === "" ||
-      RemakeRowStates[statusView].columns.includes("Scheduled Date")
-    ) {
-      _columns.push({
+        render: (text) => <>{text?.toUpperCase()}</>,
+      }]
+      : []
+    ),
+    ...(statusView === "" || RemakeRowStates[statusView]?.columns.includes("Scheduled Date")
+      ? [{
         title: `Scheduled Date`,
         dataIndex: "scheduleDate",
         key: "scheduleDate",
         width: 130,
         render: (date) => (
-          <div className=" text-gray-400">{moment(date).format("ll")}</div>
+          <div className="text-gray-400">
+            {moment(date).format("ll")}
+          </div>
         ),
         defaultSortOrder: "descend",
-        sorter: (a, b) => moment(a.scheduleDate) - moment(b.scheduleDate),
-      });
-    }
-
-    if (
-      statusView === "" ||
-      RemakeRowStates[statusView].columns.includes("Assignee")
-    ) {
-      _columns.push({
+        sorter: (a, b) => moment(a.scheduleDate).valueOf() - moment(b.scheduleDate).valueOf(),
+      }]
+      : []
+    ),
+    ...(statusView === "" || RemakeRowStates[statusView]?.columns.includes("Assignee")
+      ? [{
         title: "Assigned To",
-        key: "assignedTo",
         dataIndex: "assignedTo",
         key: "assignedTo",
         width: 180,
-        render: (assignedTo, order) => (
-          <div className="text-center p-0 m-0">
-            <UserSelectField />
-          </div>
-        ),
-      });
-    }
-
-    _columns.push({
+        render: (assignedTo, record) =>
+          record ? (
+            <div className="text-center p-0 m-0">
+              <UserSelectField
+                value={assignedTo}
+                onChange={(user) =>
+                  handleAssignedToChange(user, record)
+                }
+              />
+            </div>
+          ) : null,
+      }]
+      : []
+    ),
+    {
       title: "Status",
-      key: "status",
       dataIndex: "status",
       key: "status",
       width: 150,
       fixed: 'right',
       render: (status, order) => (
-        <div className="text-center">          
+        <div className="text-center">
           <OrderStatus
             statusKey={mapRemakeRowStateToKey(status)}
             statusList={RemakeRowStates}
             updateStatusCallback={updateStatus}
-            orderId={order.id}
+            orderId={order?.id}
             handleStatusCancelCallback={() => { }}
             style={{ width: "100%" }}
-          />          
+          />
         </div>
       ),
-    });
-    setColumns(_columns);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [statusView, openPopoverId]);
+    },
+  ];
 
   // handle query param changes
   useEffect(() => {

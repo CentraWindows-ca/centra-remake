@@ -71,7 +71,7 @@ export default function EditRemakeOrder(props) {
   // useQuery call to fetch remake details
   const {
     isLoading: isLoadingDetails,
-    data: remake,
+    data: remakeOrderData,
     refetch: refetchOrder,
     isFetching: isFetchingDetails,
   } = useQuery([`${moduleName}OrderDetails`, orderId], fetchOrderDetailsAsync, {
@@ -88,8 +88,8 @@ export default function EditRemakeOrder(props) {
   });
 
   useEffect(() => {
-    if (remake) setInputData(remake);
-  }, [remake]);
+    if (remakeOrderData) setInputData(remakeOrderData);
+  }, [remakeOrderData]);
 
   useEffect(() => {
     if (attachments) {
@@ -153,7 +153,7 @@ export default function EditRemakeOrder(props) {
         let _d = { ...d };
         let changeItem = {};
 
-        let originalData = remake;
+        let originalData = remakeOrderData;
 
         if (originalData[name] !== e.target.value) {
           changeItem = {
@@ -170,7 +170,7 @@ export default function EditRemakeOrder(props) {
         return _d;
       });
     },
-    [remake]
+    [remakeOrderData]
   );
 
   const handleSelectChange = (val, key, id) => {
@@ -186,7 +186,7 @@ export default function EditRemakeOrder(props) {
         value: val,
       };
 
-      let originalData = remake;
+      let originalData = remakeOrderData;
 
       if (originalData[id] !== val) {
         addRemakeChangeItem(changeItem); // Only add if value is different
@@ -228,11 +228,11 @@ export default function EditRemakeOrder(props) {
   };
 
   const handleSave = useCallback(async () => {
-    if (remake) {
+    if (remakeOrderData) {
       setIsSaving(true);
       let data = [];
 
-      let remakeUpdates = JSON.parse(JSON.stringify(remake));
+      let remakeUpdates = JSON.parse(JSON.stringify(remakeOrderData));
 
       if (remakeChangeItems.length > 0) {
         remakeChangeItems.map((ci) => {
@@ -257,7 +257,7 @@ export default function EditRemakeOrder(props) {
       setRemakeChangeItems([]);
       setIsSaving(false);
     }
-  }, [remake, remakeChangeItems, refetchOrder]);
+  }, [remakeOrderData, remakeChangeItems, refetchOrder]);
 
   const deleteDocumentsButtonDisabled = useCallback(() => {
     let result = true;
@@ -358,6 +358,11 @@ export default function EditRemakeOrder(props) {
   const openWOLinkCallback = () => {
     openWOLink(inputData?.workOrderNo);
   };
+
+  useEffect(() => {
+    console.log("remakeOrderData ", remakeOrderData)
+  }, [remakeOrderData])
+
   return (
     <div style={{ minWidth: "50vw" }}>
       <OrderModalHeader

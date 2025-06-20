@@ -64,28 +64,28 @@ export default function OrdersMenuList(props) {
 
         )}
       </OrdersMenuItem>
-
-      <OrdersMenuItem
-        key={`menu_item_all_filter}`}
-        selected={statusView === "" && !assignedToMe}
-        onClick={() => handleStatusFilterChange("")}
-      >
-        {drawerOpen ? (
-          <>
-            <div className="flex space-x-2 items-center">All {department}s</div>
-            {totalCount > 0 && (
-              <div className="px-2 text-xs rounded-md">{totalCount}</div>
-            )}
-          </>
-        ) : (
-          <>
-            <Tooltip title="All Records" placement="right">
-              All
-            </Tooltip>
-          </>
-        )}
-      </OrdersMenuItem>
-
+      <div className="">
+        <OrdersMenuItem
+          key={`menu_item_all_filter}`}
+          selected={statusView === "" && !assignedToMe}
+          onClick={() => handleStatusFilterChange("")}
+        >
+          {drawerOpen ? (
+            <>
+              <div className="flex space-x-2 items-center">All {department}s</div>
+              {totalCount > 0 && (
+                <div className="px-2 text-xs rounded-md">{totalCount}</div>
+              )}
+            </>
+          ) : (
+            <>
+              <Tooltip title="All Records" placement="right">
+                All
+              </Tooltip>
+            </>
+          )}
+        </OrdersMenuItem>
+      </div>
       {statusOptions.map((status, index) => {
         let _statCount = statusCount?.filter(
           (x) => x.status === status.value

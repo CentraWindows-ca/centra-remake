@@ -6,7 +6,7 @@ import {
   RemakeRowStates,
   ServiceStates,
   OrderFilters,
-  Installation,
+  Installation
 } from "app/utils/constants";
 
 export const openBlob = (base64, mimeType) => {
@@ -774,7 +774,7 @@ export const generateRow = (label, rgbColor) => {
 };
 
 export const openWOLink = (workOrderNo) => {
-  const url = `/?page=workorder&work-order-number=${workOrderNo}&department=production`;
+  const url = `${process.env.NEXT_PUBLIC_CALENDAR_API_URL}?page=workorder&work-order-number=${workOrderNo}&department=production`;
   window.open(url, "_blank");
 };
 
