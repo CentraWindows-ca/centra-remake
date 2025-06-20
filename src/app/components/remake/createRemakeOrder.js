@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "react-query";
 import moment from "moment";
-import AntDatePicker from "app/components/datePicker/datePicker";
+
 import WOSelection from "app/components/woSelection/woSelection";
 
 import { Space, Typography } from "antd";
@@ -90,17 +90,7 @@ export default function CreateRemakeOrder(props) {
         style={{ borderBottom: "1px dotted lightgrey", top: 0 }}
       >
         <Space.Compact>
-          <AntDatePicker
-            value={date}
-            picker={"month"}
-            onChange={handleDateChange}
-            format={"MMMM YYYY"}
-            style={{
-              borderRadius: "5px 0 0 5px !important",
-              width: "9rem",
-              height: "2rem",
-            }}
-          />
+          <div>Date Picker</div>
           <WOSelection
             branch={branch}
             onChange={() => {}}

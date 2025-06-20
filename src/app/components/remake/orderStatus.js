@@ -113,7 +113,7 @@ export default function OrderStatus(props) {
           trigger={isReadOnly || viewMode ? "" : "click"}
         >
           <span
-            className={`${styles.workOrderStatus} ${className} hover:brightness-95 space-x-4 px-2`}
+            className={`${className} hover:brightness-95 space-x-4 px-2 rounded-xs`}
             style={{
               backgroundColor: statusList[statusKey]?.color,
               color: statusKey === "readyToShip" ? "var(--darkgrey)" : "#FFF",
@@ -147,9 +147,7 @@ export default function OrderStatus(props) {
           <div>This will automatically save the new status.</div>
           <div>Do you want to proceed with the update?</div>
         </div>
-      </ConfirmationModal>
-
-      
+      </ConfirmationModal>      
     </>
   );
 }

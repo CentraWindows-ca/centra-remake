@@ -18,7 +18,7 @@ import Group from "app/components/workorderComponents/group";
 import SelectItem from "app/components/workorderComponents/selectItem";
 import DateItem from "app/components/workorderComponents/dateItem";
 import TextAreaItem from "app/components/workorderComponents/textareaItem";
-import Document from "app/components/document/document";
+
 import LabelItem from "app/components/workorderComponents/labelItem";
 
 import Divider from "app/components/remake/divider";
@@ -33,7 +33,7 @@ import {
   saveAttachment,
 } from "app/api/genericApis/attachmentsApi";
 import ActionModal from "app/components/actionModal/actionModal";
-import DocumentUploadNew from "app/components/documentUpload/documentUploadNew";
+
 import { saveAs } from "file-saver";
 import ConfirmationModal from "app/components/confirmationModal/confirmationModal";
 
@@ -505,14 +505,7 @@ export default function EditRemakeOrder(props) {
               <>
                 {attachments?.map((d, index) => {
                   return (
-                    <Document
-                      file={d}
-                      module={moduleName}
-                      key={`attachment-${index}`}
-                      onPreview={handlePreviewFile}
-                      onDownload={handleDownloadFile}
-                      onCheck={handleCheckFile}
-                    />
+                    <div key={index}>Document</div>
                   );
                 })}
 
@@ -671,14 +664,15 @@ export default function EditRemakeOrder(props) {
             <div>Proceed anyway?</div>
           </div>
         }
-      >
-        <DocumentUploadNew
+      >        
+        {/*
+          Document Upload
           documents={attachments}
           setContainsNewUnsavedFiles={setContainsNewUnsavedFiles}
           fileData={fileData}
           setFileData={setFileData}
           isNew={false}
-        />
+        */}
       </ActionModal>
 
       <ConfirmationModal

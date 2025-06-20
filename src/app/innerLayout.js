@@ -326,6 +326,9 @@ export default function InnerLayout({ children }) {
               }
             />
           </Drawer>
+          <div>
+            {children}
+          </div>
         </div>
       </ConfigProvider>
     </div>
