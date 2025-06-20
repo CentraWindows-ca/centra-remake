@@ -1,4 +1,6 @@
 ﻿/** @type {import('next').NextConfig} */
+const nextConfig = {}
+
 const dotenv = require('dotenv');
 const path = require('path');
 
@@ -7,13 +9,12 @@ const envPath = path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`);
 dotenv.config({ path: envPath });
 
 module.exports = {
-  output: 'export', // ✅ Added this line here
   webpack(config, { isServer }) {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
       use: ['@svgr/webpack'],
-    });
+    })
     config.module.rules.push({
       test: /\.webp$/,
       use: [
@@ -34,7 +35,7 @@ module.exports = {
       };
     }
 
-    return config;
+    return config
   },
   images: {
     unoptimized: true,
