@@ -1,13 +1,13 @@
-/** @type {import('next').NextConfig} */
+﻿/** @type {import('next').NextConfig} */
 const dotenv = require('dotenv');
 const path = require('path');
 
 const envPath = path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`);
+
 dotenv.config({ path: envPath });
 
-const nextConfig = {
-  output: 'export',  // <--- This tells Next.js to export static HTML when you run `next build`
-
+module.exports = {
+  output: 'export', // ✅ Added this line here
   webpack(config, { isServer }) {
     config.module.rules.push({
       test: /\.svg$/i,
@@ -36,19 +36,15 @@ const nextConfig = {
 
     return config;
   },
-
   images: {
     unoptimized: true,
   },
-
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_ENV: process.env.NEXT_PUBLIC_ENV,
   },
-
   compiler: {
+    // Enables the styled-components SWC transform
     styledComponents: true
   }
 };
-
-module.exports = nextConfig;
