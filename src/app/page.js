@@ -610,6 +610,7 @@ export default function Remakes() {
         onClose={onCloseClick}
         moduleName={department}
       >
+
         <CreateRemakeOrder
           style={{
             height: "80vh",
