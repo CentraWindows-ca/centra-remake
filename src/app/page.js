@@ -376,7 +376,7 @@ export default function Remakes() {
       render: (originalWorkOrderNo) => (
         <Tooltip title={`Open ${originalWorkOrderNo} in New Tab`}>
           <div
-            className="w-full flex-wrap truncate hover:text-centraBlue cursor-pointer hover:underline"
+            className="flex items-center hover:text-centraBlue cursor-pointer hover:underline min-h-[30px]"
             onClick={() => openWOLink(originalWorkOrderNo)}
           >
             {originalWorkOrderNo || ""}
