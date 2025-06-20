@@ -47,19 +47,6 @@ export default function OrdersTable(props) {
     }
   };
 
-  const CustomTable = styled(Table)`
-    .ant-table {      
-      font-size: 13px !important;
-    }
-    .ant-table-tbody > tr > td {
-      font-size: 12px !important;
-      padding: 0px 8px !important;
-    }    
-    .ant-table-thead > tr > th {
-      font-size: 12px !important;
-  }
-  `;
-
   return (
     <div className={"bg-white rounded-sm p-3"}>
       <div className="flex flex-col space-y-2">
@@ -86,7 +73,15 @@ export default function OrdersTable(props) {
           </div>
         </div>
         <div style={{ height: "calc(100vh - 195px)" }} className="overflow-auto text-xs">
-          <CustomTable
+          <Table
+            className="
+              my-custom-table
+              [&_.ant-table]:!text-[12px]
+              [&_.ant-table-tbody_tr_td]:!text-[12px]
+              [&_.ant-table-tbody_tr_td]:!p-[0_8px]
+              [&_.ant-table-thead_tr_th]:!text-[12px]
+              [&_.ant-table-thead_tr_th]:!p-[4_8px]
+            "
             columns={columns}
             dataSource={data}
             size="small"

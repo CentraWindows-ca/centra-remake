@@ -38,115 +38,6 @@ td {
     white-space: nowrap;*/
 }
 
-/* --- FullCalendar overrides --- */
-a.fc-daygrid-day-number {
-  color: black;
-  text-decoration: none;
-}
-
-a.fc-col-header-cell-cushion {
-  color: black;
-  text-decoration: none;
-}
-
-a.fc-daygrid-day-number {
-  /*width: 100%;*/
-}
-
-a.fc-daygrid-day-number:hover {
-  color: #000;
-}
-
-.fc-popover {
-  visibility: hidden;
-}
-
-.fc-daygrid-day-number:hover > div > i {
-  opacity: 1;
-}
-
-*:focus {
-  box-shadow: none !important;
-  border-color: lightgray !important;
-  outline: none;
-}
-
-/* onHover override */
-.fc-h-event:hover {
-  box-shadow: inset 0 0 100px 100px rgba(0, 0, 0, 0.1);
-}
-/* ----------------- */
-
-/* --- MUI overrides --- */
-
-/*.MuiOutlinedInput-notchedOutline {
-    border-width: 1px !important;
-
-}*/
-
-.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: lightgrey !important;
-}
-/* ----------------- */
-
-/* --- Bootstrap overrides --- */
-
-.nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
-  background-color: #fff !important;
-  border: 1px solid lightgrey;
-  border-right: none;
-  border-radius: 5px 0 0 5px !important;
-  margin-right: -1px;
-  position: relative;
-  margin-left: 7px;
-}
-
-.nav-pills .nav-link {
-  color: #212529 !important;
-  background-color: var(--lightgrey) !important;
-  border: 1px solid lightgrey;
-  border-radius: 5px 0 0 5px !important;
-  border-right: none;
-  position: relative;
-  margin-left: 12px;
-  text-overflow: ellipsis !important;
-  height: 2.5rem;
-  overflow: hidden;
-}
-
-#dropdown-basic-button {
-  font-size: 0.9rem !important;
-}
-
-#dropdown-basic-button-lite {
-  font-size: 0.9rem !important;
-  color: #000;
-  background-color: #fff;
-  border: 0px;
-
-  &:hover {
-    background-color: transparent !important;
-  }
-}
-
-#dropdown-basic-button-lite-transparent {
-  font-size: 0.9rem !important;
-  color: #000;
-  background-color: transparent;
-  border: 0px;
-
-  &:hover {
-    background-color: transparent !important;
-  }
-}
-
-.btn-check:focus + .btn,
-.btn:focus {
-  border: 1px solid transparent !important;
-}
-
-/* ----------------- */
 
 /* --- Ant Design overrides --- */
 .ant-picker {
@@ -258,3 +149,5 @@ a.fc-daygrid-day-number:hover {
 .ant-form-item-explain-error {
   display: none;
 }
+
+

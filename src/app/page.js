@@ -277,8 +277,18 @@ export default function Remakes() {
             handleClosePopover(); // close popover
           }}
         >
+          <i className="fa-solid fa-eye text-green-700"></i>
+          <span className="pl-3">{`View`}</span>
+        </div>
+        <div
+          className="text-xs w-full hover:underline hover:text-sky-700 p-1 hover:cursor-pointer rounded"
+          onClick={() => {
+            onEditClick(order.id);
+            handleClosePopover(); // close popover
+          }}
+        >
           <i className="fa-solid fa-pen text-sky-700"></i>
-          <span className="pl-3">{`Edit ${moduleName}`}</span>
+          <span className="pl-3">{`Edit`}</span>
         </div>
         {false &&
           <div
@@ -317,10 +327,10 @@ export default function Remakes() {
         fixed: 'left',
         render: (remakeId, order) => (
           <Popover
-            placement="right"
+            placement="bottom"
             title=""
             content={PopoverContent(order)}
-            trigger="click"
+            trigger="hover"
             open={openPopoverId === order.id}
             onOpenChange={(visible) => {
               setOpenPopoverId(visible ? order.id : null);
