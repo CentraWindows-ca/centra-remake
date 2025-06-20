@@ -5,6 +5,8 @@
   "scripts": {
     "start": "next start -p 3055",
     "lint": "next lint",
+    "release:staging": "git pull && cp .env.staging .env.local&&NODE_ENV=production next build&&pm2 start pm2_staging.json",
+    "release:production": "git pull && NODE_ENV=production next build&&pm2 start pm2_production.json",
     "build": "NODE_ENV=development next build&&next export",
     "build:stagingtest": "NODE_ENV=staging next build",
     "build:staging": "cp .env.staging .env.local&&NODE_ENV=production next build",
