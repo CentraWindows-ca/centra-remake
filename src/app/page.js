@@ -5,7 +5,7 @@ import moment from "moment";
 import styled from "styled-components";
 
 import { LoadingOutlined } from "@ant-design/icons";
-import { Popconfirm, Popover, Modal } from "antd";
+import { Popconfirm, Popover, Modal, Form } from "antd";
 import styles from "./home.module.css";
 
 import { updateAppMode, updateDrawerOpen } from "app/redux/app";
@@ -90,6 +90,8 @@ export default function Remakes() {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const [editRemakeForm] = Form.useForm();
+
   const { loggedInUser } = useAuthData();
 
   const [filteredOrders, setFilteredOrders] = useState([]);
@@ -98,7 +100,8 @@ export default function Remakes() {
   // for sorting & filtering & pagination
 
   const [sort, setSort] = useState({ sortBy: "RemakeId", isDescending: true });
-  //const [columns, setColumns] = useState([]);
+  const [remakeItem, setRemakeItem] = useState(null);
+
   const [location, setLocation] = useState("All");
   const [selectedRows, setSelectedRows] = useState([]);
   // VGuan-SWD-2270_delete_remake
@@ -568,6 +571,32 @@ export default function Remakes() {
     ),
   };
 
+  const handleEditRemakeSave = useCallback(async () => {
+    //if (remakeOrderData) {
+    //  setIsSaving(true);
+    //  let data = [];
+
+    //  let remakeUpdates = JSON.parse(JSON.stringify(remakeOrderData));
+
+    //  if (remakeChangeItems.length > 0) {
+    //    remakeChangeItems.map((ci) => {
+    //      var newVal = {};
+    //      newVal = ci.value;
+    //      remakeUpdates[ci.key] = newVal;
+    //    });
+    //  }
+
+    //  data.push(remakeUpdates);
+
+    //  await updateRemakeWorkOrder(data);
+
+    //  refetchOrder();
+
+    //  setRemakeChangeItems([]);
+    //  setIsSaving(false);
+    //}
+  }, [/*remakeOrderData, remakeChangeItems, refetchOrder*/]);
+
   return (
     <div className={styles.root}>
       {/*   // VGuan-SWD-2270_delete_remake */}
@@ -595,13 +624,19 @@ export default function Remakes() {
       <CustomModal
         open={showOrderModal}
         onCancel={onCloseClick}
+        onOk={handleEditRemakeSave}
         moduleName={department}
         width={1000}
+        okText="Save"
+        cancelText="Cancel"
       >
         <EditRemakeOrder
+          form={editRemakeForm}
           orderId={selectedOrderId}
           onClose={onCloseClick}
           onShareLinkClick={onShareLinkClick}
+          setRemakeItem={setRemakeItem}
+          remakeItem={remakeItem}
         />
       </CustomModal>
 

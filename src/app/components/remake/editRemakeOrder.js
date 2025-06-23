@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
+import dayjs from "dayjs";
 
 import {
   fetchRemakeWorkOrderById,
@@ -8,11 +9,11 @@ import {
 } from "app/api/remakeApis";
 import { useQuery } from "react-query";
 
-import { Button, Popconfirm, Spin } from "antd";
+import { Button, Popconfirm, Spin, Form, Select, DatePicker, Space } from "antd";
 import { ProductionRemakeOptions, RemakeRowStates } from "app/utils/constants";
 
 import LockButton from "app/components/lockButton/lockButton";
-import { mapRemakeRowStateToKey, openBlob, openWOLink } from "app/utils/utils";
+import { mapRemakeRowStateToKey, openBlob, openWOLink, YMDDateFormat } from "app/utils/utils";
 import OrderModalHeader from "app/components/remake/orderModalHeader";
 import Group from "app/components/workorderComponents/group";
 import SelectItem from "app/components/workorderComponents/selectItem";
@@ -38,9 +39,14 @@ import { saveAs } from "file-saver";
 import ConfirmationModal from "app/components/confirmationModal/confirmationModal";
 
 export default function EditRemakeOrder(props) {
-  const { orderId, onClose, onShareLinkClick } = props;
+  const {
+    orderId,
+    onClose,
+    onShareLinkClick,
+    form
+  } = props;
+
   const moduleName = "remake";
-  const { isMobile } = useSelector((state) => state.app);
   const [inputData, setInputData] = useState([]);
   const [remakeChangeItems, setRemakeChangeItems] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
@@ -116,13 +122,19 @@ export default function EditRemakeOrder(props) {
     (x) => x.key === "branch"
   )?.options;
 
-  const remakeDepartmentResponsibleOptions = ProductionRemakeOptions.find(
+  const departmentResponsibleOptions = ProductionRemakeOptions.find(
     (x) => x.key === "departmentResponsible"
-  )?.options;
+  )?.options?.map((group) => ({
+    value: group.value,
+    label: group.value,
+  }));
 
-  const remakeReasonCategoryOptions = ProductionRemakeOptions.find(
+  const reasonCategoryOptions = ProductionRemakeOptions.find(
     (x) => x.key === "reasonCategory"
-  )?.options;
+  )?.options?.map((group) => ({
+    value: group.value,
+    label: group.value,
+  }));
 
   const remakeDepartmentResponsibleSectionOptions =
     ProductionRemakeOptions.find(
@@ -133,16 +145,24 @@ export default function EditRemakeOrder(props) {
 
   const remakeReasonOptions = ProductionRemakeOptions?.find(
     (x) => x.key === "reasonCategory"
-  )?.options?.find((x) => x.value === inputData?.reasonCategory)?.options;
+  )?.options?.find((x) => x.value === inputData?.reasonCategory)?.options?.map((reasonCategory) => {
+    return {
+      value: reasonCategory.value,
+      label: reasonCategory.value,
+    }
+  });
 
   const remakeReasonDetailOptions = ProductionRemakeOptions?.find(
     (x) => x.key === "reasonCategory"
-  )
-    ?.options?.find((x) => x.value === inputData?.reasonCategory)
-    ?.options?.find((x) => x.value === inputData?.reason)?.options;
+  )?.options?.find((x) => x.value === inputData?.reasonCategory)
+    ?.options?.find((y) => y.value === inputData?.reason)?.options?.map((reasonDetail) => {
+      return {
+        value: reasonDetail.value,
+        label: reasonDetail.value,
+      };
+    });
 
   // onClick events
-
   const handleInputChange = useCallback(
     (e, type = null) => {
       if (!e?.target) return;
@@ -151,48 +171,29 @@ export default function EditRemakeOrder(props) {
 
       setInputData((d) => {
         let _d = { ...d };
-        let changeItem = {};
-
-        let originalData = remakeOrderData;
-
-        if (originalData[name] !== e.target.value) {
-          changeItem = {
-            key: name,
-            value: e.target.value,
-          };
-          addRemakeChangeItem(changeItem);
-        } else {
-          removeRemakeChangeItem({ key: name });
-        }
 
         _d[name] = e.target.value;
 
         return _d;
       });
     },
-    [remakeOrderData]
+    []
   );
 
-  const handleSelectChange = (val, key, id) => {
-    if (val && key && id) {
-      setInputData((i) => {
-        let _i = { ...i };
-        _i[id] = id !== "branch" ? val : key;
-        return _i;
+  const handleDateChange = useCallback((date, dateString) => {
+    setInputData((d) => ({
+      ...d,
+      scheduleDate: date ? date.toISOString() : null,  // store as ISO string
+    }));
+  }, []);
+
+  const handleSelectChange = (val, key) => {
+    if (val && key) {
+      setInputData((data) => {
+        let _data = { ...data };
+        _data[key] = val;
+        return _data;
       });
-
-      let changeItem = {
-        key: id,
-        value: val,
-      };
-
-      let originalData = remakeOrderData;
-
-      if (originalData[id] !== val) {
-        addRemakeChangeItem(changeItem); // Only add if value is different
-      } else {
-        removeRemakeChangeItem(changeItem); // Remove if value went back to the original one
-      }
     }
   };
 
@@ -359,12 +360,8 @@ export default function EditRemakeOrder(props) {
     openWOLink(inputData?.workOrderNo);
   };
 
-  useEffect(() => {
-    console.log("remakeOrderData ", remakeOrderData)
-  }, [remakeOrderData])
-
   return (
-    <div style={{ minWidth: "50vw" }}>
+    <Form form={form}>
       <OrderModalHeader
         moduleName={moduleName}
         orderId={orderId}
@@ -377,101 +374,142 @@ export default function EditRemakeOrder(props) {
         reloadCallback={refetchOrder}
       />
 
-      <div className="flex justify-between mb-3">
-        <Button onClick={() => onShareLinkClick(orderId)}>
-          <i className="fas fa-link"></i>
-          <span className="pl-2">Copy Link</span>
-        </Button>
-        <Popconfirm
-          placement="left"
-          title={"Save Confirmation"}
-          description={
-            <div className="pb-2">
-              <div>{`Do you wish to proceed?`}</div>
-            </div>
-          }
-          onConfirm={handleSave}
-          okText="Yes"
-          cancelText="No"
-        >
-          <LockButton
-            tooltip={"Save Changes"}
-            disabled={remakeChangeItems.length === 0}
-            label={"Save"}
-          />
-        </Popconfirm>
+      {false &&
+        <div className="flex justify-between mb-3">
+          <Button onClick={() => onShareLinkClick(orderId)}>
+            <i className="fas fa-link"></i>
+            <span className="pl-2">Copy Link</span>
+          </Button>
+          <Popconfirm
+            placement="left"
+            title={"Save Confirmation"}
+            description={
+              <div className="pb-2">
+                <div>{`Do you wish to proceed?`}</div>
+              </div>
+            }
+            onConfirm={handleSave}
+            okText="Yes"
+            cancelText="No"
+          >
+            <LockButton
+              tooltip={"Save Changes"}
+              disabled={remakeChangeItems.length === 0}
+              label={"Save"}
+            />
+          </Popconfirm>
+        </div>
+      }
+
+      <div className="border-t border-b mt-4 mb-2">
+        <div className="flex flex-row justify-between bg-[#F5F5F5] mt-[2px] mb-[2px] pl-2 pr-2">
+          <div><i className="fa-solid fa-user pr-2 text-blue-500" />{inputData?.createdBy}</div>
+          <div><i className="fa-solid fa-calendar-day text-blue-500 pr-2" />{YMDDateFormat(inputData?.createdAt)}</div>
+        </div>
       </div>
 
-      <Divider />
+      <div className="flex flex-row gap-2">
+        <section className="w-1/3">
+          <div className="border rounded-sm">
+            <div className="bg-[#F5F5F5] pl-2 pt-1 pb-1 font-semibold">
+              Item for Remake
+            </div>
+            <div className="p-2">
+              <Form.Item
+                labelCol={{ flex: '150px' }}
+                labelAlign="left"
+                label="Work Order No."
+                name="workOrderNo"
+                className="mb-0"
+                onClick={openWOLinkCallback}
+              >
+                <span className="text-[var(--centrablue)] hover:cursor-pointer hover:underline">
+                  {inputData?.workOrderNo}
+                </span>
+              </Form.Item>
 
-      <div
-        className="pt-2"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 2fr",
-          columnGap: "0.75rem",
-          width: "100%",
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gridTemplateRows: "1fr 1fr",
-          }}
-        >
-          <Group
-            title={"Production Item"}
-            style={{ minWidth: "21rem" }}
-            contentStyle={{
-              padding: "0.5rem",
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              rowGap: "0.3rem",
-            }}
-          >
-            <LabelItem
-              label={"WO No."}
-              value={inputData?.workOrderNo}
-              leftAlign={true}
-              isValueBold={true}
-              style={{ color: "var(--centrablue)" }}
-              onClick={openWOLinkCallback}
-            />
+              <Form.Item
+                labelCol={{ flex: '150px' }}
+                labelAlign="left"
+                label="Item No."
+                name="itemNo"
+                className="mb-0"
+              >
+                <span className="">
+                  {inputData?.itemNo}
+                </span>
+              </Form.Item>
 
-            <LabelItem
-              label={"Item No."}
-              value={inputData?.itemNo}
-              emphasizeValue={true}
-              leftAlign={true}
-              isValueBold={true}
-            />
-            <LabelItem
-              label={"Branch"}
-              value={inputData?.branch}
-              leftAlign={true}
-            />
-            <LabelItem
-              label={"System"}
-              value={inputData?.systemValue}
-              leftAlign={true}
-            />
-            <LabelItem
-              label={"Size"}
-              value={inputData?.size}
-              leftAlign={true}
-            />
-            <LabelItem
-              label={"Sub Quantity"}
-              value={inputData?.subQty}
-              leftAlign={true}
-            />
-            <LabelItem
-              label={"Description"}
-              value={inputData?.description}
-              leftAlign={true}
-            />
-          </Group>
+              <Form.Item
+                labelCol={{ flex: '150px' }}
+                labelAlign="left"
+                label="Sub Quantity"
+                name="subQty"
+                className="mb-0"
+              >
+                <span className="">
+                  {inputData?.subQty}
+                </span>
+              </Form.Item>
+
+              <Form.Item
+                labelCol={{ flex: '150px' }}
+                labelAlign="left"
+                label="Description"
+                name="subQty"
+                className="mb-0"
+              >
+                <span className="">
+                  {inputData?.description}
+                </span>
+              </Form.Item>
+
+              <Form.Item
+                labelCol={{ flex: '150px' }}
+                labelAlign="left"
+                label="System"
+                name="system"
+                className="mb-0"
+              >
+                <span className="">
+                  {inputData?.systemValue}
+                </span>
+              </Form.Item>
+
+              <Form.Item
+                labelCol={{ flex: '150px' }}
+                labelAlign="left"
+                label="Size"
+                name="size"
+                className="mb-0"
+              >
+                <span className="">
+                  {inputData?.size}
+                </span>
+              </Form.Item>
+
+              <Form.Item
+                labelCol={{ flex: '150px' }}
+                labelAlign="left"
+                label="Description"
+                name="description"
+                className="mb-0"
+              >
+                <span className="">
+                  {inputData?.description}
+                </span>
+              </Form.Item>
+
+
+              {false &&
+                <LabelItem
+                  label={"Branch"}
+                  value={inputData?.branch}
+                  leftAlign={true}
+                />
+              }
+            </div>
+          </div>
           <Group
             title="Attachments"
             contentStyle={{
@@ -491,7 +529,7 @@ export default function EditRemakeOrder(props) {
               {
                 Icon: DeleteForeverIcon,
                 callback: deleteDocumentsButtonDisabled()
-                  ? () => {}
+                  ? () => { }
                   : handleDeleteFiles,
                 tooltip: "Delete Document(s)",
                 className: deleteDocumentsButtonDisabled()
@@ -533,119 +571,161 @@ export default function EditRemakeOrder(props) {
               </>
             )}
           </Group>
-        </div>
+        </section>
 
-        <Group
-          title="Remake Info"
-          style={{ minWidth: "21rem" }}
-          contentStyle={{
-            padding: "0.5rem",
-            display: "grid",
-            gridTemplateColumns: "0.75fr 1fr",
-            rowGap: "0.3rem",
-            columnGap: "0.5rem",
-          }}
-        >
-          <SelectItem
-            label="Product"
-            name="product"
-            selected={remakeProductOptions.find(
-              (x) => x.value === inputData?.product
-            )}
-            options={remakeProductOptions}
-            onChange={handleSelectChange}
-            changeItems={remakeChangeItems}
-          />
-          <LabelItem
-            label="Requested By"
-            value={inputData?.createdBy}
-            leftAlign={true}
-          />
-          <LabelItem
-            label="Requested Date"
-            value={inputData?.createdAt}
-            type="Date"
-            leftAlign={true}
-          />
-
-          <DateItem
-            label="Schedule Date"
-            name="scheduleDate"
-            value={inputData?.scheduleDate}
-            onChange={handleInputChange}
-            changeItems={remakeChangeItems}
-            style={{ color: "var(--centrablue)" }}
-            leftAlign={true}
-          />
-          <SelectItem
-            label="Department Responsible"
-            name="departmentResponsible"
-            selected={remakeDepartmentResponsibleOptions.find(
-              (x) => x.value === inputData?.departmentResponsible
-            )}
-            options={remakeDepartmentResponsibleOptions}
-            onChange={handleSelectChange}
-            changeItems={remakeChangeItems}
-          />
-          <SelectItem
-            label="Department Responsible Section"
-            name="departmentResponsibleSection"
-            disabled={
-              !(
-                inputData?.departmentResponsible &&
-                remakeDepartmentResponsibleSectionOptions
-              )
+        <section className="flex-1 border rounded-sm">
+          <div className="bg-[#ebeff3] pl-2 pt-1 pb-1 font-semibold">
+            Remake Info
+          </div>
+          <div className="p-2">
+            <Form.Item
+              labelCol={{ flex: '200px' }}
+              labelAlign="left"
+              label="Product"
+              name="product"
+              className="mb-0"
+            >
+              <span className="">
+                <Select
+                  size="small"
+                  options={remakeProductOptions}
+                  onChange={handleSelectChange}
+                  selected={remakeProductOptions.find(
+                    (x) => x.value === inputData?.product
+                  )}
+                />
+              </span>
+            </Form.Item>
+            {false &&
+              <>
+                <LabelItem
+                  label="Requested By"
+                  value={inputData?.createdBy}
+                  leftAlign={true}
+                />
+                <LabelItem
+                  label="Requested Date"
+                  value={inputData?.createdAt}
+                  type="Date"
+                  leftAlign={true}
+                />
+              </>
             }
-            selected={remakeDepartmentResponsibleSectionOptions?.find(
-              (x) => x.value === inputData?.departmentResponsibleSection
-            )}
-            options={remakeDepartmentResponsibleSectionOptions}
-            onChange={handleSelectChange}
-            changeItems={remakeChangeItems}
-          />
 
-          <SelectItem
-            label="Reason Category"
-            name="reasonCategory"
-            selected={remakeReasonCategoryOptions.find(
-              (x) => x.value === inputData?.reasonCategory
-            )}
-            options={remakeReasonCategoryOptions}
-            onChange={handleSelectChange}
-            changeItems={remakeChangeItems}
-          />
-          <SelectItem
-            label="Reason"
-            name="reason"
-            disabled={!(inputData?.reasonCategory && remakeReasonOptions)}
-            selected={remakeReasonOptions?.find(
-              (x) => x.value === inputData?.reason
-            )}
-            options={remakeReasonOptions}
-            onChange={handleSelectChange}
-            changeItems={remakeChangeItems}
-          />
-          <SelectItem
-            label="Reason Detail"
-            name="reasonDetail"
-            disabled={!(inputData?.reason && remakeReasonDetailOptions)}
-            selected={remakeReasonDetailOptions?.find(
-              (x) => x.value === inputData?.reasonDetail
-            )}
-            options={remakeReasonDetailOptions}
-            onChange={handleSelectChange}
-            changeItems={remakeChangeItems}
-          />
-          <TextAreaItem
-            id={"Notes"}
-            label={<span style={{ fontWeight: 400 }}>Notes</span>}
-            name={"notes"}
-            value={inputData?.notes}
-            rows={6}
-            onChange={handleInputChange}
-            changeItems={remakeChangeItems}
-          />
-        </Group>
+            <Form.Item
+              labelCol={{ flex: '200px' }}
+              labelAlign="left"
+              label="Scheduled Date"
+              name="scheduleDate"
+              className="mb-0"
+            >
+              <span className="">
+                <DatePicker
+                  size="small"
+                  onChange={handleDateChange}
+                  value={dayjs(inputData?.scheduleDate)}
+                  format="YYYY-MM-DD"
+                />
+              </span>
+            </Form.Item>
+
+            <Form.Item
+              labelCol={{ flex: '200px' }}
+              labelAlign="left"
+              label="Department Responsible"
+              name="departmentResponsible"
+              className="mb-0"
+            >
+              <span className="">
+                <Select
+                  size="small"
+                  value={inputData?.departmentResponsible}
+                  options={departmentResponsibleOptions}
+                  onChange={(val) => handleSelectChange(val, "departmentResponsible")}
+                />
+              </span>
+            </Form.Item>
+
+            {remakeDepartmentResponsibleSectionOptions?.length > 0 &&
+              <Form.Item
+                labelCol={{ flex: '200px' }}
+                labelAlign="left"
+                label="Section Responsible"
+                name="departmentResponsibleSection"
+                className="mb-0"
+              >
+                <span className="">
+                  <Select
+                    size="small"
+                    value={inputData?.departmentResponsibleSection}
+                    options={remakeDepartmentResponsibleSectionOptions}
+                    onChange={(val) => handleSelectChange(val, "departmentResponsibleSection")}
+                  />
+                </span>
+              </Form.Item>
+            }
+            <div className="mt-2">Reason:</div>
+            <Space.Compact style={{ width: '100%' }} className="flex">
+              <div className="flex-1">
+                <Form.Item
+                  labelAlign="left"
+                  label=""
+                  name="reasonCategory"
+                  className="mb-0"
+                >
+                  <Select
+                    size="small"
+                    options={reasonCategoryOptions}
+                    value={inputData?.reasonCategory}
+                    style={{ flex: 1 }}
+                    onChange={(val) => handleSelectChange(val, "reasonCategory")}
+                  />
+                </Form.Item>
+              </div>
+              <div className="flex-1">
+                <Form.Item
+                  labelAlign="left"
+                  label=""
+                  name="reason"
+                  className="mb-0"
+                >
+                  <Select
+                    size="small"
+                    options={remakeReasonOptions}
+                    value={inputData?.reason}
+                    style={{ flex: 1 }}
+                    onChange={(val) => handleSelectChange(val, "reason")}
+                  />
+                </Form.Item>
+              </div>
+              <div className="flex-1">
+                <Form.Item
+                  labelAlign="left"
+                  label=""
+                  name="reasonDetail"
+                  className="mb-0"
+                >
+                  <Select
+                    size="small"
+                    options={remakeReasonDetailOptions}
+                    value={inputData?.reasonDetail}
+                    style={{ flex: 1 }}
+                    onChange={(val) => handleSelectChange(val, "reasonDetail")}
+                  />
+                </Form.Item>
+              </div>
+            </Space.Compact>
+            <TextAreaItem
+              id={"Notes"}
+              label={<span style={{ fontWeight: 400 }}>Notes</span>}
+              name={"notes"}
+              value={inputData?.notes}
+              rows={6}
+              onChange={handleInputChange}
+              changeItems={remakeChangeItems}
+            />
+          </div>
+        </section>
       </div>
 
       <ActionModal
@@ -669,7 +749,7 @@ export default function EditRemakeOrder(props) {
             <div>Proceed anyway?</div>
           </div>
         }
-      >        
+      >
         {/*
           Document Upload
           documents={attachments}
@@ -698,6 +778,6 @@ export default function EditRemakeOrder(props) {
           </div>
         </div>
       </ConfirmationModal>
-    </div>
+    </Form>
   );
 }
