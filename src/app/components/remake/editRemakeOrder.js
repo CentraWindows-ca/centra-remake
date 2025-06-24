@@ -18,10 +18,7 @@ import { ProductionRemakeOptions, RemakeRowStates } from "app/utils/constants";
 import LockButton from "app/components/lockButton/lockButton";
 import { mapRemakeRowStateToKey, openBlob, openWOLink, YMDDateFormat } from "app/utils/utils";
 
-import LabelItem from "app/components/workorderComponents/labelItem";
 import OrderStatus from "app/components/remake/orderStatus";
-
-import Divider from "app/components/remake/divider";
 
 import {
   deleteAttachments,
@@ -36,7 +33,9 @@ export default function EditRemakeOrder(props) {
     orderId,
     onClose,
     onShareLinkClick,
-    form
+    form,
+    onFinish,
+    onFinishFailed
   } = props;
 
   const moduleName = "remake";
@@ -96,7 +95,7 @@ export default function EditRemakeOrder(props) {
       );
     }
   }, [attachments]);
- 
+
   // for rendering dynamic options
   const remakeProductOptions = ProductionRemakeOptions.find(
     (x) => x.key === "product"
@@ -109,6 +108,7 @@ export default function EditRemakeOrder(props) {
   const departmentResponsibleOptions = ProductionRemakeOptions.find(
     (x) => x.key === "departmentResponsible"
   )?.options?.map((group) => ({
+    key: group.key,
     value: group.value,
     label: group.value,
   }));
@@ -116,6 +116,7 @@ export default function EditRemakeOrder(props) {
   const reasonCategoryOptions = ProductionRemakeOptions.find(
     (x) => x.key === "reasonCategory"
   )?.options?.map((group) => ({
+    key: group.key,
     value: group.value,
     label: group.value,
   }));
@@ -131,6 +132,7 @@ export default function EditRemakeOrder(props) {
     (x) => x.key === "reasonCategory"
   )?.options?.find((x) => x.value === inputData?.reasonCategory)?.options?.map((reasonCategory) => {
     return {
+      key: reasonCategory.key,
       value: reasonCategory.value,
       label: reasonCategory.value,
     }
@@ -141,6 +143,7 @@ export default function EditRemakeOrder(props) {
   )?.options?.find((x) => x.value === inputData?.reasonCategory)
     ?.options?.find((y) => y.value === inputData?.reason)?.options?.map((reasonDetail) => {
       return {
+        key: reasonDetail.key,
         value: reasonDetail.value,
         label: reasonDetail.value,
       };
@@ -314,10 +317,14 @@ export default function EditRemakeOrder(props) {
   };
 
   return (
-    <Form form={form}>
+    <Form
+      form={form}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+    >
       <div className="flex flex-row">
         <div className="bg-[#E2E8F0] text-[#1868B1] pl-2 pt-[1px] pr-2 rounded-sm w-[7.9rem]">
-          <i className="fa-solid fa-rotate-left pr-1"/>
+          <i className="fa-solid fa-rotate-left pr-1" />
           {`Remake# ${inputData?.remakeId}`}
         </div>
         <div className="ml-2">
@@ -365,7 +372,7 @@ export default function EditRemakeOrder(props) {
         <div className="flex flex-row justify-between bg-[#F5F5F5] mt-[2px] mb-[2px] pl-2 pr-2">
           <Space>
             <div title="Parent Work Order" className="font-semibold text-blue-500 hover:underline hover:cursor-pointer">{inputData?.workOrderNo?.toUpperCase()}</div>
-            <div title="Reported By"><i className="fa-solid fa-user pr-1 text-indigo-500" />{inputData?.createdBy}</div>
+            <div title="Reported By" className="border-l"><i className="fa-solid fa-user pr-1 pl-2 text-indigo-500" />{inputData?.createdBy}</div>
           </Space>
           <div title="Date Created"><i className="fa-solid fa-calendar-day text-blue-500 pr-2" />{YMDDateFormat(inputData?.createdAt)}</div>
         </div>
@@ -377,76 +384,53 @@ export default function EditRemakeOrder(props) {
             <div className="bg-rose-50 pl-2 pt-1 pb-1 font-semibold">
               Item for Remake
             </div>
-            <div className="p-2">              
-              <Form.Item
-                labelCol={{ flex: '90px' }}
-                labelAlign="left"
-                label="Item No."
-                name="itemNo"
-                className="mb-0"
-              >
-                <span className="">
+            <div className="p-2">
+              <div className="flex items-center mb-2">
+                <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+                  Item No.:
+                </label>
+                <div className="flex-1">
                   {inputData?.itemNo}
-                </span>
-              </Form.Item>
+                </div>
+              </div>
 
-              <Form.Item
-                labelCol={{ flex: '90px' }}
-                labelAlign="left"
-                label="Sub Qty"
-                name="subQty"
-                className="mb-0"
-              >
-                <span className="">
+              <div className="flex items-center mb-2">
+                <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+                  Sub Qty:
+                </label>
+                <div className="flex-1">
                   {inputData?.subQty}
-                </span>
-              </Form.Item>
+                </div>
+              </div>
 
-              <Form.Item
-                labelCol={{ flex: '90px' }}
-                labelAlign="left"
-                label="Description"
-                name="subQty"
-                className="mb-0"
-              >
-                <span className="">
+              <div className="flex items-center mb-2">
+                <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+                  Description:
+                </label>
+                <div className="flex-1">
                   {inputData?.description}
-                </span>
-              </Form.Item>
+                </div>
+              </div>
 
-              <Form.Item
-                labelCol={{ flex: '90px' }}
-                labelAlign="left"
-                label="System"
-                name="system"
-                className="mb-0"
-              >
-                <span className="">
+              <div className="flex items-center mb-2">
+                <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+                  System:
+                </label>
+                <div className="flex-1">
                   {inputData?.systemValue}
-                </span>
-              </Form.Item>
+                </div>
+              </div>
 
-              <Form.Item
-                labelCol={{ flex: '90px' }}
-                labelAlign="left"
-                label="Size"
-                name="size"
-                className="mb-0"
-              >
-                <span className="">
+              <div className="flex items-center mb-2">
+                <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+                  Size:
+                </label>
+                <div className="flex-1">
                   {inputData?.size}
-                </span>
-              </Form.Item>
-              {false &&
-                <LabelItem
-                  label={"Branch"}
-                  value={inputData?.branch}
-                  leftAlign={true}
-                />
-              }
+                </div>
+              </div>
             </div>
           </div>
-          
         </section>
 
         <section className="border rounded-sm w-3/5">
@@ -461,19 +445,19 @@ export default function EditRemakeOrder(props) {
                 label="Product"
                 name="product"
                 className="mb-0"
+                rules={[{ required: true }]}
               >
-                <span className="">
-                  <Select
-                    size="small"
-                    options={remakeProductOptions}
-                    onChange={handleSelectChange}
-                    selected={remakeProductOptions.find(
-                      (x) => x.value === inputData?.product
-                    )}
-                    style={{ width: '11rem' }}
-                    placeholder="Select Product"
-                  />
-                </span>
+                <Select
+                  size="small"
+                  options={remakeProductOptions}
+                  onChange={handleSelectChange}
+                  selected={remakeProductOptions.find(
+                    (x) => x.value === inputData?.product
+                  )}
+                  style={{ width: '11rem' }}
+                  placeholder="Select Product"
+                  value={inputData?.product}
+                />
               </Form.Item>
 
               <Form.Item
@@ -487,7 +471,7 @@ export default function EditRemakeOrder(props) {
                   <DatePicker
                     size="small"
                     onChange={handleDateChange}
-                    value={dayjs(inputData?.scheduleDate)}
+                    value={inputData?.scheduleDate ? dayjs(inputData.scheduleDate) : null}
                     format="YYYY-MM-DD"
                     style={{ width: '11rem' }}
                   />
@@ -499,10 +483,10 @@ export default function EditRemakeOrder(props) {
               <Form.Item
                 labelCol={{ flex: '100px' }}
                 name="departmentResponsible"
-
                 className="mb-0"
                 labelAlign="left"
                 label="Department"
+                rules={[{ required: true }]}
               >
                 <Select
                   size="small"
@@ -540,7 +524,8 @@ export default function EditRemakeOrder(props) {
                   label="Reason"
                   name="reasonCategory"
                   className="mb-0"
-                  labelCol={{ flex: '70px' }}
+                  labelCol={{ flex: '100px' }}
+                  rules={[{ required: true }]}
                 >
                   <Select
                     size="small"
@@ -557,7 +542,6 @@ export default function EditRemakeOrder(props) {
                   label=""
                   name="reason"
                   className="mb-0"
-
                 >
                   <Select
                     size="small"
@@ -580,7 +564,6 @@ export default function EditRemakeOrder(props) {
                       size="small"
                       options={remakeReasonDetailOptions}
                       value={inputData?.reasonDetail}
-
                       onChange={(val) => handleSelectChange(val, "reasonDetail")}
                       placeholder="Detail"
                     />
@@ -594,14 +577,14 @@ export default function EditRemakeOrder(props) {
                 label="Notes"
                 name="notes"
                 className="mb-0"
-                labelCol={{ flex: '70px' }}
+                labelCol={{ flex: '100px' }}
               >
-              <TextArea
-                name={"notes"}
-                value={inputData?.notes}
-                rows={2}
-                onChange={handleInputChange}
-                changeItems={remakeChangeItems}
+                <TextArea
+                  name={"notes"}
+                  value={inputData?.notes}
+                  rows={2}
+                  onChange={handleInputChange}
+                  changeItems={remakeChangeItems}
                 />
               </Form.Item>
             </div>
@@ -617,13 +600,13 @@ export default function EditRemakeOrder(props) {
               <i className="fa fa-trash-can text-red-500" />
             </div>
           </div>
-          <div className="p-2 flex justify-center items-center h-full w-full">           
-            <div className="translate-y-[-15px]"> 
+          <div className="p-2 flex justify-center items-center h-full w-full">
+            <div className="translate-y-[-15px]">
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={"No Attachments"} />
-            </div>                      
+            </div>
           </div>
         </section>
-      </div>         
+      </div>
     </Form>
   );
 }

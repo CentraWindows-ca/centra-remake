@@ -571,7 +571,9 @@ export default function Remakes() {
     ),
   };
 
-  const handleEditRemakeSave = useCallback(async () => {
+  const handleEditRemakeSave = useCallback(async (values) => {
+    console.log("values ", values)
+    editRemakeForm.submit();
     //if (remakeOrderData) {
     //  setIsSaving(true);
     //  let data = [];
@@ -596,6 +598,37 @@ export default function Remakes() {
     //  setIsSaving(false);
     //}
   }, [/*remakeOrderData, remakeChangeItems, refetchOrder*/]);
+
+  const handleFinish = useCallback(async (values) => {
+    console.log("values ", values)
+    //if (remakeOrderData) {
+    //  setIsSaving(true);
+    //  let data = [];
+
+    //  let remakeUpdates = JSON.parse(JSON.stringify(remakeOrderData));
+
+    //  if (remakeChangeItems.length > 0) {
+    //    remakeChangeItems.map((ci) => {
+    //      var newVal = {};
+    //      newVal = ci.value;
+    //      remakeUpdates[ci.key] = newVal;
+    //    });
+    //  }
+
+    //  data.push(remakeUpdates);
+
+    //  await updateRemakeWorkOrder(data);
+
+    //  refetchOrder();
+
+    //  setRemakeChangeItems([]);
+    //  setIsSaving(false);
+    //}
+  }, [/*remakeOrderData, remakeChangeItems, refetchOrder*/]);
+
+  const handleFinishFailed = () => {
+    console.log("Show error message")
+  }
 
   return (
     <div className={styles.root}>
@@ -637,6 +670,8 @@ export default function Remakes() {
           onShareLinkClick={onShareLinkClick}
           setRemakeItem={setRemakeItem}
           remakeItem={remakeItem}
+          onFinish={handleFinish}
+          onFinishFailed={handleFinishFailed}
         />
       </CustomModal>
 
