@@ -62,18 +62,18 @@ export default function OrdersTable(props) {
   const filterRow = columns.reduce(
     (row, col) => {
       const colKey = col.dataIndex || col.key;
-        row[colKey] = (
-          <Input
-            placeholder={"--"}
-            size="small"
-            value={filters[colKey] || ""}
-            onChange={(e) =>
-              handleFilterChange(colKey, e.target.value)
-            }
-            bordered={false}
-            style={{ textAlign: "left", padding:0 }}
-          />
-        );      
+      row[colKey] = (
+        <Input
+          placeholder={"--"}
+          size="small"
+          value={filters[colKey] || ""}
+          onChange={(e) =>
+            handleFilterChange(colKey, e.target.value)
+          }
+          bordered={false}
+          style={{ textAlign: "left", padding: 0 }}
+        />
+      );
       return row;
     },
     { key: "filter-row" }
@@ -119,9 +119,9 @@ export default function OrdersTable(props) {
             </div>
           }
 
-        </div>       
-          <Table
-            className="
+        </div>
+        <Table
+          className="
               my-custom-table
               [&_.ant-table]:!text-[12px]
               [&_.ant-table-tbody_tr_td]:!text-[12px]
@@ -135,20 +135,20 @@ export default function OrdersTable(props) {
               [&_tr[data-row-key='filter-row']_td.ant-table-cell-fix-left]:z-[11]
               [&_tr[data-row-key='filter-row']_td.ant-table-cell-fix-right]:z-[11]
             "
-            columns={columns}
-            dataSource={displayData}
-            size="small"
-            pagination={false}
-            loading={isLoading}
-            //rowSelection={rowSelection}
-            onChange={onTableChange}
-            sticky
-            tableLayout="fixed"
-            scroll={{
-              x: "max-content",
-              y: "calc(100vh - 250px)", // Adjust height as needed
-            }}
-          />     
+          columns={columns}
+          dataSource={displayData}
+          size="small"
+          pagination={false}
+          loading={isLoading}
+          //rowSelection={rowSelection}
+          onChange={onTableChange}
+          sticky
+          tableLayout="fixed"
+          scroll={{
+            x: "max-content",
+            y: "calc(100vh - 250px)", // Adjust height as needed
+          }}
+        />
       </div>
     </div>
   );
