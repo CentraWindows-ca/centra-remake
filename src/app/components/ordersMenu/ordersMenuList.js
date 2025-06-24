@@ -111,12 +111,12 @@ export default function OrdersMenuList(props) {
                 )}
               </>
             ) : (
-              <Tooltip title={status.value} placement="right">
+              <div title={status.value}>
                 <i
                   className={`${status.icon}`}
                   style={{ color: `${status.color}` }}
                 />
-              </Tooltip>
+              </div>
             )}
           </OrdersMenuItem>
         );
