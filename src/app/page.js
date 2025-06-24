@@ -626,7 +626,7 @@ export default function Remakes() {
         onCancel={onCloseClick}
         onOk={handleEditRemakeSave}
         moduleName={department}
-        width={1000}
+        width={1200}
         okText="Save"
         cancelText="Cancel"
       >

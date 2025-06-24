@@ -1516,7 +1516,7 @@ export const ProductionRemakeOptions = [
       },
       {
         key: "AppearanceIssues",
-        value: "AppearanceIssues",
+        value: "Appearance Issues",
         options: [
           {
             key: "silicone",
