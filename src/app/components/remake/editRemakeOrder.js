@@ -99,7 +99,11 @@ export default function EditRemakeOrder(props) {
   // for rendering dynamic options
   const remakeProductOptions = ProductionRemakeOptions.find(
     (x) => x.key === "product"
-  )?.options;
+  )?.options?.map((group) => ({
+    key: group.key,
+    value: group.value,
+    label: group.value,
+  }));
 
   const remakeBranchOptions = ProductionRemakeOptions.find(
     (x) => x.key === "branch"
@@ -316,11 +320,15 @@ export default function EditRemakeOrder(props) {
     openWOLink(inputData?.workOrderNo);
   };
 
+  useEffect(() => {
+    form.setFieldsValue(remakeOrderData)
+  }, [remakeOrderData])
+    
   return (
-    <Form
+    <Form      
       form={form}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
+      onFinishFailed={onFinishFailed}      
     >
       <div className="flex flex-row">
         <div className="bg-[#E2E8F0] text-[#1868B1] pl-2 pt-[1px] pr-2 rounded-sm w-[7.9rem]">
@@ -451,9 +459,6 @@ export default function EditRemakeOrder(props) {
                   size="small"
                   options={remakeProductOptions}
                   onChange={handleSelectChange}
-                  selected={remakeProductOptions.find(
-                    (x) => x.value === inputData?.product
-                  )}
                   style={{ width: '11rem' }}
                   placeholder="Select Product"
                   value={inputData?.product}
@@ -584,7 +589,6 @@ export default function EditRemakeOrder(props) {
                   value={inputData?.notes}
                   rows={2}
                   onChange={handleInputChange}
-                  changeItems={remakeChangeItems}
                 />
               </Form.Item>
             </div>

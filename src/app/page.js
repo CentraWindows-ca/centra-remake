@@ -19,7 +19,7 @@ import {
   closeModal,
   updateOrders,
   updateStatusCount,
-  updateTotal,
+  updateTotal
 } from "app/redux/orders";
 
 import { updateResult } from "app/redux/orders";
@@ -282,7 +282,7 @@ export default function Remakes() {
         <div
           className="text-xs w-full hover:underline hover:text-sky-700 p-1 hover:cursor-pointer rounded"
           onClick={() => {
-            onEditClick(order.id);
+            onEditClick(order.id);            
             handleClosePopover(); // close popover
           }}
         >
@@ -293,6 +293,7 @@ export default function Remakes() {
           className="text-xs w-full hover:underline hover:text-sky-700 p-1 hover:cursor-pointer rounded"
           onClick={() => {
             onEditClick(order.id);
+            setRemakeItem(order);
             handleClosePopover(); // close popover
           }}
         >
@@ -569,59 +570,24 @@ export default function Remakes() {
     ),
   };
 
-  const handleEditRemakeSave = useCallback(async (values) => {
+  const handleEditRemakeSave = () => {
     editRemakeForm.submit();
-    //if (remakeOrderData) {
-    //  setIsSaving(true);
-    //  let data = [];
+  }
 
-    //  let remakeUpdates = JSON.parse(JSON.stringify(remakeOrderData));
+  const handleFinish = useCallback(async (values) => {    
+    if (values && remakeItem) {
+      let _remakeItem = {...remakeItem}
 
-    //  if (remakeChangeItems.length > 0) {
-    //    remakeChangeItems.map((ci) => {
-    //      var newVal = {};
-    //      newVal = ci.value;
-    //      remakeUpdates[ci.key] = newVal;
-    //    });
-    //  }
+      Object.keys(values).forEach((key) => {
+        if (values[key] !== undefined) {
+          _remakeItem[key] = values[key];
+        }
+      });
 
-    //  data.push(remakeUpdates);
-
-    //  await updateRemakeWorkOrder(data);
-
-    //  refetchOrder();
-
-    //  setRemakeChangeItems([]);
-    //  setIsSaving(false);
-    //}
-  }, [/*remakeOrderData, remakeChangeItems, refetchOrder*/]);
-
-  const handleFinish = useCallback(async (values) => {
-    console.log("values ", values)
-    //if (remakeOrderData) {
-    //  setIsSaving(true);
-    //  let data = [];
-
-    //  let remakeUpdates = JSON.parse(JSON.stringify(remakeOrderData));
-
-    //  if (remakeChangeItems.length > 0) {
-    //    remakeChangeItems.map((ci) => {
-    //      var newVal = {};
-    //      newVal = ci.value;
-    //      remakeUpdates[ci.key] = newVal;
-    //    });
-    //  }
-
-    //  data.push(remakeUpdates);
-
-    //  await updateRemakeWorkOrder(data);
-
-    //  refetchOrder();
-
-    //  setRemakeChangeItems([]);
-    //  setIsSaving(false);
-    //}
-  }, [/*remakeOrderData, remakeChangeItems, refetchOrder*/]);
+      updateRemakeWorkOrder([_remakeItem]);
+      onCloseClick();
+    }
+  }, [remakeItem]);
 
   const handleFinishFailed = () => {
     console.log("Show error message")
