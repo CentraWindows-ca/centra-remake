@@ -432,58 +432,50 @@ export default function Remakes() {
       key: "product",
       width: 150,
     },
-    ...(statusView.length > 0 && RemakeRowStates[statusView]?.columns.includes("City")
-      ? [{
-        title: "City",
-        dataIndex: "city",
-        key: "city",
-        width: 150,
-        render: (text) => <>{text?.toUpperCase()}</>,
-      }]
-      : []
-    ),
-    ...(statusView === "" || RemakeRowStates[statusView]?.columns.includes("Scheduled Date")
-      ? [{
-        title: `Scheduled Date`,
-        dataIndex: "scheduleDate",
-        key: "scheduleDate",
-        width: 130,
-        render: (date, record, index) =>
-          index === 0
-            ? date // do not format — leave raw for editable filter row
-            : (
-              <div className="text-gray-400">
-                {moment(date).format("ll")}
-              </div>
-            ),
-        defaultSortOrder: "descend",
-        sorter: (a, b) => moment(a.scheduleDate).valueOf() - moment(b.scheduleDate).valueOf(),
-      }]
-      : []
-    ),
+    //{
+    //  title: "City",
+    //  dataIndex: "city",
+    //  key: "city",
+    //  width: 150      
+    //},
 
-    ...(statusView === "" || RemakeRowStates[statusView]?.columns.includes("Assignee")
-      ? [{
-        title: "Assigned To",
-        dataIndex: "assignedTo",
-        key: "assignedTo",
-        width: 180,
-        render: (assignedTo, record, index) =>
-          index === 0
-            ? assignedTo
-            : (
-              <div className="text-center p-0 m-0">
-                <UserSelectField
-                  value={assignedTo}
-                  onChange={(user) =>
-                    handleAssignedToChange(user, record)
-                  }
-                />
-              </div>
-            ),
-      }]
-      : []
-    ),
+    {
+      title: `Scheduled Date`,
+      dataIndex: "scheduleDate",
+      key: "scheduleDate",
+      width: 130,
+      render: (date, record, index) =>
+        index === 0
+          ? date
+          : (
+            <div className="text-gray-400">
+              {moment(date).format("ll")}
+            </div>
+          ),
+      defaultSortOrder: "descend",
+      sorter: (a, b) =>
+        moment(a.scheduleDate).valueOf() - moment(b.scheduleDate).valueOf(),
+    },
+
+    {
+      title: "Assigned To",
+      dataIndex: "assignedTo",
+      key: "assignedTo",
+      width: 180,
+      render: (assignedTo, record, index) =>
+        index === 0
+          ? assignedTo
+          : (
+            <div className="text-center p-0 m-0">
+              <UserSelectField
+                value={assignedTo}
+                onChange={(user) =>
+                  handleAssignedToChange(user, record)
+                }
+              />
+            </div>
+          ),
+    },
     {
       title: "Status",
       dataIndex: "status",
