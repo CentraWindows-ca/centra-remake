@@ -130,13 +130,17 @@ export default function Remakes() {
   } = useSelector((state) => state.orders);
 
   const fetchOrders = async () => {
-    const result = await fetchRemakeWorkOrders(
-      pageNumber,
-      pageSize,
-      statusView ? statusOptions.find((x) => x.key === statusView).value : "",
-      sort.sortBy,
-      sort.isDescending
-    );
+    //const result = await fetchRemakeWorkOrders(
+    //  pageNumber,
+    //  pageSize,
+    //  statusView ? statusOptions.find((x) => x.key === statusView).value : "",
+    //  sort.sortBy,
+    //  sort.isDescending
+    //);
+
+    const result = await fetchAllRemakeWorkOrders();
+
+    console.log("result ", result)
 
     let _statusCountPromises = statusOptions.map(async (_status) => {
       let _count = await fetchStatusCount(_status.value);
@@ -152,7 +156,8 @@ export default function Remakes() {
 
     dispatch(updateStatusCount(_statusCount));
     dispatch(updateTotal(result.data.totalCount));
-    return result.data.data;
+    //return result.data.data;
+    return result.data;
   };
 
   const fetchStatusCount = async (status) => {
@@ -376,30 +381,25 @@ export default function Remakes() {
       dataIndex: "workOrderNo",
       key: "workOrderNo",
       width: 120,
-      render: (originalWorkOrderNo) => (
-        <Tooltip title={`Open ${originalWorkOrderNo} in New Tab`}>
-          <div
-            className="flex items-center hover:text-centraBlue cursor-pointer hover:underline min-h-[30px]"
-            onClick={() => openWOLink(originalWorkOrderNo)}
-          >
-            {originalWorkOrderNo || ""}
-          </div>
-        </Tooltip>
-      ),
-    },
+      render: (originalWorkOrderNo, order, index) => 
+        index === 0
+          ? originalWorkOrderNo
+          :
+        (<Tooltip title={`Open ${originalWorkOrderNo} in New Tab`}>
+            <div
+              className="flex items-center hover:text-centraBlue cursor-pointer hover:underline min-h-[30px]"
+              onClick={() => openWOLink(originalWorkOrderNo)}
+            >
+              {originalWorkOrderNo || ""}
+            </div>
+          </Tooltip>
+        )
+      },    
     {
       title: `Item`,
       dataIndex: "itemNo",
       key: "itemNo",
-      width: 120,
-      render: (itemNo, order) => (
-        <div
-          className="w-full flex-wrap truncate hover:text-centraBlue cursor-pointer hover:underline"
-          onClick={() => onEditClick(order?.id)}
-        >
-          {itemNo}
-        </div>
-      ),
+      width: 120
     },
     {
       title: `SubQty`,
@@ -438,7 +438,6 @@ export default function Remakes() {
     //  key: "city",
     //  width: 150      
     //},
-
     {
       title: `Scheduled Date`,
       dataIndex: "scheduleDate",
@@ -456,7 +455,6 @@ export default function Remakes() {
       sorter: (a, b) =>
         moment(a.scheduleDate).valueOf() - moment(b.scheduleDate).valueOf(),
     },
-
     {
       title: "Assigned To",
       dataIndex: "assignedTo",
@@ -509,17 +507,13 @@ export default function Remakes() {
       case "edit":
         if (orderIdParam.length > 0)
           dispatch(openOrderModal({ orderId: orderIdParam, isEdit: true }));
-
         break;
-
       case "create":
         dispatch(openCreateModal());
         break;
-
       default:
         if (orderIdParam.length > 0)
           dispatch(openOrderModal({ orderId: orderIdParam, isEdit: false }));
-
         break;
     }
   }, [dispatch, modeParam, orderIdParam]);
@@ -576,7 +570,6 @@ export default function Remakes() {
   };
 
   const handleEditRemakeSave = useCallback(async (values) => {
-    console.log("values ", values)
     editRemakeForm.submit();
     //if (remakeOrderData) {
     //  setIsSaving(true);

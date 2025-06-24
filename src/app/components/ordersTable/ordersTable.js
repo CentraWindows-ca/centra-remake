@@ -64,12 +64,14 @@ export default function OrdersTable(props) {
       const colKey = col.dataIndex || col.key;
         row[colKey] = (
           <Input
-            placeholder={col.title}
+            placeholder={"--"}
             size="small"
             value={filters[colKey] || ""}
             onChange={(e) =>
               handleFilterChange(colKey, e.target.value)
             }
+            bordered={false}
+            style={{ textAlign: "left", padding:0 }}
           />
         );      
       return row;
@@ -103,23 +105,21 @@ export default function OrdersTable(props) {
             </Button>
           </div>
 
-          <div className="flex justify-end items-center">
-            <Pagination
-              onChange={onChangeProps}
-              total={total}
-              showTotal={(total) => (
-                <div className="text-sm font-semibold mt-2">{` ${total.toLocaleString()} Total`}</div>
-              )}
-              current={pageNumber}
-              pageSize={pageSize}
-            />
-          </div>
-        </div>
+          {false && // This will be added back when custom filter/search api is available
+            <div className="flex justify-end items-center">
+              <Pagination
+                onChange={onChangeProps}
+                total={total}
+                showTotal={(total) => (
+                  <div className="text-sm font-semibold mt-2">{` ${total.toLocaleString()} Total`}</div>
+                )}
+                current={pageNumber}
+                pageSize={pageSize}
+              />
+            </div>
+          }
 
-        <div
-          //style={{ height: "calc(100vh - 195px)" }}
-          //className="overflow-auto text-xs"
-        >
+        </div>       
           <Table
             className="
               my-custom-table
@@ -140,7 +140,7 @@ export default function OrdersTable(props) {
             size="small"
             pagination={false}
             loading={isLoading}
-            rowSelection={rowSelection}
+            //rowSelection={rowSelection}
             onChange={onTableChange}
             sticky
             tableLayout="fixed"
@@ -148,8 +148,7 @@ export default function OrdersTable(props) {
               x: "max-content",
               y: "calc(100vh - 250px)", // Adjust height as needed
             }}
-          />
-        </div>
+          />     
       </div>
     </div>
   );
