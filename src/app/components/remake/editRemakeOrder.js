@@ -389,7 +389,7 @@ export default function EditRemakeOrder(props) {
       <div className="flex flex-row gap-2">
         <section className="w-1/5">
           <div className="border rounded-sm h-full">
-            <div className="bg-rose-50 pl-2 pt-1 pb-1 font-semibold">
+            <div className="bg-neutral-200 pl-2 pt-1 pb-1 font-semibold">
               Item for Remake
             </div>
             <div className="p-2">
