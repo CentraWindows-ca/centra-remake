@@ -330,8 +330,8 @@ export default function Remakes() {
       return _prevOrders;
     });
 
-    let orderData = filteredOrders.find((o) => o.id === order?.id);    
-    
+    let orderData = filteredOrders.find((o) => o.id === order?.id);
+
     if (orderData) {
       orderData.assignedTo = user || "";
 
@@ -340,9 +340,9 @@ export default function Remakes() {
       ).then(() => {
         refetchOrders();
       });
-    }    
+    }
   }, [filteredOrders]);
-           
+
   const columns = [
     {
       title: `Remake #`,
@@ -448,33 +448,39 @@ export default function Remakes() {
         dataIndex: "scheduleDate",
         key: "scheduleDate",
         width: 130,
-        render: (date) => (
-          <div className="text-gray-400">
-            {moment(date).format("ll")}
-          </div>
-        ),
+        render: (date, record, index) =>
+          index === 0
+            ? date // do not format — leave raw for editable filter row
+            : (
+              <div className="text-gray-400">
+                {moment(date).format("ll")}
+              </div>
+            ),
         defaultSortOrder: "descend",
         sorter: (a, b) => moment(a.scheduleDate).valueOf() - moment(b.scheduleDate).valueOf(),
       }]
       : []
     ),
+
     ...(statusView === "" || RemakeRowStates[statusView]?.columns.includes("Assignee")
       ? [{
         title: "Assigned To",
         dataIndex: "assignedTo",
         key: "assignedTo",
         width: 180,
-        render: (assignedTo, record) =>
-          record ? (
-            <div className="text-center p-0 m-0">
-              <UserSelectField
-                value={assignedTo}
-                onChange={(user) =>
-                  handleAssignedToChange(user, record)
-                }
-              />
-            </div>
-          ) : null,
+        render: (assignedTo, record, index) =>
+          index === 0
+            ? assignedTo
+            : (
+              <div className="text-center p-0 m-0">
+                <UserSelectField
+                  value={assignedTo}
+                  onChange={(user) =>
+                    handleAssignedToChange(user, record)
+                  }
+                />
+              </div>
+            ),
       }]
       : []
     ),
@@ -484,18 +490,24 @@ export default function Remakes() {
       key: "status",
       width: 150,
       fixed: 'right',
-      render: (status, order) => (
-        <div className="text-center">
-          <OrderStatus
-            statusKey={mapRemakeRowStateToKey(status)}
-            statusList={RemakeRowStates}
-            updateStatusCallback={updateStatus}
-            orderId={order?.id}
-            handleStatusCancelCallback={() => { }}
-            style={{ width: "100%" }}
-          />
-        </div>
-      ),
+      render: (status, order, index) => {
+        if (index === 0) {
+          // Just show the raw status text (from data)
+          return status;
+        }
+        return (
+          <div className="text-center">
+            <OrderStatus
+              statusKey={mapRemakeRowStateToKey(status)}
+              statusList={RemakeRowStates}
+              updateStatusCallback={updateStatus}
+              orderId={order?.id}
+              handleStatusCancelCallback={() => { }}
+              style={{ width: "100%" }}
+            />
+          </div>
+        );
+      },
     },
   ];
 
@@ -680,7 +692,6 @@ export default function Remakes() {
         onClose={onCloseClick}
         moduleName={department}
       >
-
         <CreateRemakeOrder
           style={{
             height: "80vh",

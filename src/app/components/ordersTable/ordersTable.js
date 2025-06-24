@@ -1,6 +1,6 @@
-import { Pagination, Table } from "antd";
+import React, { useState } from "react";
+import { Pagination, Table, Input } from "antd";
 import styles from "./ordersTable.module.css";
-import styled from "styled-components";
 import { Button } from "react-bootstrap";
 
 import {
@@ -11,6 +11,15 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 export default function OrdersTable(props) {
+  const [filters, setFilters] = useState({});
+
+  const handleFilterChange = (dataIndex, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [dataIndex]: value,
+    }));
+  };
+
   const {
     data,
     columns,
@@ -19,12 +28,14 @@ export default function OrdersTable(props) {
     isLoading,
     onCreateClick,
   } = props;
+
   const dispatch = useDispatch();
+
+  const { pageNumber, pageSize, total } = useSelector((state) => state.orders);
+
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRows(newSelectedRowKeys);
   };
-
-  const { pageNumber, pageSize, total } = useSelector((state) => state.orders);
 
   const rowSelection = {
     selectedRowKeys: selectedRows,
@@ -47,20 +58,53 @@ export default function OrdersTable(props) {
     }
   };
 
+  // Build filter row
+  const filterRow = columns.reduce(
+    (row, col) => {
+      const colKey = col.dataIndex || col.key;
+        row[colKey] = (
+          <Input
+            placeholder={col.title}
+            size="small"
+            value={filters[colKey] || ""}
+            onChange={(e) =>
+              handleFilterChange(colKey, e.target.value)
+            }
+          />
+        );      
+      return row;
+    },
+    { key: "filter-row" }
+  );
+
+  // Apply filtering to data
+  const filteredData = data.filter((row) =>
+    columns.every((col) => {
+      const value = filters[col.dataIndex];
+      if (!value) return true; // no filter on this column
+
+      const rowValue = row[col.dataIndex];
+      return (
+        rowValue != null &&
+        rowValue.toString().toLowerCase().includes(value.toLowerCase())
+      );
+    })
+  );
+
+  const displayData = [filterRow, ...filteredData];
+
   return (
     <div className={"bg-white rounded-sm p-3"}>
       <div className="flex flex-col space-y-2">
         <div className="flex justify-between items-center sticky">
           <div className="flex space-x-2 sticky">
             <Button size="sm" className="text-sm" onClick={onCreateClick}>
-              {/* <i className="fa-solid fa-plus pr-2" /> */}
               <span>Create</span>
-            </Button> 
+            </Button>
           </div>
 
           <div className="flex justify-end items-center">
             <Pagination
-              //showSizeChanger
               onChange={onChangeProps}
               total={total}
               showTotal={(total) => (
@@ -68,11 +112,14 @@ export default function OrdersTable(props) {
               )}
               current={pageNumber}
               pageSize={pageSize}
-            //pageSizeOptions={[20]}
             />
           </div>
         </div>
-        <div style={{ height: "calc(100vh - 195px)" }} className="overflow-auto text-xs">
+
+        <div
+          //style={{ height: "calc(100vh - 195px)" }}
+          //className="overflow-auto text-xs"
+        >
           <Table
             className="
               my-custom-table
@@ -81,19 +128,25 @@ export default function OrdersTable(props) {
               [&_.ant-table-tbody_tr_td]:!p-[0_8px]
               [&_.ant-table-thead_tr_th]:!text-[12px]
               [&_.ant-table-thead_tr_th]:!p-[4_8px]
+              [&_tr[data-row-key='filter-row']_td]:sticky
+              [&_tr[data-row-key='filter-row']_td]:top-[0px]
+              [&_tr[data-row-key='filter-row']_td]:bg-white
+              [&_tr[data-row-key='filter-row']_td]:z-[1]
+              [&_tr[data-row-key='filter-row']_td.ant-table-cell-fix-left]:z-[11]
+              [&_tr[data-row-key='filter-row']_td.ant-table-cell-fix-right]:z-[11]
             "
             columns={columns}
-            dataSource={data}
+            dataSource={displayData}
             size="small"
             pagination={false}
-            //rowSelection={rowSelection}
-            loading={isLoading}            
+            loading={isLoading}
+            rowSelection={rowSelection}
             onChange={onTableChange}
             sticky
-            //bordered
             tableLayout="fixed"
             scroll={{
-              x: 'max-content'
+              x: "max-content",
+              y: "calc(100vh - 250px)", // Adjust height as needed
             }}
           />
         </div>
