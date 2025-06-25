@@ -459,7 +459,7 @@ export default function RemakeItem(props) {
                 const isImage = attachment.mimeType?.startsWith('image/');
                 return (
                   <>
-                    {isImage && (
+                    {isImage && false && (
                       <div style={{ display: 'none' }}>
                         <Image
                           style={{ height: 0 }}
@@ -477,9 +477,9 @@ export default function RemakeItem(props) {
                       <div
                         className="group-hover:underline group-hover:cursor-pointer"
                         onClick={() => {
-                          if (isImage) {
-                            setPreviewVisible(true);
-                          } else {
+                          //if (isImage) {
+                           // setPreviewVisible(true);
+                          //} else {
                             const dataUri = attachment.base64.startsWith('data:')
                               ? attachment.base64
                               : `data:${attachment.mimeType};base64,${attachment.base64}`;
@@ -488,15 +488,15 @@ export default function RemakeItem(props) {
                             const newTab = window.open();
                             if (newTab) {
                               newTab.document.write(`
-              <html>
-                <head><title>Preview: ${attachment.name}</title></head>
-                <body style="margin:0">
-                  <iframe src="${dataUri}" style="border:0;width:100vw;height:100vh;"></iframe>
-                </body>
-              </html>
-            `);
+                              <html>
+                                <head><title>Preview: ${attachment.name}</title></head>
+                                <body style="margin:0">
+                                  <iframe src="${dataUri}" style="border:0;width:100vw;height:100vh;"></iframe>
+                                </body>
+                              </html>
+                            `);
                             }
-                          }
+                          //}
                         }}
                       >
                         <span className="pr-1">{getFileIcon(attachment?.mimeType)}</span>
