@@ -12,7 +12,7 @@ import {
 
 import { useQuery } from "react-query";
 
-import { Form, Select, DatePicker, Space, Empty, Input, Modal, Button, message, Image } from "antd";
+import { Form, Select, DatePicker, Space, Empty, Input, message, Image } from "antd";
 const { TextArea } = Input;
 
 import { ProductionRemakeOptions } from "app/utils/constants";
@@ -21,6 +21,7 @@ import {
   fetchAttachments,
 } from "app/api/genericApis/attachmentsApi";
 import AntUploadModalWithNotes from "app/components/antUploadModalWithNotes/antUploadModalWithNotes";
+import Attachments from "app/features/remake/Attachments";
 
 import { saveAs } from "file-saver";
 
@@ -439,134 +440,13 @@ export default function RemakeItem(props) {
           </div>
         </div>
       </section>
-
+     
       <section className="border rounded-sm w-1/5">
-        <div className="bg-[#ebeff3] pl-2 pt-1 pb-1 font-semibold flex flex-row justify-between">
-          <div>
-            <i
-              className="fa fa-cloud-arrow-up text-blue-500 hover:text-blue-400 hover:cursor-pointer pr-1"
-              onClick={() => setShowUpload(true)}
-            />
-            Attachments
-          </div>
-          <div className="">
-          </div>
-        </div>
-        <div className="h-[185px] overflow-y-auto">
-          {attachments?.length > 0 &&
-            <div className="p-2">
-              {[...attachments].map((attachment) => {
-                const isImage = attachment.mimeType?.startsWith('image/');
-                return (
-                  <>
-                    {isImage && false && (
-                      <div style={{ display: 'none' }}>
-                        <Image
-                          style={{ height: 0 }}
-                          preview={{
-                            visible: previewVisible,
-                            src: attachment.base64.startsWith('data:')
-                              ? attachment.base64
-                              : `data:${attachment.mimeType};base64,${attachment.base64}`,
-                            onVisibleChange: (visible) => setPreviewVisible(visible),
-                          }}
-                        />
-                      </div>
-                    )}
-                    <div className="flex flex-row justify-between group">
-                      <div
-                        className="group-hover:underline group-hover:cursor-pointer"
-                        onClick={() => {
-                          //if (isImage) {
-                           // setPreviewVisible(true);
-                          //} else {
-                            const dataUri = attachment.base64.startsWith('data:')
-                              ? attachment.base64
-                              : `data:${attachment.mimeType};base64,${attachment.base64}`;
-
-                            // Open file in a new tab using iframe
-                            const newTab = window.open();
-                            if (newTab) {
-                              newTab.document.write(`
-                              <html>
-                                <head><title>Preview: ${attachment.name}</title></head>
-                                <body style="margin:0">
-                                  <iframe src="${dataUri}" style="border:0;width:100vw;height:100vh;"></iframe>
-                                </body>
-                              </html>
-                            `);
-                            }
-                          //}
-                        }}
-                      >
-                        <span className="pr-1">{getFileIcon(attachment?.mimeType)}</span>
-                        <span>{attachment.name}</span>
-                        <span className="pl-1 text-blue-500">({attachment.size})</span>
-                      </div>
-                      <i class="mt-[5px] fa-solid fa-gear text-gray-400 group-hover:cursor-pointer hover:text-blue-500" />
-                    </div>
-                  </>)
-              })}
-            </div>
-          }
-
-          {attachments?.length === 0 &&
-            <div className="p-2 flex justify-center items-center h-full w-full">
-              <div className="translate-y-[-15px]">
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={"No Attachments"} />
-              </div>
-            </div>
-          }
-        </div>
-      </section>
-      <AntUploadModalWithNotes
-        showUpload={showUpload}
-        setShowUpload={setShowUpload}
-        setUploadFileList={setUploadFileList}
-        onSave={handleUpload}
-        allowedFileTypes={[
-          // Images
-          'image/jpeg',
-          'image/png',
-          'image/gif',
-          'image/webp',
-          'image/heic',
-          'image/svg+xml',
-
-          // PDFs
-          'application/pdf',
-
-          // Word documents
-          'application/msword',                     // .doc
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-
-          // Excel files
-          'application/vnd.ms-excel',               // .xls
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-
-          // PowerPoint
-          'application/vnd.ms-powerpoint',          // .ppt
-          'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
-
-          // Text files
-          'text/plain',
-
-          // CSV, JSON
-          'text/csv',
-          'application/json',
-
-          // Archives
-          'application/zip',
-          'application/x-7z-compressed',
-          'application/x-rar-compressed',
-          'application/x-tar',
-
-          // Rich Text Format
-          'application/rtf'
-        ]}
-        title={"Upload Attachments"}
-        canUpload={true}
-      />
+        <Attachments
+          key={orderId}
+          orderId={inputData.id}
+        />
+      </section>                  
     </div>
   );
 }
