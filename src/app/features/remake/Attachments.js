@@ -24,7 +24,7 @@ import AntUploadModalWithNotes from "app/components/antUploadModalWithNotes/antU
 
 import { saveAs } from "file-saver";
 
-export default function RemakeItem(props) {
+export default function Attachments(props) {
   const {
     orderId,
     form,
@@ -169,17 +169,17 @@ export default function RemakeItem(props) {
     return fileList.map(file => ({
       id: null,
       fileName: file.name,
-      base64Content: file.base64,
-      contentType: file.contentType || "",
-      size: file.size || "",
-      note: file.notes || ""
+      base64Content: file.base64, 
+      contentType: file.contentType || "", 
+      size: file.size || "",               
+      note: file.notes || ""             
     }));
   };
 
 
   const handleUpload = useCallback(async () => {
     if (uploadFileList?.length > 0 && data) {
-      const payload = mapToUploadPayload(uploadFileList);
+      const payload = mapToUploadPayload(uploadFileList);      
 
       if (payload?.length > 0) {
         const result = await uploadAttachments("remake", data.id, payload);
@@ -192,9 +192,9 @@ export default function RemakeItem(props) {
         } else {
           message.error("Failed to upload attachments.");
         }
-      }
+      }      
 
-
+      
     }
   }, [uploadFileList, data]);
 
@@ -449,7 +449,7 @@ export default function RemakeItem(props) {
             />
             Attachments
           </div>
-          <div className="">
+          <div className="">            
           </div>
         </div>
         <div className="h-[185px] overflow-y-auto">
@@ -457,55 +457,29 @@ export default function RemakeItem(props) {
             <div className="p-2">
               {[...attachments].map((attachment) => {
                 const isImage = attachment.mimeType?.startsWith('image/');
+                console.log("isImage ", isImage)
                 return (
                   <>
                     {isImage && (
-                      <div style={{ display: 'none' }}>
-                        <Image
-                          style={{ height: 0 }}
-                          preview={{
-                            visible: previewVisible,
-                            src: attachment.base64.startsWith('data:')
-                              ? attachment.base64
-                              : `data:${attachment.mimeType};base64,${attachment.base64}`,
-                            onVisibleChange: (visible) => setPreviewVisible(visible),
-                          }}
-                        />
-                      </div>
-                    )}
-                    <div className="flex flex-row justify-between group">
-                      <div
-                        className="group-hover:underline group-hover:cursor-pointer"
-                        onClick={() => {
-                          if (isImage) {
-                            setPreviewVisible(true);
-                          } else {
-                            const dataUri = attachment.base64.startsWith('data:')
-                              ? attachment.base64
-                              : `data:${attachment.mimeType};base64,${attachment.base64}`;
-
-                            // Open file in a new tab using iframe
-                            const newTab = window.open();
-                            if (newTab) {
-                              newTab.document.write(`
-              <html>
-                <head><title>Preview: ${attachment.name}</title></head>
-                <body style="margin:0">
-                  <iframe src="${dataUri}" style="border:0;width:100vw;height:100vh;"></iframe>
-                </body>
-              </html>
-            `);
-                            }
-                          }
+                      <Image
+                        style={{ display: 'none' }}
+                        preview={{
+                          visible: previewVisible,
+                          src: attachment.base64.startsWith('data:')
+                            ? attachment.base64
+                            : `data:${attachment.mimeType};base64,${attachment.base64}`,
+                          onVisibleChange: (visible) => setPreviewVisible(visible),
                         }}
-                      >
-                        <span className="pr-1">{getFileIcon(attachment?.mimeType)}</span>
-                        <span>{attachment.name}</span>
+                      />
+                    )}
+                    <div className="flex flex-row justify-between group">                    
+                      <div className="group-hover:underline group-hover:cursor-pointer" onClick={() => isImage && setPreviewVisible(true)}>
+                        <span className="pr-1">{getFileIcon(attachment?.mimeType)}</span><span>{attachment.name}</span>
                         <span className="pl-1 text-blue-500">({attachment.size})</span>
                       </div>
-                      <i class="mt-[5px] fa-solid fa-gear text-gray-400 group-hover:cursor-pointer hover:text-blue-500" />
+                      <i class="mt-[5px] fa-solid fa-gear text-gray-400 group-hover:cursor-pointer hover:text-blue-500"/>
                     </div>
-                  </>)
+                </>)
               })}
             </div>
           }
@@ -517,7 +491,7 @@ export default function RemakeItem(props) {
               </div>
             </div>
           }
-        </div>
+        </div>        
       </section>
       <AntUploadModalWithNotes
         showUpload={showUpload}
@@ -566,7 +540,7 @@ export default function RemakeItem(props) {
         ]}
         title={"Upload Attachments"}
         canUpload={true}
-      />
+      /> 
     </div>
   );
 }
