@@ -31,8 +31,8 @@ import OrdersTable from "app/components/ordersTable/ordersTable";
 import UserSelectField from "app/components/users/userSelect";
 import OrderStatus from "app/components/remake/orderStatus";
 import Tooltip from "app/components/tooltip/tooltip";
-import CreateRemakeOrder from "app/components/remake/createRemakeOrder";
-import EditRemakeOrder from "app/components/remake/editRemakeOrder";
+import CreateRemakeOrder from "app/features/remake/createRemakeOrder";
+import EditRemakeOrder from "app/features/remake/editRemakeOrder";
 import {
   fetchAllRemakeWorkOrders,
   fetchRemakeCountByStatus,
@@ -595,7 +595,6 @@ export default function Remakes() {
 
   return (
     <div className={styles.root}>
-      {/*   // VGuan-SWD-2270_delete_remake */}
       <Popconfirm
         title="Are you sure you want to delete this recorder?"
         open={popupOpen}

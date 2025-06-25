@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import { Pagination, Table, Input } from "antd";
 import styles from "./ordersTable.module.css";
+
+import React from "react";
+import { Pagination } from "antd";
 import { Button } from "react-bootstrap";
+import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
 
 import {
   updatePageNumber,
@@ -11,15 +13,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 export default function OrdersTable(props) {
-  const [filters, setFilters] = useState({});
-
-  const handleFilterChange = (dataIndex, value) => {
-    setFilters((prev) => ({
-      ...prev,
-      [dataIndex]: value,
-    }));
-  };
-
   const {
     data,
     columns,
@@ -57,44 +50,7 @@ export default function OrdersTable(props) {
       );
     }
   };
-
-  // Build filter row
-  const filterRow = columns.reduce(
-    (row, col) => {
-      const colKey = col.dataIndex || col.key;
-      row[colKey] = (
-        <Input
-          placeholder={"--"}
-          size="small"
-          value={filters[colKey] || ""}
-          onChange={(e) =>
-            handleFilterChange(colKey, e.target.value)
-          }
-          bordered={false}
-          style={{ textAlign: "left", padding: 0 }}
-        />
-      );
-      return row;
-    },
-    { key: "filter-row" }
-  );
-
-  // Apply filtering to data
-  const filteredData = data.filter((row) =>
-    columns.every((col) => {
-      const value = filters[col.dataIndex];
-      if (!value) return true; // no filter on this column
-
-      const rowValue = row[col.dataIndex];
-      return (
-        rowValue != null &&
-        rowValue.toString().toLowerCase().includes(value.toLowerCase())
-      );
-    })
-  );
-
-  const displayData = [filterRow, ...filteredData];
-
+ 
   return (
     <div className={"bg-white rounded-sm p-3"}>
       <div className="flex flex-col space-y-2">
@@ -118,36 +74,13 @@ export default function OrdersTable(props) {
               />
             </div>
           }
-
         </div>
-        <Table
-          className="
-              my-custom-table
-              [&_.ant-table]:!text-[12px]
-              [&_.ant-table-tbody_tr_td]:!text-[12px]
-              [&_.ant-table-tbody_tr_td]:!p-[0_8px]
-              [&_.ant-table-thead_tr_th]:!text-[12px]
-              [&_.ant-table-thead_tr_th]:!p-[4_8px]
-              [&_tr[data-row-key='filter-row']_td]:sticky
-              [&_tr[data-row-key='filter-row']_td]:top-[0px]
-              [&_tr[data-row-key='filter-row']_td]:bg-white
-              [&_tr[data-row-key='filter-row']_td]:z-[1]
-              [&_tr[data-row-key='filter-row']_td.ant-table-cell-fix-left]:z-[11]
-              [&_tr[data-row-key='filter-row']_td.ant-table-cell-fix-right]:z-[11]
-            "
+        <TableWithFilters 
           columns={columns}
-          dataSource={displayData}
-          size="small"
+          data={data}
           pagination={false}
-          loading={isLoading}
-          //rowSelection={rowSelection}
-          onChange={onTableChange}
-          sticky
-          tableLayout="fixed"
-          scroll={{
-            x: "max-content",
-            y: "calc(100vh - 250px)", // Adjust height as needed
-          }}
+          loading={isLoading}          
+          onChange={onTableChange}          
         />
       </div>
     </div>
