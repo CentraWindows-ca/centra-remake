@@ -22,7 +22,7 @@ export default function CreateRemakeOrder(props) {
 
   const [date, setDate] = useState(moment());
 
-  const { branch } = useSelector((state) => state.calendar);
+  //const { branch } = useSelector((state) => state.calendar);
 
   const HEADER_HEIGHT_OFFSET = 140;
 

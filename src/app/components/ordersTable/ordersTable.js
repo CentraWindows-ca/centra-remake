@@ -9,7 +9,9 @@ import {
   updatePageNumber,
   updatePageSize,
   updateSortOrder,
+  openCreateModal
 } from "app/redux/orders";
+
 import { useDispatch, useSelector } from "react-redux";
 
 export default function OrdersTable(props) {
@@ -56,7 +58,7 @@ export default function OrdersTable(props) {
       <div className="flex flex-col space-y-2">
         <div className="flex justify-between items-center sticky">
           <div className="flex space-x-2 sticky">
-            <Button size="sm" className="text-sm" onClick={onCreateClick}>
+            <Button size="sm" className="text-sm" onClick={() => dispatch(openCreateModal())}>
               <span>Create</span>
             </Button>
           </div>

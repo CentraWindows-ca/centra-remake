@@ -618,6 +618,29 @@ export default function Remakes() {
       />
 
       <CustomModal
+        title="Create Remake Order"
+        style={{ top: 25 }}
+        open={showCreateModal}
+        onCancel={onCloseClick}
+        onOk={handleEditRemakeSave}
+        moduleName={department}
+        width={{
+          xs: '80%',
+          sm: '80%',
+          md: '80%',
+          lg: '80%',
+          xl: '80%',
+          xxl: '80%',
+        }}
+        okText="Save"
+        cancelText="Cancel"
+        okButtonProps={{ disabled: !isEditFormModified }}
+      >
+        <div className="h-[80vh] w-[80vw]">
+        </div>
+      </CustomModal>
+
+      <CustomModal
         open={showOrderModal}
         onCancel={onCloseClick}
         onOk={handleEditRemakeSave}
@@ -639,7 +662,7 @@ export default function Remakes() {
           setIsEditFormModified={setIsEditFormModified}
         />
       </CustomModal>
-
+      {/*
       <Modal
         open={showCreateModal}
         onClose={onCloseClick}
@@ -658,6 +681,7 @@ export default function Remakes() {
           isEditMode={editMode}
         />
       </Modal>
+      */}
     </div>
   );
 }
