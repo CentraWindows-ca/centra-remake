@@ -33,6 +33,8 @@ import OrderStatus from "app/components/remake/orderStatus";
 import Tooltip from "app/components/tooltip/tooltip";
 import CreateRemakeOrder from "app/features/remake/createRemakeOrder";
 import EditRemakeOrder from "app/features/remake/editRemakeOrder";
+import CreateRemake from "app/features/remake/createRemake";
+
 import {
   fetchAllRemakeWorkOrders,
   fetchRemakeCountByStatus,
@@ -618,7 +620,7 @@ export default function Remakes() {
       />
 
       <CustomModal
-        title="Create Remake Order"
+        title="Create Remake Orders"
         style={{ top: 25 }}
         open={showCreateModal}
         onCancel={onCloseClick}
@@ -636,8 +638,7 @@ export default function Remakes() {
         cancelText="Cancel"
         okButtonProps={{ disabled: !isEditFormModified }}
       >
-        <div className="h-[80vh] w-[80vw]">
-        </div>
+        <CreateRemake />
       </CustomModal>
 
       <CustomModal
