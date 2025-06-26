@@ -6,36 +6,24 @@ import {
   fetchRemakeWorkOrderById,
 } from "app/api/remakeApis";
 
-import {
-  uploadAttachments,
-} from "app/api/genericApis/attachmentsApi";
-
 import { useQuery } from "react-query";
 
-import { Form, Select, DatePicker, Space, Empty, Input, message, Image } from "antd";
+import { Form, Select, DatePicker, Space, Input } from "antd";
 const { TextArea } = Input;
 
 import { ProductionRemakeOptions } from "app/utils/constants";
 
-import {
-  fetchAttachments,
-} from "app/api/genericApis/attachmentsApi";
-import AntUploadModalWithNotes from "app/components/antUploadModalWithNotes/antUploadModalWithNotes";
 import Attachments from "app/features/remake/Attachments";
-
-import { saveAs } from "file-saver";
 
 export default function RemakeItem(props) {
   const {
     orderId,
     form,
+    setIsModified
   } = props;
 
   const moduleName = "remake";
   const [inputData, setInputData] = useState([]);
-  const [showUpload, setShowUpload] = useState(false);
-  const [uploadFileList, setUploadFileList] = useState([]);
-  const [previewVisible, setPreviewVisible] = useState([]);
 
   // api calls
   const fetchOrderDetailsAsync = async () => {
@@ -47,14 +35,6 @@ export default function RemakeItem(props) {
     }
   };
 
-  const fetchAttachmentsAsync = async () => {
-    if (orderId) {
-      const result = await fetchAttachments(moduleName, orderId);
-      return result.data;
-    }
-    return [];
-  };
-
   // useQuery call to fetch remake details
   const {
     isLoading: isLoadingDetails,
@@ -62,15 +42,6 @@ export default function RemakeItem(props) {
     refetch: refetchOrder,
     isFetching: isFetchingDetails,
   } = useQuery([`${moduleName}OrderDetails`, orderId], fetchOrderDetailsAsync, {
-    refetchOnWindowFocus: false,
-  });
-
-  const {
-    isLoading: isLoadingAttachments,
-    data: attachments,
-    refetch: refetchAttachments,
-    isFetching: isFetchingAttachments,
-  } = useQuery(`${moduleName}OrderAttachments`, fetchAttachmentsAsync, {
     refetchOnWindowFocus: false,
   });
 
@@ -165,71 +136,18 @@ export default function RemakeItem(props) {
       });
     }
   };
-
-  const mapToUploadPayload = (fileList) => {
-    return fileList.map(file => ({
-      id: null,
-      fileName: file.name,
-      base64Content: file.base64,
-      contentType: file.contentType || "",
-      size: file.size || "",
-      note: file.notes || ""
-    }));
-  };
-
-
-  const handleUpload = useCallback(async () => {
-    if (uploadFileList?.length > 0 && data) {
-      const payload = mapToUploadPayload(uploadFileList);
-
-      if (payload?.length > 0) {
-        const result = await uploadAttachments("remake", data.id, payload);
-        console.log("upload result ", result);
-        if (result) {
-          message.success("Attachments uploaded successfully.");
-          refetchAttachments();
-          setShowUpload(false);
-          setUploadFileList([]);
-        } else {
-          message.error("Failed to upload attachments.");
-        }
-      }
-
-
-    }
-  }, [uploadFileList, data]);
-
+  
   useEffect(() => {
     form.setFieldsValue(data)
   }, [data]);
 
   useEffect(() => {
-    console.log("attachments ", attachments)
-  }, [attachments])
-
-  useEffect(() => {
-    console.log("orderId ", orderId)
-  }, [orderId])
-
-  useEffect(() => {
-    console.log("uploadFileList ", uploadFileList)
-  }, [uploadFileList]);
-
-  const getFileIcon = (fileType) => {
-    if (fileType?.includes("pdf")) {
-      return <i className="fa-regular fa-file-pdf text-red-600 pt-1" />;
+    if (JSON.stringify(inputData) !== JSON.stringify(data)) {
+      setIsModified(true);
+    } else {
+      setIsModified(false);
     }
-    if (fileType?.includes("word")) {
-      return <i className="fa-regular fa-file-word text-blue-600 pt-1" />;
-    }
-    if (fileType?.includes("image")) {
-      return <i className="fa-regular fa-file-image text-teal-600 pt-1" />;
-    }
-    if (fileType?.includes("text")) {
-      return <i className="fa-regular fa-file-lines text-gray-600 pt-1" />;
-    }
-    return <i className="fa-regular fa-file text-gray-400 pt-1" />;
-  };
+  }, [inputData, data])
 
   return (
     <div className="flex flex-row gap-2">

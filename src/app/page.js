@@ -96,6 +96,7 @@ export default function Remakes() {
 
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [openPopoverId, setOpenPopoverId] = useState(null);
+  const [isEditFormModified, setIsEditFormModified] = useState(false);
 
   // for sorting & filtering & pagination
 
@@ -624,6 +625,7 @@ export default function Remakes() {
         width={1200}
         okText="Save"
         cancelText="Cancel"
+        okButtonProps={{ disabled: !isEditFormModified }}
       >
         <EditRemakeOrder
           form={editRemakeForm}
@@ -634,6 +636,7 @@ export default function Remakes() {
           remakeItem={remakeItem}
           onFinish={handleFinish}
           onFinishFailed={handleFinishFailed}
+          setIsEditFormModified={setIsEditFormModified}
         />
       </CustomModal>
 

@@ -1,7 +1,5 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
-import dayjs from "dayjs";
 
 import {
   fetchRemakeWorkOrderById,
@@ -9,25 +7,15 @@ import {
 } from "app/api/remakeApis";
 import { useQuery } from "react-query";
 
-import { Button, Popconfirm, Spin, Form, Select, DatePicker, Space, Typography, Input, Empty } from "antd";
-const { Text } = Typography;
-const { TextArea } = Input;
+import { Button, Popconfirm, Form, Space } from "antd";
 
-import { ProductionRemakeOptions, RemakeRowStates } from "app/utils/constants";
+import { RemakeRowStates } from "app/utils/constants";
 
 import LockButton from "app/components/lockButton/lockButton";
-import { mapRemakeRowStateToKey, openBlob, openWOLink, YMDDateFormat } from "app/utils/utils";
+import { mapRemakeRowStateToKey, YMDDateFormat } from "app/utils/utils";
 
 import OrderStatus from "app/components/remake/orderStatus";
 import RemakeItem from "app/features/remake/RemakeItem";
-
-import {
-  deleteAttachments,
-  fetchAttachments,
-  saveAttachment,
-} from "app/api/genericApis/attachmentsApi";
-
-import { saveAs } from "file-saver";
 
 export default function EditRemakeOrder(props) {
   const {
@@ -36,17 +24,14 @@ export default function EditRemakeOrder(props) {
     onShareLinkClick,
     form,
     onFinish,
-    onFinishFailed
+    onFinishFailed,
+    setIsEditFormModified
   } = props;
 
   const moduleName = "remake";
   const [inputData, setInputData] = useState([]);
   const [remakeChangeItems, setRemakeChangeItems] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
-  const [showAttachments, setShowAttachments] = useState(false);
-  const [showDeleteFiles, setShowDeleteFiles] = useState(false);
-  const [documents, setDocuments] = useState([]);
-  const [fileData, setFileData] = useState([]);
 
   // api calls
   const fetchOrderDetailsAsync = async () => {
@@ -56,14 +41,6 @@ export default function EditRemakeOrder(props) {
     } else {
       return null;
     }
-  };
-
-  const fetchAttachmentsAsync = async () => {
-    if (orderId) {
-      const result = await fetchAttachments(moduleName, orderId);
-      return result.data;
-    }
-    return [];
   };
 
   // useQuery call to fetch remake details
@@ -76,119 +53,10 @@ export default function EditRemakeOrder(props) {
     refetchOnWindowFocus: false,
   });
 
-  const {
-    isLoading: isLoadingAttachments,
-    data: attachments,
-    refetch: refetchAttachments,
-    isFetching: isFetchingAttachments,
-  } = useQuery(`${moduleName}OrderAttachments`, fetchAttachmentsAsync, {
-    refetchOnWindowFocus: false,
-  });
-
   useEffect(() => {
     if (remakeOrderData) setInputData(remakeOrderData);
   }, [remakeOrderData]);
-
-  useEffect(() => {
-    if (attachments) {
-      setDocuments(
-        attachments // attachments.filter((f) => f.fileType === FileTypes.file) ?? []
-      );
-    }
-  }, [attachments]);
-
-  // for rendering dynamic options
-  const remakeProductOptions = ProductionRemakeOptions.find(
-    (x) => x.key === "product"
-  )?.options?.map((group) => ({
-    key: group.key,
-    value: group.value,
-    label: group.value,
-  }));
-
-  const remakeBranchOptions = ProductionRemakeOptions.find(
-    (x) => x.key === "branch"
-  )?.options;
-
-  const departmentResponsibleOptions = ProductionRemakeOptions.find(
-    (x) => x.key === "departmentResponsible"
-  )?.options?.map((group) => ({
-    key: group.key,
-    value: group.value,
-    label: group.value,
-  }));
-
-  const reasonCategoryOptions = ProductionRemakeOptions.find(
-    (x) => x.key === "reasonCategory"
-  )?.options?.map((group) => ({
-    key: group.key,
-    value: group.value,
-    label: group.value,
-  }));
-
-  const remakeDepartmentResponsibleSectionOptions =
-    ProductionRemakeOptions.find(
-      (x) => x.key === "departmentResponsible"
-    )?.options?.find(
-      (x) => x.value === inputData?.departmentResponsible
-    )?.options;
-
-  const remakeReasonOptions = ProductionRemakeOptions?.find(
-    (x) => x.key === "reasonCategory"
-  )?.options?.find((x) => x.value === inputData?.reasonCategory)?.options?.map((reasonCategory) => {
-    return {
-      key: reasonCategory.key,
-      value: reasonCategory.value,
-      label: reasonCategory.value,
-    }
-  });
-
-  const remakeReasonDetailOptions = ProductionRemakeOptions?.find(
-    (x) => x.key === "reasonCategory"
-  )?.options?.find((x) => x.value === inputData?.reasonCategory)
-    ?.options?.find((y) => y.value === inputData?.reason)?.options?.map((reasonDetail) => {
-      return {
-        key: reasonDetail.key,
-        value: reasonDetail.value,
-        label: reasonDetail.value,
-      };
-    });
-
-  // onClick events
-  const handleInputChange = useCallback(
-    (e, type = null) => {
-      if (!e?.target) return;
-
-      const name = e.target.name;
-
-      setInputData((d) => {
-        let _d = { ...d };
-
-        _d[name] = e.target.value;
-
-        return _d;
-      });
-    },
-    []
-  );
-
-  const handleDateChange = useCallback((date, dateString) => {
-    setInputData((d) => ({
-      ...d,
-      scheduleDate: date ? date.toISOString() : null,  // store as ISO string
-    }));
-  }, []);
-
-  const handleSelectChange = (val, key) => {
-    if (val && key) {
-      setInputData((data) => {
-        let _data = { ...data };
-        _data[key] = val;
-        return _data;
-      });
-    }
-  };
-
+ 
   const handleSave = useCallback(async () => {
     if (remakeOrderData) {
       setIsSaving(true);
@@ -204,113 +72,18 @@ export default function EditRemakeOrder(props) {
         });
       }
 
-      // if (dateChangeItems.length > 0) {
-      //   dateChangeItems.map((dc) => {
-      //     data[dc.key] = dc.value;
-      //   });
-      // }
-
       data.push(remakeUpdates);
-
       await updateRemakeWorkOrder(data);
-
       refetchOrder();
-
       setRemakeChangeItems([]);
       setIsSaving(false);
     }
   }, [remakeOrderData, remakeChangeItems, refetchOrder]);
 
-  const handleDocumentsOk = useCallback(async () => {
-    if (fileData) {
-      const updatedDocuments = fileData.map((d) => {
-        if (d?.base64?.length > 0) {
-          return {
-            id: d.id,
-            fileName: d.name,
-            base64Content: d.base64.split(",")[1],
-            contentType: d.type,
-            size: d.size,
-            note: d.fileNotes,
-          };
-        }
-      });
-      await saveAttachment(moduleName, orderId, updatedDocuments);
-      refetchAttachments();
-
-      setShowAttachments(false);
-    }
-  }, [fileData, orderId, refetchAttachments]);
-
-  const handleDownloadFile = useCallback(
-    (fileId) => {
-      if (documents) {
-        let document = documents.find((x) => x.id === fileId);
-        if (document) {
-          const binaryData = atob(document.base64);
-          const byteArray = new Uint8Array(binaryData.length);
-          for (let i = 0; i < binaryData.length; i++) {
-            byteArray[i] = binaryData.charCodeAt(i);
-          }
-          const blob = new Blob([byteArray], { type: document.mimeType });
-          saveAs(blob, document.name);
-        }
-      }
-    },
-    [documents]
-  );
-
-  const handlePreviewFile = useCallback(
-    (fileId) => {
-      if (documents) {
-        let document = documents.find((x) => x.id === fileId);
-        if (document) {
-          let base64 = document.base64;
-          if (base64) {
-            openBlob(base64, document.mimeType);
-          }
-        }
-      }
-    },
-    [documents]
-  );
-
-  const handleCheckFile = (fileId, value) => {
-    setDocuments((d) => {
-      let _d = JSON.parse(JSON.stringify(d));
-      let index = documents.findIndex((x) => x.id === fileId);
-      _d[index].checked = value;
-      return _d;
-    });
-  };
-
-  const handleDeleteFiles = () => {
-    setShowDeleteFiles(true);
-  };
-
-  const deleteCheckedFiles = useCallback(async () => {
-    let checkedDocs = documents.filter((d) => d.checked);
-
-    if (checkedDocs?.length > 0) {
-      let idsToDelete = checkedDocs.map((d) => {
-        return d.id;
-      });
-
-      await deleteAttachments(moduleName, idsToDelete);
-      refetchAttachments();
-
-      setShowDeleteFiles(false);
-    }
-  }, [documents, refetchAttachments]);
-
-  const openWOLinkCallback = () => {
-    openWOLink(inputData?.workOrderNo);
-  };
-
   useEffect(() => {
     form.setFieldsValue(remakeOrderData)
   }, [remakeOrderData])
-    
+  
   return (
     <Form      
       form={form}
@@ -376,6 +149,7 @@ export default function EditRemakeOrder(props) {
       <RemakeItem
         orderId={orderId}
         form={form}
+        setIsModified={setIsEditFormModified}
       />   
     </Form>
   );

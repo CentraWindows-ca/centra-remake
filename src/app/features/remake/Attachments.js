@@ -1,7 +1,8 @@
 "use client";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 
 import {
+  fetchAttachments,
   uploadAttachments,
   deleteAttachments
 } from "app/api/genericApis/attachmentsApi";
@@ -10,15 +11,10 @@ import { useQuery } from "react-query";
 
 import { Empty, message, Image, Popover, Popconfirm } from "antd";
 
-import {
-  fetchAttachments,
-} from "app/api/genericApis/attachmentsApi";
 import AntUploadModalWithNotes from "app/components/antUploadModalWithNotes/antUploadModalWithNotes";
 
 export default function Attachments(props) {
-  const {
-    orderId
-  } = props;
+  const { orderId } = props;
 
   const moduleName = "remake";
   const [showUpload, setShowUpload] = useState(false);
@@ -120,7 +116,6 @@ export default function Attachments(props) {
   }
 
   const handleDownload = (attachment) => {
-    console.log("attachment ", attachment)
     const link = document.createElement("a");
     link.href = attachment.base64.startsWith("data:")
       ? attachment.base64
@@ -149,11 +144,6 @@ export default function Attachments(props) {
       </div>
     )
   }
-
-
-  useEffect(() => {
-    console.log("attachments ", attachments)
-  }, [attachments])
 
   return (
     <>
