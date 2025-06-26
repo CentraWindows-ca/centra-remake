@@ -154,9 +154,11 @@ export default function Attachments(props) {
                         //}
                       }}
                     >
-                      <span className="pr-1">{getFileIcon(attachment?.mimeType)}</span>
-                      <span>{attachment.name}</span>
-                      <span className="pl-1 text-blue-500">({attachment.size})</span>
+                      <div className="flex flex-row">
+                        <div className="pr-1">{getFileIcon(attachment?.mimeType)}</div>
+                        <div className="w-[9.5rem]">{attachment.fileNotes || attachment.name}</div>
+                      </div>                      
+                      {false && <span className="pl-1 text-blue-500">({attachment.size})</span>}
                     </div>
                     <i class="mt-[5px] fa-solid fa-gear text-gray-400 group-hover:cursor-pointer hover:text-blue-500" />
                   </div>
