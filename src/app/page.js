@@ -33,7 +33,7 @@ import OrderStatus from "app/components/remake/orderStatus";
 import Tooltip from "app/components/tooltip/tooltip";
 import CreateRemakeOrder from "app/features/remake/createRemakeOrder";
 import EditRemakeOrder from "app/features/remake/editRemakeOrder";
-import CreateRemake from "app/features/remake/createRemake";
+import CreateRemake from "app/features/remake/CreateRemake";
 
 import {
   fetchAllRemakeWorkOrders,
