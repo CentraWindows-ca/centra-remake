@@ -40,13 +40,19 @@ export default function CreateRemake(props) {
     <div className="h-[80vh] w-[80vw]">
 
       <div className="w-[20rem] border-r pr-6">
+        <div>                    
+          <div>Input + Lookup</div>
+          <div>or</div>
+          <div>Search</div>
+        </div>
+        {false &&
         <Calendar
           fullscreen={false}
           onSelect={(x) => {
             setSSS(x);
           }} />
-        AAA: {received}
-        -----------------------------------------------
+          }
+        WO Item List
         <div className="mt-4 h-[10rem]" key={"VKTEST11"}>
           <iframe
             key={`iframe-${sss}`}
