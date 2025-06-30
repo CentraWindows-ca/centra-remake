@@ -7,7 +7,7 @@ import {
   updateWorkOrderData,
 } from "../redux/orders";
 
-import { BASE_URL } from "app/utils/constants";
+import { BASE_URL, BASE_URL_OM, Production } from "app/utils/constants";
 
 function getConfig() {
   const tokenString = localStorage.getItem("authnav_user");
@@ -19,6 +19,18 @@ function getConfig() {
       "Content-Type": "application/json",
     },
   };
+}
+
+function getConfigOM() {
+  const token = localStorage.getItem("centra_token");
+
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'centra-login-email': store?.getState()?.app?.userData?.email
+    }
+  }
 }
 
 export async function fetchProductionWorkOrders(startDate, endDate, token) {
@@ -89,34 +101,6 @@ export async function fetchProductionDocuments(id) {
     });
   }
 }
-
-// export async function search(department, searchType, data, startDay, endDay) {
-//   if (department && searchType && data && startDay && endDay) {
-//     const url = `${BASE_URL}/Generic/GetPlantProductionSearchResults?startDay=${startDay}&endDay=${endDay}&searchType=${searchType}&exactSearch=false`;
-//     axios
-//       .post(url, data, getConfig())
-//       .then((res) => {
-//         if (res?.data) {
-//           store.dispatch(
-//             searchSlice.actions.updateSearchResults({
-//               department: department,
-//               data: res.data,
-//             })
-//           );
-//         }
-//       })
-//       .catch((err) => {
-//         console.log("error: ", err);
-//         store.dispatch(
-//           searchSlice.actions.updateSearchResults({
-//             department: department,
-//             error: err,
-//           })
-//         );
-//         throw new Error(err);
-//       });
-//   }
-// }
 
 export async function updateProdOrder(data) {
   if (data) {
@@ -559,5 +543,34 @@ export async function importGlass(company, data) {
         console.log("error: ", err);
         throw new Error(err);
       });
+  }
+}
+
+export async function fetchProductionWindowsByWOFilter(workOrderNo) {
+  const url = `${BASE_URL_OM}/ProdData/QueryWorkOrderHeaderWithPrefixAsync`;
+
+  const _payload = {
+    filterGroup: {
+      conditions: [
+        {
+          field: "m_WorkOrderNo",
+          operator: "Contains",
+          value: workOrderNo
+        }
+      ]
+    }
+  }
+
+  const payload = JSON.stringify(_payload);
+
+  try {
+    const response = await axios.post(url, payload, {
+      ...getConfigOM()
+    });
+
+    return { ...response.data, department: Production };
+  } catch (error) {
+    //logger.error("error: ", err);
+    console.error("Error fetching production windows by WO filter:", error);
   }
 }

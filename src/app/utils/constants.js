@@ -1,6 +1,7 @@
 import { RotateRightIcon, TruckFastIcon } from "./icons";
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+export const BASE_URL_OM = process.env.NEXT_PUBLIC_CALENDAR_API_URL
 
 export const CalendarTypes = [
   { key: "production", value: "Production", type: "single" },
