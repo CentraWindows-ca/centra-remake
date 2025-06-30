@@ -270,6 +270,7 @@ export default function InnerLayout({ children }) {
               width={drawerOpen ? 280 : 62}
               onClose={() => dispatch(updateDrawerOpen(false))}
               open={true}
+              bodyStyle={{ padding: 0 }} // Don't remove
               mask={false}
               zIndex={1}
               closeIcon={null}

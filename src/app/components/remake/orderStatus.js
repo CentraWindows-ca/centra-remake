@@ -4,7 +4,7 @@ import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Tooltip from "app/components/tooltip/tooltip";
-import ConfirmationModal from "app/components/confirmationModal/confirmationModal";
+//import ConfirmationModal from "app/components/confirmationModal/confirmationModal";
 
 import { Popover } from "antd";
 
@@ -133,7 +133,7 @@ export default function OrderStatus(props) {
           </span>
         </Popover>
       </Tooltip>
-
+      {/*
       <ConfirmationModal
         title={"Status Change Confirmation"}
         open={showStatusConfirmation}
@@ -148,6 +148,7 @@ export default function OrderStatus(props) {
           <div>Do you want to proceed with the update?</div>
         </div>
       </ConfirmationModal>      
+      */}
     </>
   );
 }

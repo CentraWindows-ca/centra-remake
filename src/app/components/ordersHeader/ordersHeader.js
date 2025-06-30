@@ -16,7 +16,7 @@ import Tooltip from "app/components/tooltip/tooltip";
 import RootHeader from "app/components/rootHeader/rootHeader";
 
 /*import { SearchIcon } from "app/utils/icons";*/
-import { Collapse } from "@mui/material";
+//import { Collapse } from "@mui/material";
 
 import { Button, Segmented, Breadcrumb, Badge, Popover } from "antd";
 import { getIcon } from "app/utils/utils";
@@ -221,10 +221,11 @@ export default function OrdersHeader(props) {
         <div
           className={`${styles.calendarMonthWeekDayViewContainer} flex flex-row justify-end items-center`}
         >
+          {/*
           <Collapse in={show} orientation={"horizontal"}>
             <QuickSearch />
           </Collapse>
-
+          */}
           <span
             onClick={() => {
               setShow(!show);

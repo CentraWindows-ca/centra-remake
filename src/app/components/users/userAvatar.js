@@ -1,6 +1,6 @@
 import React from "react";
 import Icon, { UserOutlined } from "@ant-design/icons";
-import Avatar from "@mui/material/Avatar";
+//import Avatar from "@mui/material/Avatar";
 
 function stringToColor(string) {
   let hash = 0;
@@ -62,6 +62,8 @@ function stringAvatar(name) {
 
 export default function UserAvatar(props) {
   const { username, image } = props;
-
+  {/*
   return <Avatar {...stringAvatar(username)} />;
+  */}
+  return <div>[{username}]</div>
 }
