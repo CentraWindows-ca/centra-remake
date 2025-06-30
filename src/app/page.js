@@ -116,6 +116,7 @@ export default function Remakes() {
   const statusParam = searchParams.get("status") ?? "";
   const modeParam = searchParams.get("mode") ?? "";
   const orderIdParam = searchParams.get("orderId") ?? "";
+  const openCreateRemakeParam = searchParams.get("create-remake") ?? false;
 
   const statusOptions = getStatusOptions("Remake");
   const statusOptionsRef = useRef(statusOptions); //TODO: see if we still need this
@@ -263,7 +264,7 @@ export default function Remakes() {
 
   useEffect(() => {
     dispatch(updateAppMode(AppModes.orders));
-    dispatch(updateDrawerOpen(true));
+    //dispatch(updateDrawerOpen(true));
     dispatch(updateDepartment("Remake"));
   }, [dispatch]);
 
@@ -521,6 +522,12 @@ export default function Remakes() {
         break;
     }
   }, [dispatch, modeParam, orderIdParam]);
+  
+  useEffect(() => {
+    if (openCreateRemakeParam === "true") {
+      dispatch(openCreateModal());
+    }     
+  }, [dispatch, openCreateRemakeParam]);
 
   // for fetching orders
   useEffect(() => {

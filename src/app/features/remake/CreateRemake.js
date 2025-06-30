@@ -1,23 +1,29 @@
 ﻿"use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
-
+import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
 import { useQuery } from "react-query";
 
-import { Form, Select, DatePicker, Space, Input, Calendar } from "antd";
+import { Select } from "antd";
 
 import {
-  fetchProductionWindowsByWOFilter
+  fetchProductionWindowsByWOFilter,
+  fetchProductionWindowByWO,
+  fetchWindowItems
 } from "app/api/productionApis";
 
 export default function CreateRemake(props) {
   //const [sss, setSSS] = useState(null);
   //const [received, setReceived] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(null);
-  const [woList, setWOList] = useState([]);
   const searchParams = useSearchParams();
   const woParam = searchParams.get("workorder-no");
 
+  const [searchQuery, setSearchQuery] = useState(woParam);
+  const [woSelectList, setWOSelectList] = useState([]);
+  const [selectedWONumber, setSelectedWONumber] = useState(null);
+  const [wo, setWO] = useState(null);
+  const [woItems, setWOItems] = useState(null);
+    
   //useEffect(() => {
   //  //const handleMessage = (event) => {
   //  //  // Optionally check origin: if (event.origin !== 'http://localhost:3005') return;
@@ -35,13 +41,12 @@ export default function CreateRemake(props) {
   //}, []);
 
   useEffect(() => {
-    console.log("searchQuery: ", searchQuery);
     if (searchQuery && searchQuery?.length > 1) {
       const delayDebounce = setTimeout(() => {
         const fetchData = async () => {
           const result = await fetchProductionWindowsByWOFilter(searchQuery);
           if (result) {
-            setWOList(result);
+            setWOSelectList(result);
           }
         };
 
@@ -52,33 +57,127 @@ export default function CreateRemake(props) {
     }
   }, [searchQuery]);
 
+  useEffect(() => {
+    if (selectedWONumber?.length > 1) {      
+      const fetchData = async () => {
+        const result = await fetchProductionWindowByWO(selectedWONumber);
+        if (result) {
+          setWO(result?.data?.[0]);
+        }
+      };
+
+      fetchData();           
+    }
+  }, [selectedWONumber]);
+
+  useEffect(() => {
+    if (wo) {
+      const fetchData = async () => {
+        const result = await fetchWindowItems(wo?.value?.w?.w_Id);
+        if (result) {
+          setWOItems(result?.data)
+        }
+      };
+
+      fetchData();
+    }
+  }, [wo]);
+
   const onSearch = useCallback((val) => {
     setSearchQuery(val);
   }, []);
 
   const onChange = useCallback((val) => {
-    setSearchQuery(val);
+    setSelectedWONumber(val);
   }, []);
+
+  useEffect(() => {
+    console.log("woItems ", woItems)
+  }, [woItems])
+
+  const columns = [
+    {
+      title: `Item`,
+      dataIndex: "Item",
+      key: "Item",
+      width: 120
+    },
+    {
+      title: `SubQty`,
+      dataIndex: "SubQty",
+      key: "SubQty",
+      width: 70
+    },
+    {
+      title: `System`,
+      dataIndex: "System",
+      key: "System",
+      width: 120,
+    },
+    {
+      title: `Size`,
+      dataIndex: "Size",
+      key: "Size",
+      width: 200,
+    },
+    {
+      title: `Description`,
+      dataIndex: "Description",
+      key: "Description",
+      ellipsis: true,
+    },
+    {
+      title: `Product`,
+      dataIndex: "product",
+      key: "product",
+      width: 150,
+    },  
+    //{
+    //  title: "Status",
+    //  dataIndex: "status",
+    //  key: "status",
+    //  width: 150,
+    //  fixed: 'right',
+    //  render: (status, order, index) => {
+    //    if (index === 0) {
+    //      // Just show the raw status text (from data)
+    //      return status;
+    //    }
+    //    return (
+    //      <div className="text-center">
+    //        <OrderStatus
+    //          statusKey={mapRemakeRowStateToKey(status)}
+    //          statusList={RemakeRowStates}
+    //          updateStatusCallback={updateStatus}
+    //          orderId={order?.id}
+    //          handleStatusCancelCallback={() => { }}
+    //          style={{ width: "100%" }}
+    //        />
+    //      </div>
+    //    );
+    //  },
+    //},
+  ];
 
   return (
     <div className="h-[80vh]">
       <div className="">
         <Select
           key={woParam}
-          disabled={true }
           showSearch
           placeholder="Find Work order..."
           optionFilterProp="label"
           //onSearch={onSearch}
           onChange={onChange}
           onSearch={onSearch}
-          options={woList?.data?.map((wo) => {
+          options={woSelectList?.data?.map((wo) => {
             return {
               value: wo.value.m.m_WorkOrderNo,
               label: wo.value.m.m_WorkOrderNo
             }
           })}
           style={{ width: 250 }}
+          value={selectedWONumber}
         />
         {/*
         {false &&
@@ -97,6 +196,13 @@ export default function CreateRemake(props) {
         }
         */}
       </div>
+      <TableWithFilters
+        columns={columns}
+        data={woItems ?? []}
+        pagination={false}
+        //loading={isLoading}
+        //onChange={onTableChange}
+      />
     </div>
   );
 }

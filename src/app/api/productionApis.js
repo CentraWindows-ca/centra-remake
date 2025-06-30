@@ -574,3 +574,61 @@ export async function fetchProductionWindowsByWOFilter(workOrderNo) {
     console.error("Error fetching production windows by WO filter:", error);
   }
 }
+
+export async function fetchProductionWindowByWO(workOrderNo) {
+  const url = `${BASE_URL_OM}/ProdData/QueryWorkOrderHeaderWithPrefixAsync`;
+
+  const _payload = {
+    filterGroup: {
+      conditions: [
+        {
+          field: "m_WorkOrderNo",
+          operator: "Equals",
+          value: workOrderNo
+        }
+      ]
+    }
+  }
+
+  const payload = JSON.stringify(_payload);
+
+  try {
+    const response = await axios.post(url, payload, {
+      ...getConfigOM()
+    });
+
+    return { ...response.data, department: Production };
+  } catch (error) {
+    //logger.error("error: ", err);
+    console.error("Error fetching production windows by WO:", error);
+  }
+}
+
+export async function fetchWindowItems(id) {
+  const url = `${BASE_URL_OM}/ProdData/QueryAnyTableAsync`;
+
+  let _payload =
+  {
+    table: "ProdWindowItems",
+    filterGroup: {
+      conditions: [
+        {
+          field: "ParentId",
+          operator: "Equals",
+          value: id
+        }
+      ]
+    }
+  }
+
+  let payload = JSON.stringify(_payload);
+
+  console.log("payload ", payload)
+
+  try {
+    const response = await axios.post(url, payload, getConfigOM());
+    return response.data;
+  } catch (error) {
+    logger.error("error: ", err);
+  }
+}

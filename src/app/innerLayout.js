@@ -1,14 +1,10 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useSearchParams, useRouter } from "next/navigation";
-
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 import Sidebar from "app/components/sidebar/sidebar";
 import Tooltip from "app/components/tooltip/tooltip";
-
-import { Pages } from "app/utils/constants";
 
 import AuthNav from "@centrawindows-ca/authnav";
 import { useAuthData } from "../context/authContext";
@@ -21,6 +17,7 @@ import {
   message,
   Drawer,
 } from "antd";
+
 const { useBreakpoint } = Grid;
 
 import {
@@ -33,18 +30,17 @@ import {
 
 import { useCookies } from "react-cookie";
 
-const Context = React.createContext({ name: "Default" });
-
 export default function InnerLayout({ children }) {
-  const [calendarHeight, setCalendarHeight] = useState(0);
   const [cookies, setCookie] = useCookies(["c.token"]);
-  const [drawerWidth, setDrawerWidth] = useState(320);
   const [messageApi, messageContextHolder] = message.useMessage();
   const [notificationApi, contextHolder] = notification.useNotification();
   const [navParams, setNavParams] = useState(null);
 
   const { drawerOpen, isReadOnly, networkInfo, isMobile, userData, canEdit } =
     useSelector((state) => state.app);
+
+  const pathname = usePathname();
+  const isRoot = pathname === '/';
 
   const { result, showMessage } = useSelector((state) => state.orders);
 
@@ -54,27 +50,6 @@ export default function InnerLayout({ children }) {
   const searchParams = useSearchParams();
 
   const { onAuthNavAction } = useAuthData();
-
-  const isTablet = useMediaQuery("(max-width:768px)");
-  const pageParam = searchParams.get("page") || Pages.month;
-
-  const MONTH_HEADER_HEIGHT_OFFSET = 200;
-
-  useEffect(() => {
-    function updateSize() {
-      setCalendarHeight(window.innerHeight - MONTH_HEADER_HEIGHT_OFFSET);
-    }
-    window.addEventListener("resize", updateSize);
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
-
-  useEffect(() => {
-    if (isTablet) {
-      setDrawerWidth(0);
-    } else {
-      setDrawerWidth(300);
-    }
-  }, [isTablet, drawerOpen]);
 
   const showResultPopup = useCallback(
     (result) => {
@@ -113,29 +88,9 @@ export default function InnerLayout({ children }) {
     }
   }, [result, showResultPopup]);
 
-  // useEffect(() => {
-  //   let _page = Pages.month;
-
-  //   if (pageParam && !isMobile) {
-  //     _page = pageParam;
-  //   } else if (isMobile) {
-  //     _page = Pages.mobile;
-  //   } else {
-  //     _page = Pages.month;
-  //   }
-
-  //   dispatch(updatePage(_page));
-  // }, [dispatch, pageParam, isMobile]);
-
   useEffect(() => {
     dispatch(updateDrawerOpen(drawerOpen));
   }, [dispatch, drawerOpen]);
-
-  useEffect(() => {
-    if (!screens.xl) {
-      dispatch(updateDrawerOpen(true));
-    }
-  }, [dispatch, screens]);
 
   useEffect(() => {
     const fetchNetworkInfo = async () => {
@@ -302,34 +257,40 @@ export default function InnerLayout({ children }) {
           },
         }}
       >
-        <div
-          style={{
-            marginLeft: drawerOpen ? 280 : 55,
-            transition: "margin-left 0.3s",
-          }}
-        >
-          <Drawer
-            title=""
-            placement={"left"}
-            width={drawerOpen ? 280 : 62}
-            onClose={() => dispatch(updateDrawerOpen(false))}
-            open={true}
-            bodyStyle={{ padding: 0 }}
-            mask={false}
-            zIndex={1}
-            closeIcon={null}
-            rootStyle={{ marginTop: "40px" }}
+        {isRoot && (
+          <div
+            style={{
+              marginLeft: drawerOpen ? 280 : 55,
+              transition: "margin-left 0.3s",
+            }}
           >
-            <Sidebar
-              style={
-                drawerOpen ? { padding: "0 1rem" } : { padding: "0 0.7rem" }
-              }
-            />
-          </Drawer>
+            <Drawer
+              title=""
+              placement={"left"}
+              width={drawerOpen ? 280 : 62}
+              onClose={() => dispatch(updateDrawerOpen(false))}
+              open={true}
+              mask={false}
+              zIndex={1}
+              closeIcon={null}
+              rootStyle={{ marginTop: "40px" }}
+            >
+              <Sidebar
+                style={
+                  drawerOpen ? { padding: "0 1rem" } : { padding: "0 0.7rem" }
+                }
+              />
+            </Drawer>
+            <div>
+              {children}
+            </div>
+            </div>
+          )}
+        {!isRoot && (
           <div>
             {children}
           </div>
-        </div>
+        )}
       </ConfigProvider>
     </div>
   );
