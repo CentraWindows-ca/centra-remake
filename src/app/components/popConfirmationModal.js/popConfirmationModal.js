@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { useSelector } from "react-redux";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
+//import Modal from "@mui/material/Modal";
+//import Box from "@mui/material/Box";
 
 import { Button, Popconfirm, Space } from "antd";
 
@@ -26,6 +26,8 @@ export default function PopConfirmationModal(props) {
   const { isReadOnly } = useSelector((state) => state.app);
 
   return (
+    <div></div>
+    {/*
     <Modal
       open={open}
       onClose={onCancel}
@@ -94,5 +96,6 @@ export default function PopConfirmationModal(props) {
         </div>
       </Box>
     </Modal>
+    */}
   );
 }
