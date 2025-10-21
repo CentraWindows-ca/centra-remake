@@ -15,8 +15,8 @@ export async function fetchAttachments(module, moduleId) {
   return axios.get(url, getConfig());
 }
 
-export async function saveAttachment(module, moduleId, documents) {
-  const url = `${BASE_URL}/Common/UploadFiles?module=${module}&parentId=${moduleId}`;
+export async function uploadAttachments(module, parentId, documents) {
+  const url = `${BASE_URL}/Common/UploadFiles?module=${module}&parentId=${parentId}`;
 
   try {
     const response = await axios.post(url, documents, getConfig());

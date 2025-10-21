@@ -7,7 +7,7 @@ export const appSlice = createSlice({
   initialState: {
     isLoading: true,
     appMode: AppModes.orders,
-    drawerOpen: true,
+    drawerOpen: false,
     users: [],
     isMobile: true,
     networkInfo: { ip: "", isTest: false },

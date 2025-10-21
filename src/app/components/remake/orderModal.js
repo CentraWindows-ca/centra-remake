@@ -1,9 +1,11 @@
-import { Modal, Box } from "@mui/material";
+//import { Modal, Box } from "@mui/material";
 
 export default function OrderModal(props) {
   const { open, onClose } = props;
 
   return (
+    <div>1</div>
+    {/*
     <Modal open={open} onClose={() => onClose()}>
       <Box
         sx={{
@@ -21,5 +23,6 @@ export default function OrderModal(props) {
         {props.children}
       </Box>
     </Modal>
+    */}
   );
 }

@@ -1,13 +1,17 @@
-import { Pagination, Table } from "antd";
 import styles from "./ordersTable.module.css";
-import styled from "styled-components";
+
+import React from "react";
+import { Pagination } from "antd";
 import { Button } from "react-bootstrap";
+import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
 
 import {
   updatePageNumber,
   updatePageSize,
   updateSortOrder,
+  openCreateModal
 } from "app/redux/orders";
+
 import { useDispatch, useSelector } from "react-redux";
 
 export default function OrdersTable(props) {
@@ -19,12 +23,14 @@ export default function OrdersTable(props) {
     isLoading,
     onCreateClick,
   } = props;
+
   const dispatch = useDispatch();
+
+  const { pageNumber, pageSize, total } = useSelector((state) => state.orders);
+
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRows(newSelectedRowKeys);
   };
-
-  const { pageNumber, pageSize, total } = useSelector((state) => state.orders);
 
   const rowSelection = {
     selectedRowKeys: selectedRows,
@@ -46,57 +52,38 @@ export default function OrdersTable(props) {
       );
     }
   };
-
+ 
   return (
     <div className={"bg-white rounded-sm p-3"}>
       <div className="flex flex-col space-y-2">
         <div className="flex justify-between items-center sticky">
           <div className="flex space-x-2 sticky">
-            <Button size="sm" className="text-sm" onClick={onCreateClick}>
-              {/* <i className="fa-solid fa-plus pr-2" /> */}
+            <Button size="sm" className="text-sm" onClick={() => dispatch(openCreateModal())}>
               <span>Create</span>
-            </Button> 
+            </Button>
           </div>
 
-          <div className="flex justify-end items-center">
-            <Pagination
-              //showSizeChanger
-              onChange={onChangeProps}
-              total={total}
-              showTotal={(total) => (
-                <div className="text-sm font-semibold mt-2">{` ${total.toLocaleString()} Total`}</div>
-              )}
-              current={pageNumber}
-              pageSize={pageSize}
-            //pageSizeOptions={[20]}
-            />
-          </div>
+          {false && // This will be added back when custom filter/search api is available
+            <div className="flex justify-end items-center">
+              <Pagination
+                onChange={onChangeProps}
+                total={total}
+                showTotal={(total) => (
+                  <div className="text-sm font-semibold mt-2">{` ${total.toLocaleString()} Total`}</div>
+                )}
+                current={pageNumber}
+                pageSize={pageSize}
+              />
+            </div>
+          }
         </div>
-        <div style={{ height: "calc(100vh - 195px)" }} className="overflow-auto text-xs">
-          <Table
-            className="
-              my-custom-table
-              [&_.ant-table]:!text-[12px]
-              [&_.ant-table-tbody_tr_td]:!text-[12px]
-              [&_.ant-table-tbody_tr_td]:!p-[0_8px]
-              [&_.ant-table-thead_tr_th]:!text-[12px]
-              [&_.ant-table-thead_tr_th]:!p-[4_8px]
-            "
-            columns={columns}
-            dataSource={data}
-            size="small"
-            pagination={false}
-            //rowSelection={rowSelection}
-            loading={isLoading}            
-            onChange={onTableChange}
-            sticky
-            //bordered
-            tableLayout="fixed"
-            scroll={{
-              x: 'max-content'
-            }}
-          />
-        </div>
+        <TableWithFilters 
+          columns={columns}
+          data={data}
+          pagination={false}
+          loading={isLoading}          
+          onChange={onTableChange}          
+        />
       </div>
     </div>
   );

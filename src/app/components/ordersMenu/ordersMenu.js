@@ -21,6 +21,10 @@ export default function OrdersMenu(props) {
     setStatusOptions(_options);
   }, [])
   
+  useEffect(() => {
+    console.log("drawerOpen ", drawerOpen)
+  }, [drawerOpen])
+
 
   return (
     <>

@@ -23,7 +23,6 @@ import {
   faClipboard
 } from "@fortawesome/free-solid-svg-icons";
 
-import SensorWindowIcon from '@mui/icons-material/SensorWindow';
 
 import FontAwesomeEventIcon from "app/components/events/fontAwesomeEventIcon";
 import Tooltip from "app/components/tooltip/tooltip";
