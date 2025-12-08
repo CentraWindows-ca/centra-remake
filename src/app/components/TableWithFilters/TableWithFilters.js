@@ -20,6 +20,8 @@ export default function TableWithFilters(props) {
     rowSelection,
   } = props;
 
+  console.log('data ', data)
+
   const filterRow = columns.reduce(
     (row, col) => {
       const colKey = col.dataIndex || col.key;

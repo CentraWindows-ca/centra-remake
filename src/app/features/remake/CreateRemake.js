@@ -21,7 +21,7 @@ export default function CreateRemake(props) {
   const [searchQuery, setSearchQuery] = useState(woParam);
   const [woSelectList, setWOSelectList] = useState([]);
   const [selectedWONumber, setSelectedWONumber] = useState(null);
-  const [wo, setWO] = useState(null);
+  const [wo, setWO] = useState('');
   const [woItems, setWOItems] = useState(null);
     
   //useEffect(() => {
@@ -57,8 +57,21 @@ export default function CreateRemake(props) {
     }
   }, [searchQuery]);
 
+  useEffect(() => {          
+    const fetchData = async () => {
+      const result = await fetchProductionWindowsByWOFilter("vk");
+      if (result) {
+        setWOSelectList(result);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   useEffect(() => {
-    if (selectedWONumber?.length > 1) {      
+    console.log("aaa1", selectedWONumber)
+    if (selectedWONumber?.length > 1) {
+      console.log("aaa2", selectedWONumber)
       const fetchData = async () => {
         const result = await fetchProductionWindowByWO(selectedWONumber);
         if (result) {
@@ -74,6 +87,7 @@ export default function CreateRemake(props) {
     if (wo) {
       const fetchData = async () => {
         const result = await fetchWindowItems(wo?.value?.w?.w_Id);
+        console.log("result1 ", result)
         if (result) {
           setWOItems(result?.data)
         }
@@ -88,6 +102,7 @@ export default function CreateRemake(props) {
   }, []);
 
   const onChange = useCallback((val) => {
+    console.log("val ", val)
     setSelectedWONumber(val);
   }, []);
 
@@ -98,14 +113,14 @@ export default function CreateRemake(props) {
   const columns = [
     {
       title: `Item`,
-      dataIndex: "Item",
-      key: "Item",
+      dataIndex: "itemNo",
+      key: "ItemNo",
       width: 120
     },
     {
       title: `SubQty`,
-      dataIndex: "SubQty",
-      key: "SubQty",
+      dataIndex: "subQty",
+      key: "subQty",
       width: 70
     },
     {
@@ -132,32 +147,36 @@ export default function CreateRemake(props) {
       key: "product",
       width: 150,
     },  
-    //{
-    //  title: "Status",
-    //  dataIndex: "status",
-    //  key: "status",
-    //  width: 150,
-    //  fixed: 'right',
-    //  render: (status, order, index) => {
-    //    if (index === 0) {
-    //      // Just show the raw status text (from data)
-    //      return status;
-    //    }
-    //    return (
-    //      <div className="text-center">
-    //        <OrderStatus
-    //          statusKey={mapRemakeRowStateToKey(status)}
-    //          statusList={RemakeRowStates}
-    //          updateStatusCallback={updateStatus}
-    //          orderId={order?.id}
-    //          handleStatusCancelCallback={() => { }}
-    //          style={{ width: "100%" }}
-    //        />
-    //      </div>
-    //    );
-    //  },
-    //},
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      width: 150,
+      fixed: 'right',
+      //render: (status, order, index) => {
+      //  if (index === 0) {
+      //    // Just show the raw status text (from data)
+      //    return status;
+      //  }
+      //  return (
+      //    <div className="text-center">
+      //      <OrderStatus
+      //        statusKey={mapRemakeRowStateToKey(status)}
+      //        statusList={RemakeRowStates}
+      //        updateStatusCallback={updateStatus}
+      //        orderId={order?.id}
+      //        handleStatusCancelCallback={() => { }}
+      //        style={{ width: "100%" }}
+      //      />
+      //    </div>
+      //  );
+      //},
+    },
   ];
+
+  console.log("columns ", columns)
+  console.log("woItems ", woItems)
+  console.log("woSelectList ", woSelectList)
 
   return (
     <div className="h-[80vh]">
