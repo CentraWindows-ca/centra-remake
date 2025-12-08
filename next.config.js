@@ -9,7 +9,6 @@ const envPath = path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`);
 dotenv.config({ path: envPath });
 
 module.exports = {
-  output: "export",
   webpack(config, { isServer }) {
     config.module.rules.push({
       test: /\.svg$/i,
@@ -37,6 +36,9 @@ module.exports = {
     }
 
     return config
+  },
+  images: {
+    unoptimized: true,
   },
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
