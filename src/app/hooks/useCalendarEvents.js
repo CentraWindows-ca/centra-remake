@@ -39,13 +39,13 @@ import {
   updateMarkedWorkOrderId,
   updateWorkOrderData,
   updateResult,
-  updateDayWorkOrders,
-  updateWeekWorkOrders,
-  createProductionEvents,
-  createInstallationEvents,
+  //updateDayWorkOrders,
+  //updateWeekWorkOrders,
+  //createProductionEvents,
+  //createInstallationEvents,
   createServiceEvents,
   updateIsLoading,
-  updateProductionEvents,
+  //updateProductionEvents,
   clearEvents,
 } from "app/redux/orders";
 
@@ -78,15 +78,15 @@ const useCalendarEvents = ({ date, workOrders, departmentParam }) => {
         switch (departmentParam) {
           case Production:
             let events = buildProductionEvents(workOrders.data);
-            dispatch(updateProductionEvents(events));
+            //dispatch(updateProductionEvents(events));
             break;
-          case Installation:
-            dispatch(
-              createInstallationEvents({
-                workOrders: workOrders.data,
-              })
-            );
-            break;
+          //case Installation:
+          //  dispatch(
+          //    createInstallationEvents({
+          //      workOrders: workOrders.data,
+          //    })
+          //  );
+          //  break;
           case Service:
             dispatch(
               createServiceEvents({
@@ -103,7 +103,7 @@ const useCalendarEvents = ({ date, workOrders, departmentParam }) => {
         dispatch(clearEvents());
       }
     }
-  }, [dispatch, workOrders, departmentParam]);
+  }, [dispatch, workOrders, departmentParam, buildProductionEvents]);
 
   useEffect(() => {
     let result = [];
@@ -229,7 +229,7 @@ const useCalendarEvents = ({ date, workOrders, departmentParam }) => {
         (x) => YMDDateFormat(x.startDateTime) === YMDDateFormat(date)
       );
 
-      dispatch(updateDayWorkOrders([...dayWorkOrders]));
+      //dispatch(updateDayWorkOrders([...dayWorkOrders]));
 
       if (dayWorkOrders) {
         dayWorkOrders.forEach((dwo) => {
@@ -275,7 +275,7 @@ const useCalendarEvents = ({ date, workOrders, departmentParam }) => {
           setWeekSummaryWorkOrders(_filteredWeekWorkOrders);
         }
 
-        dispatch(updateWeekWorkOrders(weekSelectionWorkOrders));
+        //dispatch(updateWeekWorkOrders(weekSelectionWorkOrders));
       }
     }
   }, [

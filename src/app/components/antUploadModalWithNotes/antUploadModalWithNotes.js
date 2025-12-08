@@ -72,7 +72,7 @@ export default function AntUploadModalWithNotes({
       setUploadFileList([]);
       setDraggerFileList([]);
     }
-  }, [showUpload]);
+  }, [showUpload, setUploadFileList, setDraggerFileList]);
 
   return (
     <Modal

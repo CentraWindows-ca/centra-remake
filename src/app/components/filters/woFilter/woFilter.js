@@ -10,7 +10,7 @@ import WOSelection from "app/components/woSelection/woSelection";
 import useCalendarEvents from "app/hooks/useCalendarEvents";
 import { Pages } from "app/utils/constants";
 
-import { updateFilteredWorkOrders } from "app/redux/orders";
+//import { updateFilteredWorkOrders } from "app/redux/orders";
 
 export default function WOFilter(props) {
   const { className } = props;
@@ -52,11 +52,11 @@ export default function WOFilter(props) {
             _filteredWorkOrders.push(_workOrder);
           }
 
-          dispatch(updateFilteredWorkOrders(_filteredWorkOrders));
+          //dispatch(updateFilteredWorkOrders(_filteredWorkOrders));
         }
       }
     },
-    [dispatch, monthWorkOrders, filteredWorkOrders]
+    [/*dispatch,*/ monthWorkOrders]
   );
 
   useEffect(() => {

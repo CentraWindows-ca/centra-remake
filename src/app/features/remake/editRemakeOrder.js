@@ -82,7 +82,7 @@ export default function EditRemakeOrder(props) {
 
   useEffect(() => {
     form.setFieldsValue(remakeOrderData)
-  }, [remakeOrderData])
+  }, [remakeOrderData, form])
   
   return (
     <Form      

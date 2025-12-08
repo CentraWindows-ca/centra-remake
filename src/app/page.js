@@ -219,7 +219,7 @@ export default function Remakes() {
     }
     setPopupOpen(false);
     setSelectedOrderId(null);
-  }, [selectedRemakeOrderId, deleteRemakeWorkOrder, loggedInUser]);
+  }, [selectedRemakeOrderId, loggedInUser]);
 
   const handlePopupCancel = useCallback(() => {
     setPopupOpen(false);
@@ -276,9 +276,9 @@ export default function Remakes() {
     setOpenPopoverId(orderId);
   };
 
-  const handleClosePopover = () => {
+  const handleClosePopover = useCallback(() => {
     setOpenPopoverId(null);
-  };
+  }, [setOpenPopoverId]);
 
   const PopoverContent = useCallback((order) => {
     return (
@@ -328,7 +328,7 @@ export default function Remakes() {
         </div>
       </div>
     );
-  }, [onEditClick, onShareLinkClick, onDeleteClick, handleClosePopover, moduleName]);
+  }, [onEditClick, onShareLinkClick, onDeleteClick, handleClosePopover]);
 
   const handleAssignedToChange = useCallback((user, order) => {
     setFilteredOrders((prevOrders) => {
@@ -351,7 +351,7 @@ export default function Remakes() {
         refetchOrders();
       });
     }
-  }, [filteredOrders]);
+  }, [filteredOrders, refetchOrders]);
 
   const columns = [
     {
@@ -597,7 +597,7 @@ export default function Remakes() {
       updateRemakeWorkOrder([_remakeItem]);
       onCloseClick();
     }
-  }, [remakeItem]);
+  }, [remakeItem, onCloseClick]);
 
   const handleFinishFailed = () => {
     console.log("Show error message")

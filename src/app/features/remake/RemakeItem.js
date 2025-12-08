@@ -139,7 +139,7 @@ export default function RemakeItem(props) {
   
   useEffect(() => {
     form.setFieldsValue(data)
-  }, [data]);
+  }, [data, form]);
 
   useEffect(() => {
     if (JSON.stringify(inputData) !== JSON.stringify(data)) {
@@ -147,7 +147,7 @@ export default function RemakeItem(props) {
     } else {
       setIsModified(false);
     }
-  }, [inputData, data])
+  }, [inputData, data, form, setIsModified])
 
   return (
     <div className="flex flex-row gap-2">

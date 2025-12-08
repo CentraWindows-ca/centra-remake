@@ -3,9 +3,7 @@
 export default function OrderModal(props) {
   const { open, onClose } = props;
 
-  return (
-    <div>1</div>
-    {/*
+  {/*
     <Modal open={open} onClose={() => onClose()}>
       <Box
         sx={{
@@ -24,5 +22,8 @@ export default function OrderModal(props) {
       </Box>
     </Modal>
     */}
+
+  return (
+    <div>1</div>    
   );
 }
