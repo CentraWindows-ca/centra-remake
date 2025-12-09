@@ -47,8 +47,8 @@ export default function CreateRemake(props) {
   useEffect(() => {          
     const fetchData = async () => {
       const result = await fetchProductionWindowAvailableForRemake();
-      if (result) {
-        setWOSelectList(result);
+      if (result?.data?.length > 0) {
+        setWOSelectList(result?.data);
       }
     };
 
