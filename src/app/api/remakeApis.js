@@ -28,9 +28,8 @@ export async function fetchAllRemakeWorkOrders() {
 }
 
 export async function fetchRemakeCountByStatus(status) {
-  const url = `${BASE_URL}/Remake/GetRemakeCountByStatus${
-    status && status.length > 0 ? `?status=${status}` : ""
-  }`;
+  const url = `${BASE_URL}/Remake/GetRemakeCountByStatus${status && status.length > 0 ? `?status=${status}` : ""
+    }`;
   return axios.get(url, getConfig());
 }
 
@@ -41,9 +40,8 @@ export async function fetchRemakeWorkOrders(
   sortBy,
   isDescending
 ) {
-  const url = `${BASE_URL}/Remake/GetRemakesPaginated?pageNumber=${pageNumber}&pageSize=${pageSize}&status=${status}&sortBy=${sortBy}&isDescending=${
-    isDescending ? "true" : "false"
-  }`;
+  const url = `${BASE_URL}/Remake/GetRemakesPaginated?pageNumber=${pageNumber}&pageSize=${pageSize}&status=${status}&sortBy=${sortBy}&isDescending=${isDescending ? "true" : "false"
+    }`;
   return axios.get(url, getConfig());
 }
 
@@ -140,43 +138,17 @@ export async function deleteRemakeWorkOrder(loggedInUserEmail, data) {
 }
 
 export async function fetchProductionWindowAvailableForRemake() {
-  const url = `${BASE_URL_OM}/ProdData/QueryWorkOrderHeaderWithPrefixAsync`;
-
-  const _payload = {
-    filterGroup: {
-      conditions: [
-        {
-          field: "w_Status",
-          operator: "NotEquals",
-          value: "Shipped"
-        },
-        {
-          field: "w_Status",
-          operator: "NotEquals",
-          value: "Cancelled"
-        },
-        {
-          field: "w_Status",
-          operator: "NotEquals",
-          value: "Completed Reservations"
-        },
-        {
-          field: "w_Status",
-          operator: "NotEquals",
-          value: ""
-        }
-      ]
-    }
-  }
-
-  const payload = JSON.stringify(_payload);
+  const url = `${BASE_URL_OM}/ProdData/GetWindowsWorkOrderFieldsAsync?columns=m_MasterId&columns=m_WorkOrderNo&columns=w_Status&status=In-Progress`;
 
   try {
-    const response = await axios.post(url, payload, {
+    const response = await axios.get(url, {
       ...getConfigOM()
     });
 
-    return { ...response.data, department: Production };
+    return {
+      list: response.data,
+      department: Production
+    };
   } catch (error) {
     //logger.error("error: ", err);
     console.error("Error fetching production windows by WO:", error);

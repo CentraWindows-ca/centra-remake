@@ -27,7 +27,7 @@ export default function CreateRemake(props) {
   const [selectedWONumber, setSelectedWONumber] = useState(null);
   const [wo, setWO] = useState('');
   const [woItems, setWOItems] = useState(null);
-    
+
   //useEffect(() => {
   //  //const handleMessage = (event) => {
   //  //  // Optionally check origin: if (event.origin !== 'http://localhost:3005') return;
@@ -44,11 +44,11 @@ export default function CreateRemake(props) {
   //  };
   //}, []);
 
-  useEffect(() => {          
+  useEffect(() => {
     const fetchData = async () => {
       const result = await fetchProductionWindowAvailableForRemake();
-      if (result?.data?.length > 0) {
-        setWOSelectList(result);
+      if (result?.list?.length > 0) {
+        setWOSelectList(result.list);
       }
     };
 
@@ -56,9 +56,7 @@ export default function CreateRemake(props) {
   }, []);
 
   useEffect(() => {
-    console.log("aaa1", selectedWONumber)
     if (selectedWONumber?.length > 1) {
-      console.log("aaa2", selectedWONumber)
       const fetchData = async () => {
         const result = await fetchProductionWindowByWO(selectedWONumber);
         if (result) {
@@ -66,7 +64,7 @@ export default function CreateRemake(props) {
         }
       };
 
-      fetchData();           
+      fetchData();
     }
   }, [selectedWONumber]);
 
@@ -133,7 +131,7 @@ export default function CreateRemake(props) {
       dataIndex: "product",
       key: "product",
       width: 150,
-    },  
+    },
     {
       title: "Status",
       dataIndex: "status",
@@ -161,10 +159,6 @@ export default function CreateRemake(props) {
     },
   ];
 
-  console.log("columns ", columns)
-  console.log("woItems ", woItems)
-  console.log("woSelectList ", woSelectList)
-
   return (
     <div className="h-[80vh]">
       <div className="">
@@ -176,10 +170,10 @@ export default function CreateRemake(props) {
           //onSearch={onSearch}
           onChange={onChange}
           onSearch={onSearch}
-          options={woSelectList?.data?.map((wo) => {
+          options={woSelectList?.map((wo) => {
             return {
-              value: wo.value.m.m_WorkOrderNo,
-              label: wo.value.m.m_WorkOrderNo
+              value: wo.m_WorkOrderNo,
+              label: wo.m_WorkOrderNo
             }
           })}
           style={{ width: 250 }}
@@ -206,8 +200,8 @@ export default function CreateRemake(props) {
         columns={columns}
         data={woItems ?? []}
         pagination={false}
-        //loading={isLoading}
-        //onChange={onTableChange}
+      //loading={isLoading}
+      //onChange={onTableChange}
       />
     </div>
   );
