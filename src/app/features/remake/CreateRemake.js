@@ -12,6 +12,10 @@ import {
   fetchWindowItems
 } from "app/api/productionApis";
 
+import {
+  fetchProductionWindowAvailableForRemake
+} from "app/api/remakeApis";
+
 export default function CreateRemake(props) {
   //const [sss, setSSS] = useState(null);
   //const [received, setReceived] = useState(null);
@@ -40,26 +44,9 @@ export default function CreateRemake(props) {
   //  };
   //}, []);
 
-  useEffect(() => {
-    if (searchQuery && searchQuery?.length > 1) {
-      const delayDebounce = setTimeout(() => {
-        const fetchData = async () => {
-          const result = await fetchProductionWindowsByWOFilter(searchQuery);
-          if (result) {
-            setWOSelectList(result);
-          }
-        };
-
-        fetchData();
-      }, 500); // debounce delay in ms
-
-      return () => clearTimeout(delayDebounce); // cleanup on re-run
-    }
-  }, [searchQuery]);
-
   useEffect(() => {          
     const fetchData = async () => {
-      const result = await fetchProductionWindowsByWOFilter("vk");
+      const result = await fetchProductionWindowAvailableForRemake();
       if (result) {
         setWOSelectList(result);
       }

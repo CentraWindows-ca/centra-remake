@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from "../redux/store.js";
 import { updateResult } from "../redux/orders";
-import { BASE_URL } from "../utils/constants";
+import { BASE_URL, BASE_URL_OM, Production } from "../utils/constants";
 
 function getConfig(loggedInUserEmail) {
   return {
@@ -9,6 +9,17 @@ function getConfig(loggedInUserEmail) {
     "Content-Type": "application/json",
     "centra-login-email": loggedInUserEmail,
   };
+}
+function getConfigOM() {
+  const token = localStorage.getItem("centra_token");
+
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'centra-login-email': store?.getState()?.app?.userData?.email
+    }
+  }
 }
 
 export async function fetchAllRemakeWorkOrders() {
@@ -125,5 +136,49 @@ export async function deleteRemakeWorkOrder(loggedInUserEmail, data) {
   } catch (error) {
     console.error("Error deleting Remake:", error);
     throw error;
+  }
+}
+
+export async function fetchProductionWindowAvailableForRemake() {
+  const url = `${BASE_URL_OM}/ProdData/QueryWorkOrderHeaderWithPrefixAsync`;
+
+  const _payload = {
+    filterGroup: {
+      conditions: [
+        {
+          field: "w_Status",
+          operator: "NotEquals",
+          value: "Shipped"
+        },
+        {
+          field: "w_Status",
+          operator: "NotEquals",
+          value: "Cancelled"
+        },
+        {
+          field: "w_Status",
+          operator: "NotEquals",
+          value: "Completed Reservations"
+        },
+        {
+          field: "w_Status",
+          operator: "NotEquals",
+          value: ""
+        }
+      ]
+    }
+  }
+
+  const payload = JSON.stringify(_payload);
+
+  try {
+    const response = await axios.post(url, payload, {
+      ...getConfigOM()
+    });
+
+    return { ...response.data, department: Production };
+  } catch (error) {
+    //logger.error("error: ", err);
+    console.error("Error fetching production windows by WO:", error);
   }
 }
