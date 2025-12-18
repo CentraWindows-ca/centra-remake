@@ -699,6 +699,7 @@ export default function Remakes() {
         okText="Save"
         cancelText="Cancel"
         okButtonProps={{ disabled: !isEditFormModified }}
+        footer={null}
       >
         <CreateRemake />
       </CustomModal>
