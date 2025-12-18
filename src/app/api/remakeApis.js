@@ -3,6 +3,9 @@ import store from "../redux/store.js";
 import { updateResult } from "../redux/orders";
 import { BASE_URL, BASE_URL_OM, Production } from "../utils/constants";
 
+const BASE_URL_REMAKE = process.env.NEXT_PUBLIC_REMAKE_API_URL;
+
+
 function getConfig(loggedInUserEmail) {
   return {
     headers: { Authorization: `Bearer ${store?.getState()?.app?.userToken}` },
@@ -22,28 +25,36 @@ function getConfigOM() {
   }
 }
 
+export async function fetchRemakeWorkOrders(payload) {
+  const url = `${BASE_URL_REMAKE}/Remake/QueryRemakes`;
+  return axios.post(url, payload, getConfig());
+}
+
 export async function fetchAllRemakeWorkOrders() {
   const url = `${BASE_URL}/Remake/GetRemakes`;
   return axios.get(url, getConfig());
 }
 
 export async function fetchRemakeCountByStatus(status) {
-  const url = `${BASE_URL}/Remake/GetRemakeCountByStatus${status && status.length > 0 ? `?status=${status}` : ""
+  const url = `${BASE_URL_REMAKE}/RemakeV2023/GetRemakeCountByStatus${status && status.length > 0 ? `?status=${status}` : ""
     }`;
+
   return axios.get(url, getConfig());
 }
 
-export async function fetchRemakeWorkOrders(
-  pageNumber,
-  pageSize,
-  status,
-  sortBy,
-  isDescending
-) {
-  const url = `${BASE_URL}/Remake/GetRemakesPaginated?pageNumber=${pageNumber}&pageSize=${pageSize}&status=${status}&sortBy=${sortBy}&isDescending=${isDescending ? "true" : "false"
-    }`;
-  return axios.get(url, getConfig());
-}
+/*
+  export async function fetchRemakeWorkOrders(
+    pageNumber,
+    pageSize,
+    status,
+    sortBy,
+    isDescending
+  ) {
+    const url = `${BASE_URL}/Remake/GetRemakesPaginated?pageNumber=${pageNumber}&pageSize=${pageSize}&status=${status}&sortBy=${sortBy}&isDescending=${isDescending ? "true" : "false"
+      }`;
+    return axios.get(url, getConfig());
+  }
+*/
 
 export async function updateRemakeWorkOrderState(newStatus, moduleId) {
   const url = `${BASE_URL}/Common/Transit`;

@@ -1,9 +1,11 @@
 import styles from "./ordersTable.module.css";
 
 import React from "react";
+import { useRouter, usePathname } from 'next/navigation';
 import { Pagination } from "antd";
 import { Button } from "react-bootstrap";
-import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
+import TableWithExternalFilters from "app/components/TableWithExternalFilters/TableWithExternalFilters";
+//import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
 
 import {
   updatePageNumber,
@@ -23,6 +25,9 @@ export default function OrdersTable(props) {
     isLoading,
     onCreateClick,
   } = props;
+
+  const router = useRouter();
+  const pathname = usePathname();
 
   const dispatch = useDispatch();
 
@@ -52,6 +57,16 @@ export default function OrdersTable(props) {
       );
     }
   };
+
+  const onFilterChange = (filters) => {
+    console.log("filters", filters);
+    const params = new URLSearchParams(
+      Object.entries(filters).filter(
+        ([, value]) => value !== '' && value !== undefined && value !== null
+      )
+    );
+    router.push(`${pathname}?${params.toString()}`);
+  }
  
   return (
     <div className={"bg-white rounded-sm p-3"}>
@@ -77,12 +92,13 @@ export default function OrdersTable(props) {
             </div>
           }
         </div>
-        <TableWithFilters 
+        <TableWithExternalFilters 
           columns={columns}
           data={data}
           pagination={false}
-          loading={isLoading}          
-          onChange={onTableChange}          
+          loading={isLoading}
+          onChange={onTableChange}
+          onFilterChange={onFilterChange}
         />
       </div>
     </div>

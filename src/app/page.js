@@ -37,8 +37,8 @@ import CreateRemake from "app/features/remake/CreateRemake";
 
 import {
   fetchAllRemakeWorkOrders,
-  fetchRemakeCountByStatus,
   fetchRemakeWorkOrders,
+  fetchRemakeCountByStatus,
   updateRemakeWorkOrderState,
   deleteRemakeWorkOrder,
   updateRemakeWorkOrder
@@ -113,6 +113,8 @@ export default function Remakes() {
 
   // query params
   const searchParams = useSearchParams();
+  const params = Object.fromEntries(searchParams.entries());
+
   const statusParam = searchParams.get("status") ?? "";
   const modeParam = searchParams.get("mode") ?? "";
   const orderIdParam = searchParams.get("orderId") ?? "";
@@ -133,7 +135,7 @@ export default function Remakes() {
     pageSize,
   } = useSelector((state) => state.orders);
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (params) => {
     //const result = await fetchRemakeWorkOrders(
     //  pageNumber,
     //  pageSize,
@@ -142,9 +144,25 @@ export default function Remakes() {
     //  sort.isDescending
     //);
 
-    const result = await fetchAllRemakeWorkOrders();
+    const x = Object.entries(params)
+      .filter(([, value]) =>
+        value !== '' &&
+        value !== null &&
+        value !== undefined
+      )
+      .map(([key, value]) => ({
+        field: key,
+        values: [String(value)], // normalize
+        operator: "contains",
+      }));
 
-    console.log("result ", result)
+    const payload = {
+        filters: x,
+        page: 0,
+        pageSize: 20  
+    }
+
+    const result = await fetchRemakeWorkOrders(payload);
 
     let _statusCountPromises = statusOptions.map(async (_status) => {
       let _count = await fetchStatusCount(_status.value);
@@ -158,9 +176,13 @@ export default function Remakes() {
     // Wait for all promises to resolve
     let _statusCount = await Promise.all(_statusCountPromises);
 
+    // I'm getting count but not from the new DB
+    console.log("_statusCount ", _statusCount)
+
     dispatch(updateStatusCount(_statusCount));
     dispatch(updateTotal(result.data.totalCount));
     //return result.data.data;
+    
     return result.data;
   };
 
@@ -174,10 +196,11 @@ export default function Remakes() {
     data: ordersData,
     isFetching: isFetchingOrders,
     refetch: refetchOrders,
-  } = useQuery(["remake_workorders", department, statusView], fetchOrders, {
-    refetchOnWindowFocus: false,
+  } = useQuery(["remake_workorders", department, statusView, params], () => fetchOrders(params), {
+    refetchOnWindowFocus: true,
   });
-
+  
+  
   const isLoading = isLoadingOrders || isFetchingOrders;
 
   // when user updates order status
@@ -360,20 +383,24 @@ export default function Remakes() {
       key: `id`,
       width: 90,
       fixed: 'left',
-      render: (remakeId, order) => (
+      render: (remakeId, row) => (
         <Popover
           placement="right"
           title=""
-          content={PopoverContent(order)}
+          content={PopoverContent(row)}
           trigger="click"
-          open={openPopoverId === order?.id}
-          onOpenChange={(visible) => {
-            setOpenPopoverId(visible ? order?.id : null);
+          open={openPopoverId === row?.key && row?.key !== "filter-row"}
+          onOpenChange={(visible) => {            
+            setOpenPopoverId(visible ? row?.key : null);
           }}
         >
           <span
             className="text-sky-700 hover:underline hover:cursor-pointer"
-            onClick={() => handlePopoverToggle(order?.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handlePopoverToggle(row?.key)
+            }}
           >
             {remakeId}
           </span>
@@ -530,7 +557,7 @@ export default function Remakes() {
   }, [dispatch, openCreateRemakeParam]);
 
   // for fetching orders
-  useEffect(() => {
+  useEffect(() => {    
     if (ordersData) {
       dispatch(updateOrders(ordersData));
     }
@@ -539,7 +566,7 @@ export default function Remakes() {
   // for status filter changes
   useEffect(() => {
     setSelectedRows([]);
-    if (orders && statusOptionsRef.current) {
+    if (orders && statusOptionsRef.current) {      
       setFilteredOrders(() => {
         let currentStatus =
           statusView.length > 0
@@ -548,12 +575,17 @@ export default function Remakes() {
 
         let _orders = currentStatus
           ? orders
-            .map((o, index) => ({
+            ?.data
+            ?.items
+            ?.map((o, index) => ({
               ...o,
               key: index,
             }))
             .filter((o) => o.status === currentStatus.value)
-          : orders.map((o, index) => ({
+          : orders
+            ?.data
+            ?.items
+            ?.map((o, index) => ({
             ...o,
             key: index,
           }));

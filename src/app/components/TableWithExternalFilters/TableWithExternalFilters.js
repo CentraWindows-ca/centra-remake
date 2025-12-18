@@ -1,8 +1,8 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Input } from "antd";
 
-export default function TableWithFilters(props) {
+export default function TableWithExternalFilters(props) {
   const [filters, setFilters] = useState({});
 
   const handleFilterChange = (dataIndex, value) => {
@@ -12,11 +12,18 @@ export default function TableWithFilters(props) {
     }));
   };
 
+  useEffect(() => {
+    if (filters) {
+      onFilterChange(filters);
+    }    
+  }, [filters]);
+
   const {
     data,
     columns,
     isLoading,
     onChange,
+    onFilterChange,
     rowSelection,
   } = props;
 
@@ -28,9 +35,11 @@ export default function TableWithFilters(props) {
           placeholder={"--"}
           size="small"
           value={filters[colKey] || ""}
-          onChange={(e) =>
-            handleFilterChange(colKey, e.target.value)
-          }
+          onChange={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            handleFilterChange(colKey, e.target.value);
+          }}
           bordered={false}
           style={{ textAlign: "left", padding: 0 }}
         />
@@ -58,6 +67,11 @@ export default function TableWithFilters(props) {
     ...(Array.isArray(filteredData) ? filteredData : []),
   ];
 
+  const tableData = [
+    filterRow,
+    ...(Array.isArray(data) ? data : []),
+  ];
+
   return (
     <Table
       className="
@@ -75,7 +89,7 @@ export default function TableWithFilters(props) {
         [&_tr[data-row-key='filter-row']_td.ant-table-cell-fix-right]:z-[11]
       "
       columns={columns}
-      dataSource={displayData}
+      dataSource={tableData}
       size="small"
       pagination={false}
       loading={isLoading}
