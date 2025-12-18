@@ -1,9 +1,11 @@
 import styles from "./ordersTable.module.css";
 
-import React from "react";
+import React, { useEffect  } from "react";
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { Pagination } from "antd";
 import { Button } from "react-bootstrap";
-import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
+import TableWithExternalFilters from "app/components/TableWithExternalFilters/TableWithExternalFilters";
+//import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
 
 import {
   updatePageNumber,
@@ -22,7 +24,14 @@ export default function OrdersTable(props) {
     setSelectedRows,
     isLoading,
     onCreateClick,
+    noOfPages,
   } = props;
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
+  const pageParam = searchParams.get("page") ?? "";
 
   const dispatch = useDispatch();
 
@@ -38,8 +47,13 @@ export default function OrdersTable(props) {
   };
 
   const onChangeProps = (page, pageSize) => {
-    dispatch(updatePageNumber(page));
-    dispatch(updatePageSize(pageSize));
+    //dispatch(updatePageNumber(page));
+    //dispatch(updatePageSize(pageSize));
+    console.log("page ", page)
+    console.log("pageSize ", pageSize)
+
+    params.set("page", page);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const onTableChange = (pagination, filters, sorter) => {
@@ -52,7 +66,36 @@ export default function OrdersTable(props) {
       );
     }
   };
- 
+
+  const onFilterChange = (filters) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== '' && value !== null && value !== undefined) {
+        params.set(key, String(value));
+      } else {
+        params.delete(key);
+      }
+    });
+
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  useEffect(() => {
+    if (!noOfPages) return;
+
+    const currentPage = Number.parseInt(pageParam ?? '1', 10);
+
+    if (currentPage > noOfPages) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', '1');
+
+      router.replace(`${pathname}?${params.toString()}`, {
+        scroll: false,
+      });
+    }
+  }, [noOfPages, pageParam, searchParams, pathname, router]);
+
   return (
     <div className={"bg-white rounded-sm p-3"}>
       <div className="flex flex-col space-y-2">
@@ -61,28 +104,26 @@ export default function OrdersTable(props) {
             <Button size="sm" className="text-sm" onClick={() => dispatch(openCreateModal())}>
               <span>Create</span>
             </Button>
-          </div>
-
-          {false && // This will be added back when custom filter/search api is available
-            <div className="flex justify-end items-center">
-              <Pagination
-                onChange={onChangeProps}
-                total={total}
-                showTotal={(total) => (
-                  <div className="text-sm font-semibold mt-2">{` ${total.toLocaleString()} Total`}</div>
-                )}
-                current={pageNumber}
-                pageSize={pageSize}
-              />
-            </div>
-          }
+          </div>         
+          <div className="flex justify-end items-center">
+            <Pagination
+              onChange={onChangeProps}
+              total={noOfPages}
+              //showTotal={(total) => (
+              //  <div className="text-sm font-semibold mt-2">{` ${total.toLocaleString()} Total`}</div>
+              //)}
+              current={Number.parseInt(pageParam || 1, 10) || 1}
+              pageSize={1}
+            />
+          </div>          
         </div>
-        <TableWithFilters 
+        <TableWithExternalFilters 
           columns={columns}
           data={data}
           pagination={false}
-          loading={isLoading}          
-          onChange={onTableChange}          
+          loading={isLoading}
+          onChange={onTableChange}
+          onFilterChange={onFilterChange}
         />
       </div>
     </div>
