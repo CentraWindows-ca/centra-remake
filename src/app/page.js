@@ -19,7 +19,7 @@ import {
   closeModal,
   updateOrders,
   updateStatusCount,
-  updateTotal
+  updateTotal  
 } from "app/redux/orders";
 
 import { updateResult } from "app/redux/orders";
@@ -118,6 +118,7 @@ export default function Remakes() {
   const statusParam = searchParams.get("status") ?? "";
   const modeParam = searchParams.get("mode") ?? "";
   const orderIdParam = searchParams.get("orderId") ?? "";
+  const pageParam = searchParams.get("page") ?? "";
   const openCreateRemakeParam = searchParams.get("create-remake") ?? false;
 
   const statusOptions = getStatusOptions("Remake");
@@ -135,7 +136,7 @@ export default function Remakes() {
     pageSize,
   } = useSelector((state) => state.orders);
 
-  const fetchOrders = async (params) => {
+  const fetchOrders = async (params, pageParam) => {
     //const result = await fetchRemakeWorkOrders(
     //  pageNumber,
     //  pageSize,
@@ -144,8 +145,16 @@ export default function Remakes() {
     //  sort.isDescending
     //);
 
-    const x = Object.entries(params)
-      .filter(([, value]) =>
+    const EXCLUDED_FILTER_KEYS = new Set([
+      'page',
+      'pageSize',
+      'sort',
+      'order',
+    ]);
+
+    const filters = Object.entries(params)
+      .filter(([key, value]) =>
+        !EXCLUDED_FILTER_KEYS.has(key) &&
         value !== '' &&
         value !== null &&
         value !== undefined
@@ -157,9 +166,9 @@ export default function Remakes() {
       }));
 
     const payload = {
-        filters: x,
-        page: 0,
-        pageSize: 20  
+        ...(filters.length > 0 && { filters }),
+        page: pageParam || '1',
+        pageSize: 2  
     }
 
     const result = await fetchRemakeWorkOrders(payload);
@@ -196,11 +205,22 @@ export default function Remakes() {
     data: ordersData,
     isFetching: isFetchingOrders,
     refetch: refetchOrders,
-  } = useQuery(["remake_workorders", department, statusView, params], () => fetchOrders(params), {
-    refetchOnWindowFocus: true,
+  } = useQuery([
+    "remake_workorders",
+    department,
+    statusView,
+    params,
+    pageParam
+  ], ({ queryKey }) => {
+    const [, , , params, pageParam] = queryKey;
+
+    return fetchOrders(params, pageParam);
+  }, {
+    refetchOnWindowFocus: false,
   });
   
-  
+  console.log("ordersData ", ordersData)
+
   const isLoading = isLoadingOrders || isFetchingOrders;
 
   // when user updates order status
@@ -635,6 +655,8 @@ export default function Remakes() {
     console.log("Show error message")
   }
 
+  const noOfPages = ordersData?.data?.totalPages;
+
   return (
     <div className={styles.root}>
       <Popconfirm
@@ -656,6 +678,7 @@ export default function Remakes() {
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
         isLoading={tableLoading}
+        noOfPages={noOfPages}
       />
 
       <CustomModal
