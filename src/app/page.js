@@ -9,7 +9,6 @@ import { Popconfirm, Popover, Modal, Form } from "antd";
 import styles from "./home.module.css";
 
 import { updateAppMode, updateDrawerOpen } from "app/redux/app";
-import { useQuery } from "react-query";
 
 import {
   updateDepartment,
@@ -34,10 +33,9 @@ import Tooltip from "app/components/tooltip/tooltip";
 import CreateRemakeOrder from "app/features/remake/createRemakeOrder";
 import EditRemakeOrder from "app/features/remake/editRemakeOrder";
 import CreateRemake from "app/features/remake/CreateRemake";
+import useRemakes from "app/hooks/useRemakes";
 
 import {
-  fetchAllRemakeWorkOrders,
-  fetchRemakeWorkOrders,
   fetchRemakeCountByStatus,
   updateRemakeWorkOrderState,
   deleteRemakeWorkOrder,
@@ -88,7 +86,6 @@ const CustomModal = styled(Modal).attrs({
 `;
 
 export default function Remakes() {
-  const moduleName = "Remake";
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -113,12 +110,9 @@ export default function Remakes() {
 
   // query params
   const searchParams = useSearchParams();
-  const params = Object.fromEntries(searchParams.entries());
-
   const statusParam = searchParams.get("status") ?? "";
   const modeParam = searchParams.get("mode") ?? "";
   const orderIdParam = searchParams.get("orderId") ?? "";
-  const pageParam = searchParams.get("page") ?? "";
   const openCreateRemakeParam = searchParams.get("create-remake") ?? false;
 
   const statusOptions = getStatusOptions("Remake");
@@ -136,91 +130,13 @@ export default function Remakes() {
     pageSize,
   } = useSelector((state) => state.orders);
 
-  const fetchOrders = async (params, pageParam) => {
-    //const result = await fetchRemakeWorkOrders(
-    //  pageNumber,
-    //  pageSize,
-    //  statusView ? statusOptions.find((x) => x.key === statusView).value : "",
-    //  sort.sortBy,
-    //  sort.isDescending
-    //);
-
-    const EXCLUDED_FILTER_KEYS = new Set([
-      'page',
-      'pageSize',
-      'sort',
-      'order',
-    ]);
-
-    const filters = Object.entries(params)
-      .filter(([key, value]) =>
-        !EXCLUDED_FILTER_KEYS.has(key) &&
-        value !== '' &&
-        value !== null &&
-        value !== undefined
-      )
-      .map(([key, value]) => ({
-        field: key,
-        values: [String(value)], // normalize
-        operator: "contains",
-      }));
-
-    const payload = {
-        ...(filters.length > 0 && { filters }),
-        page: pageParam || '1',
-        pageSize: 2  
-    }
-
-    const result = await fetchRemakeWorkOrders(payload);
-
-    let _statusCountPromises = statusOptions.map(async (_status) => {
-      let _count = await fetchStatusCount(_status.value);
-
-      return {
-        status: _status.value,
-        count: _count,
-      };
-    });
-
-    // Wait for all promises to resolve
-    let _statusCount = await Promise.all(_statusCountPromises);
-
-    // I'm getting count but not from the new DB
-    console.log("_statusCount ", _statusCount)
-
-    dispatch(updateStatusCount(_statusCount));
-    dispatch(updateTotal(result.data.totalCount));
-    //return result.data.data;
-    
-    return result.data;
-  };
-
-  const fetchStatusCount = async (status) => {
-    const result = await fetchRemakeCountByStatus(status);
-    return result.data;
-  };
-
   const {
-    isLoading: isLoadingOrders,
-    data: ordersData,
-    isFetching: isFetchingOrders,
-    refetch: refetchOrders,
-  } = useQuery([
-    "remake_workorders",
-    department,
-    statusView,
-    params,
-    pageParam
-  ], ({ queryKey }) => {
-    const [, , , params, pageParam] = queryKey;
-
-    return fetchOrders(params, pageParam);
-  }, {
-    refetchOnWindowFocus: false,
-  });
-  
-  console.log("ordersData ", ordersData)
-
+    remakes,
+    isLoadingOrders,
+    isFetchingOrders,
+    refetchOrders
+  } = useRemakes();
+   
   const isLoading = isLoadingOrders || isFetchingOrders;
 
   // when user updates order status
@@ -240,6 +156,7 @@ export default function Remakes() {
   // when user clicks on an order
   const onEditClick = useCallback(
     (orderId) => {
+      console.log("orderId ", orderId)
       router.push(
         `${statusView.length > 0 ? `?status=${statusView}&` : "?"
         }orderId=${orderId}&mode=edit`,
@@ -329,7 +246,7 @@ export default function Remakes() {
         <div
           className="text-xs w-full hover:underline hover:text-sky-700 p-1 hover:cursor-pointer rounded"
           onClick={() => {
-            onEditClick(order.id);            
+            onEditClick(order.remakeId);            
             handleClosePopover(); // close popover
           }}
         >
@@ -339,7 +256,7 @@ export default function Remakes() {
         <div
           className="text-xs w-full hover:underline hover:text-sky-700 p-1 hover:cursor-pointer rounded"
           onClick={() => {
-            onEditClick(order.id);
+            onEditClick(order.remakeId);
             setRemakeItem(order);
             handleClosePopover(); // close popover
           }}
@@ -578,10 +495,10 @@ export default function Remakes() {
 
   // for fetching orders
   useEffect(() => {    
-    if (ordersData) {
-      dispatch(updateOrders(ordersData));
+    if (remakes) {
+      dispatch(updateOrders(remakes));
     }
-  }, [ordersData, dispatch]);
+  }, [remakes, dispatch]);
 
   // for status filter changes
   useEffect(() => {
@@ -655,7 +572,7 @@ export default function Remakes() {
     console.log("Show error message")
   }
 
-  const noOfPages = ordersData?.data?.totalPages;
+  const noOfPages = remakes?.data?.totalPages;
 
   return (
     <div className={styles.root}>

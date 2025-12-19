@@ -17,6 +17,8 @@ import { mapRemakeRowStateToKey, YMDDateFormat } from "app/utils/utils";
 import OrderStatus from "app/components/remake/orderStatus";
 import RemakeItem from "app/features/remake/RemakeItem";
 
+import useRemakes from "app/hooks/useRemakes";
+
 export default function EditRemakeOrder(props) {
   const {
     orderId,
@@ -27,6 +29,10 @@ export default function EditRemakeOrder(props) {
     onFinishFailed,
     setIsEditFormModified
   } = props;
+
+  const {
+    remake
+  } = useRemakes();
 
   const moduleName = "remake";
   const [inputData, setInputData] = useState([]);
@@ -91,9 +97,9 @@ export default function EditRemakeOrder(props) {
       onFinishFailed={onFinishFailed}      
     >
       <div className="flex flex-row">
-        <div className="bg-[#E2E8F0] text-[#1868B1] pl-2 pt-[1px] pr-2 rounded-sm w-[7.9rem]">
+        <div className="bg-[#E2E8F0] text-[#1868B1] pl-2 pt-[1px] pr-2 rounded-sm">
           <i className="fa-solid fa-rotate-left pr-1" />
-          {`Remake# ${inputData?.remakeId}`}
+          {`Remake# ${orderId}`}
         </div>
         <div className="ml-2">
           <OrderStatus
@@ -147,6 +153,7 @@ export default function EditRemakeOrder(props) {
       </div>
 
       <RemakeItem
+        remake={remake}
         orderId={orderId}
         form={form}
         setIsModified={setIsEditFormModified}
