@@ -786,4 +786,8 @@ export const generateOptions = (count) => {
   return options;
 };
 
-export const generateFilterOptions = () => {};
+export const generateFilterOptions = () => { };
+
+export const capitalizeWords = (str) => {
+  return str.replace(/\b\w/g, c => c.toUpperCase());
+}

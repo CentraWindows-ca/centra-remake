@@ -2,7 +2,7 @@ import styles from "./ordersTable.module.css";
 
 import React, { useEffect  } from "react";
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { Pagination } from "antd";
+import { Pagination, Tag } from "antd";
 import { Button } from "react-bootstrap";
 import TableWithExternalFilters from "app/components/TableWithExternalFilters/TableWithExternalFilters";
 //import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
@@ -68,13 +68,11 @@ export default function OrdersTable(props) {
   };
 
   const onFilterChange = (filters) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams();
 
     Object.entries(filters).forEach(([key, value]) => {
       if (value !== '' && value !== null && value !== undefined) {
         params.set(key, String(value));
-      } else {
-        params.delete(key);
       }
     });
 
@@ -97,7 +95,7 @@ export default function OrdersTable(props) {
   }, [noOfPages, pageParam, searchParams, pathname, router]);
 
   return (
-    <div className={"bg-white rounded-sm p-3"}>
+    <div className={"bg-white rounded-sm p-3 flex flex-col justify-between h-[calc(100vh-120px)]"}>
       <div className="flex flex-col space-y-2">
         <div className="flex justify-between items-center sticky">
           <div className="flex space-x-2 sticky">
