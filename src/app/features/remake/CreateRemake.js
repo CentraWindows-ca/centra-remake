@@ -27,6 +27,7 @@ export default function CreateRemake(props) {
   const [selectedWONumber, setSelectedWONumber] = useState(null);
   const [wo, setWO] = useState('');
   const [woItems, setWOItems] = useState(null);
+  const[selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   //useEffect(() => {
   //  //const handleMessage = (event) => {
@@ -87,13 +88,8 @@ export default function CreateRemake(props) {
   }, []);
 
   const onChange = useCallback((val) => {
-    console.log("val ", val)
     setSelectedWONumber(val);
   }, []);
-
-  useEffect(() => {
-    console.log("woItems ", woItems)
-  }, [woItems])
 
   const columns = [
     {
@@ -159,10 +155,19 @@ export default function CreateRemake(props) {
     },
   ];
 
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (keys) => setSelectedRowKeys(keys),
+    getCheckboxProps: (record) => ({      
+      disabled: record.key === "filter-row",
+    }),
+  };
+
   return (
     <div className="h-[80vh]">
-      <div className="">
+      <div className="mb-3">
         <Select
+          size="small"
           key={woParam}
           showSearch
           placeholder="Find Work order..."
@@ -197,11 +202,13 @@ export default function CreateRemake(props) {
         */}
       </div>
       <TableWithFilters
+        rowKey="Id"
         columns={columns}
         data={woItems ?? []}
         pagination={false}
-      //loading={isLoading}
-      //onChange={onTableChange}
+        rowSelection={rowSelection}
+        //loading={isLoading}
+        //onChange={onTableChange}
       />
     </div>
   );
