@@ -30,6 +30,11 @@ export async function fetchRemakeWorkOrders(payload) {
   return axios.post(url, payload, getConfig());
 }
 
+export async function fetchRemakeById(payload) {
+  const url = `${BASE_URL_REMAKE}/Remake/QueryRemakes`;
+  return axios.post(url, payload, getConfig());
+}
+
 export async function fetchAllRemakeWorkOrders() {
   const url = `${BASE_URL}/Remake/GetRemakes`;
   return axios.get(url, getConfig());
@@ -84,7 +89,7 @@ export async function updateRemakeWorkOrderState(newStatus, moduleId) {
 }
 
 export async function fetchRemakeWorkOrderById(id) {
-  const url = `${BASE_URL}/Remake/GetRemakeById?remakeId=${id}`;
+  const url = `${BASE_URL_REMAKE}/Remake/GetRemakeById?remakeId=${id}`;
   return axios.get(url, getConfig());
 }
 

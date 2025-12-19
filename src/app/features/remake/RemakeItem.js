@@ -19,35 +19,36 @@ export default function RemakeItem(props) {
   const {
     orderId,
     form,
-    setIsModified
+    setIsModified,
+    remake
   } = props;
 
   const moduleName = "remake";
   const [inputData, setInputData] = useState([]);
 
-  // api calls
-  const fetchOrderDetailsAsync = async () => {
-    if (orderId) {
-      const result = await fetchRemakeWorkOrderById(orderId, false);
-      return result.data;
-    } else {
-      return null;
-    }
-  };
+  //// api calls
+  //const fetchOrderDetailsAsync = async () => {
+  //  if (orderId) {
+  //    const result = await fetchRemakeWorkOrderById(orderId, false);
+  //    return result.data;
+  //  } else {
+  //    return null;
+  //  }
+  //};
 
-  // useQuery call to fetch remake details
-  const {
-    isLoading: isLoadingDetails,
-    data: data,
-    refetch: refetchOrder,
-    isFetching: isFetchingDetails,
-  } = useQuery([`${moduleName}OrderDetails`, orderId], fetchOrderDetailsAsync, {
-    refetchOnWindowFocus: false,
-  });
+  //// useQuery call to fetch remake details
+  //const {
+  //  isLoading: isLoadingDetails,
+  //  data: data,
+  //  refetch: refetchOrder,
+  //  isFetching: isFetchingDetails,
+  //} = useQuery([`${moduleName}OrderDetails`, orderId], fetchOrderDetailsAsync, {
+  //  refetchOnWindowFocus: false,
+  //});
 
-  useEffect(() => {
-    if (data) setInputData(data);
-  }, [data]);
+  //useEffect(() => {
+  //  if (data) setInputData(data);
+  //}, [data]);
 
   // for rendering dynamic options
   const remakeProductOptions = ProductionRemakeOptions.find(
@@ -137,17 +138,23 @@ export default function RemakeItem(props) {
     }
   };
   
-  useEffect(() => {
-    form.setFieldsValue(data)
-  }, [data, form]);
+  //useEffect(() => {
+  //  form.setFieldsValue(data)
+  //}, [data, form]);
 
   useEffect(() => {
-    if (JSON.stringify(inputData) !== JSON.stringify(data)) {
-      setIsModified(true);
-    } else {
-      setIsModified(false);
-    }
-  }, [inputData, data, form, setIsModified])
+    form.setFieldsValue(remake)
+  }, [remake, form]);
+
+  //useEffect(() => {
+  //  if (JSON.stringify(inputData) !== JSON.stringify(data)) {
+  //    setIsModified(true);
+  //  } else {
+  //    setIsModified(false);
+  //  }
+  //}, [inputData, data, form, setIsModified])
+
+  console.log("remake", remake)
 
   return (
     <div className="flex flex-row gap-2">
@@ -162,7 +169,7 @@ export default function RemakeItem(props) {
                 Item No.:
               </label>
               <div className="flex-1">
-                {data?.itemNo}
+                {remake?.itemNo}
               </div>
             </div>
 
@@ -171,7 +178,7 @@ export default function RemakeItem(props) {
                 Sub Qty:
               </label>
               <div className="flex-1">
-                {data?.subQty}
+                {remake?.subQty}
               </div>
             </div>
 
@@ -180,7 +187,7 @@ export default function RemakeItem(props) {
                 Description:
               </label>
               <div className="flex-1">
-                {data?.description}
+                {remake?.description}
               </div>
             </div>
 
@@ -189,7 +196,7 @@ export default function RemakeItem(props) {
                 System:
               </label>
               <div className="flex-1">
-                {data?.systemValue}
+                {remake?.systemValue}
               </div>
             </div>
 
@@ -198,7 +205,7 @@ export default function RemakeItem(props) {
                 Size:
               </label>
               <div className="flex-1">
-                {data?.size}
+                {remake?.size}
               </div>
             </div>
           </div>
@@ -350,7 +357,8 @@ export default function RemakeItem(props) {
             >
               <TextArea
                 name={"notes"}
-                value={inputData?.notes}
+                //value={inputData?.notes}
+                value={"test"}
                 rows={2}
                 onChange={handleInputChange}
               />
