@@ -18,6 +18,7 @@ export default function TableWithFilters(props) {
     isLoading,
     onChange,
     rowSelection,
+    rowKey
   } = props;
 
   const filterRow = columns.reduce(
@@ -60,6 +61,7 @@ export default function TableWithFilters(props) {
 
   return (
     <Table
+      rowKey={rowKey}
       className="
         my-custom-table
         [&_.ant-table]:!text-[12px]
@@ -86,7 +88,7 @@ export default function TableWithFilters(props) {
       scroll={{
         x: "max-content",
         y: "calc(100vh - 250px)", // Adjust height as needed
-      }}
+      }}      
     />
   );
 }
