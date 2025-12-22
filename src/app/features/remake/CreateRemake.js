@@ -94,14 +94,14 @@ export default function CreateRemake(props) {
   const columns = [
     {
       title: `Item`,
-      dataIndex: "itemNo",
-      key: "ItemNo",
+      dataIndex: "Item",
+      key: "Item",
       width: 120
     },
     {
       title: `SubQty`,
-      dataIndex: "subQty",
-      key: "subQty",
+      dataIndex: "SubQty",
+      key: "SubQty",
       width: 70
     },
     {
@@ -122,16 +122,16 @@ export default function CreateRemake(props) {
       key: "Description",
       ellipsis: true,
     },
-    {
-      title: `Product`,
-      dataIndex: "product",
-      key: "product",
-      width: 150,
-    },
+    //{
+    //  title: `Product`,
+    //  dataIndex: "product",
+    //  key: "product",
+    //  width: 150,
+    //},
     {
       title: "Status",
-      dataIndex: "status",
-      key: "status",
+      dataIndex: "Status",
+      key: "Status",
       width: 150,
       fixed: 'right',
       //render: (status, order, index) => {
@@ -162,6 +162,9 @@ export default function CreateRemake(props) {
       disabled: record.key === "filter-row",
     }),
   };
+
+  console.log("wo ", wo)
+  console.log("woItems ", woItems)
 
   return (
     <div className="h-[80vh]">
