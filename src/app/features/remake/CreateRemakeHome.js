@@ -2,9 +2,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
+import NewRemakeForm from "app/features/remake/NewRemakeForm";
 import { useQuery } from "react-query";
 
-import { Select } from "antd";
+import { Select, Button, Modal } from "antd";
 
 import {
   fetchProductionWindowsByWOFilter,
@@ -16,7 +17,7 @@ import {
   fetchProductionWindowAvailableForRemake
 } from "app/api/remakeApis";
 
-export default function CreateRemake(props) {
+export default function CreateRemakeHome(props) {
   //const [sss, setSSS] = useState(null);
   //const [received, setReceived] = useState(null);
   const searchParams = useSearchParams();
@@ -27,7 +28,8 @@ export default function CreateRemake(props) {
   const [selectedWONumber, setSelectedWONumber] = useState(null);
   const [wo, setWO] = useState('');
   const [woItems, setWOItems] = useState(null);
-  const[selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [showNewRemakeForm, setShowNewRemakeForm] = useState(false);
 
   //useEffect(() => {
   //  //const handleMessage = (event) => {
@@ -167,8 +169,8 @@ export default function CreateRemake(props) {
   console.log("woItems ", woItems)
 
   return (
-    <div className="h-[80vh]">
-      <div className="mb-3">
+    <div className="max-h-[80vh]">
+      <div className="mb-3 flex flex-row justify-between">
         <Select
           size="small"
           key={woParam}
@@ -187,6 +189,14 @@ export default function CreateRemake(props) {
           style={{ width: 250 }}
           value={selectedWONumber}
         />
+        <Button
+          size="small"
+          type="primary"
+          disabled={selectedRowKeys.length === 0}
+          onClick={()=>setShowNewRemakeForm(true)}
+        >
+          Remake
+        </Button>
         {/*
         {false &&
         <div className="mt-4 h-[10rem]" key={"VKTEST11"}>
@@ -210,9 +220,16 @@ export default function CreateRemake(props) {
         data={woItems ?? []}
         pagination={false}
         rowSelection={rowSelection}
+        scrollY={"calc(100vh - 280px)"}
         //loading={isLoading}
         //onChange={onTableChange}
       />
+      <Modal
+        open={showNewRemakeForm}
+        onCancel={() => setShowNewRemakeForm(false)}
+      >
+        <NewRemakeForm />
+      </Modal>
     </div>
   );
 }

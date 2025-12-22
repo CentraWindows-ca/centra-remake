@@ -32,7 +32,7 @@ import OrderStatus from "app/components/remake/orderStatus";
 import Tooltip from "app/components/tooltip/tooltip";
 import CreateRemakeOrder from "app/features/remake/createRemakeOrder";
 import EditRemakeOrder from "app/features/remake/editRemakeOrder";
-import CreateRemake from "app/features/remake/CreateRemake";
+import CreateRemakeHome from "app/features/remake/CreateRemakeHome";
 import useRemakes from "app/hooks/useRemakes";
 
 import {
@@ -618,7 +618,7 @@ export default function Remakes() {
         okButtonProps={{ disabled: !isEditFormModified }}
         footer={null}
       >
-        <CreateRemake />
+        <CreateRemakeHome />
       </CustomModal>
 
       <CustomModal
