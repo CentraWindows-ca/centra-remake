@@ -30,7 +30,7 @@ export default function CreateRemakeHome(props) {
   const [woItems, setWOItems] = useState(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [showNewRemakeForm, setShowNewRemakeForm] = useState(false);
-
+  
   //useEffect(() => {
   //  //const handleMessage = (event) => {
   //  //  // Optionally check origin: if (event.origin !== 'http://localhost:3005') return;
@@ -165,8 +165,11 @@ export default function CreateRemakeHome(props) {
     }),
   };
 
-  console.log("wo ", wo)
-  console.log("woItems ", woItems)
+  const selectedSet = new Set(selectedRowKeys);
+
+  const selectedRows = woItems?.filter(row => selectedSet.has(row.Id));
+
+  console.log("selectedRows ", selectedRows);
 
   return (
     <div className="max-h-[80vh]">
@@ -227,8 +230,10 @@ export default function CreateRemakeHome(props) {
       <Modal
         open={showNewRemakeForm}
         onCancel={() => setShowNewRemakeForm(false)}
+        width={1500}
+        centered
       >
-        <NewRemakeForm />
+        <NewRemakeForm selectedRows={selectedRows} />
       </Modal>
     </div>
   );

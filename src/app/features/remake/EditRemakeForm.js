@@ -19,7 +19,7 @@ import RemakeItem from "app/features/remake/RemakeItem";
 
 import useRemakes from "app/hooks/useRemakes";
 
-export default function EditRemakeOrder(props) {
+export default function EditRemakeForm(props) {
   const {
     orderId,
     onClose,

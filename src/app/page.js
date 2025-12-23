@@ -30,8 +30,8 @@ import OrdersTable from "app/components/ordersTable/ordersTable";
 import UserSelectField from "app/components/users/userSelect";
 import OrderStatus from "app/components/remake/orderStatus";
 import Tooltip from "app/components/tooltip/tooltip";
-import CreateRemakeOrder from "app/features/remake/createRemakeOrder";
-import EditRemakeOrder from "app/features/remake/editRemakeOrder";
+//import CreateRemakeOrder from "app/features/remake/createRemakeOrder";
+import EditRemakeForm from "app/features/remake/editRemakeForm";
 import CreateRemakeHome from "app/features/remake/CreateRemakeHome";
 import useRemakes from "app/hooks/useRemakes";
 
@@ -617,6 +617,7 @@ export default function Remakes() {
         cancelText="Cancel"
         okButtonProps={{ disabled: !isEditFormModified }}
         footer={null}
+        centered
       >
         <CreateRemakeHome />
       </CustomModal>
@@ -630,8 +631,9 @@ export default function Remakes() {
         okText="Save"
         cancelText="Cancel"
         okButtonProps={{ disabled: !isEditFormModified }}
+        centered
       >
-        <EditRemakeOrder
+        <EditRemakeForm
           form={editRemakeForm}
           orderId={selectedOrderId}
           onClose={onCloseClick}

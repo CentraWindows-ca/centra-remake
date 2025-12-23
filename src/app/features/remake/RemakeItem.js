@@ -145,7 +145,7 @@ export default function RemakeItem(props) {
   //}, [data, form]);
 
   useEffect(() => {
-    form.setFieldsValue(remake)
+    form?.setFieldsValue(remake)
   }, [remake, form]);
 
   //useEffect(() => {
