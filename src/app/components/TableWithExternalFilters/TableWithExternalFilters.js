@@ -18,7 +18,7 @@ export default function TableWithExternalFilters(props) {
     if (filters) {
       onFilterChange(filters);
     }    
-  }, [filters]);
+  }, [filters, onFilterChange]);
 
   const {
     data,

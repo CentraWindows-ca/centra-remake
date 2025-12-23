@@ -2,9 +2,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
+import NewRemakeForm from "app/features/remake/NewRemakeForm";
 import { useQuery } from "react-query";
 
-import { Select } from "antd";
+import { Select, Button, Modal } from "antd";
 
 import {
   fetchProductionWindowsByWOFilter,
@@ -16,7 +17,7 @@ import {
   fetchProductionWindowAvailableForRemake
 } from "app/api/remakeApis";
 
-export default function CreateRemake(props) {
+export default function CreateRemakeHome(props) {
   //const [sss, setSSS] = useState(null);
   //const [received, setReceived] = useState(null);
   const searchParams = useSearchParams();
@@ -27,8 +28,9 @@ export default function CreateRemake(props) {
   const [selectedWONumber, setSelectedWONumber] = useState(null);
   const [wo, setWO] = useState('');
   const [woItems, setWOItems] = useState(null);
-  const[selectedRowKeys, setSelectedRowKeys] = useState([]);
-
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [showNewRemakeForm, setShowNewRemakeForm] = useState(false);
+  
   //useEffect(() => {
   //  //const handleMessage = (event) => {
   //  //  // Optionally check origin: if (event.origin !== 'http://localhost:3005') return;
@@ -94,14 +96,14 @@ export default function CreateRemake(props) {
   const columns = [
     {
       title: `Item`,
-      dataIndex: "itemNo",
-      key: "ItemNo",
+      dataIndex: "Item",
+      key: "Item",
       width: 120
     },
     {
       title: `SubQty`,
-      dataIndex: "subQty",
-      key: "subQty",
+      dataIndex: "SubQty",
+      key: "SubQty",
       width: 70
     },
     {
@@ -122,16 +124,16 @@ export default function CreateRemake(props) {
       key: "Description",
       ellipsis: true,
     },
-    {
-      title: `Product`,
-      dataIndex: "product",
-      key: "product",
-      width: 150,
-    },
+    //{
+    //  title: `Product`,
+    //  dataIndex: "product",
+    //  key: "product",
+    //  width: 150,
+    //},
     {
       title: "Status",
-      dataIndex: "status",
-      key: "status",
+      dataIndex: "Status",
+      key: "Status",
       width: 150,
       fixed: 'right',
       //render: (status, order, index) => {
@@ -163,9 +165,15 @@ export default function CreateRemake(props) {
     }),
   };
 
+  const selectedSet = new Set(selectedRowKeys);
+
+  const selectedRows = woItems?.filter(row => selectedSet.has(row.Id));
+
+  console.log("selectedRows ", selectedRows);
+
   return (
-    <div className="h-[80vh]">
-      <div className="mb-3">
+    <div className="max-h-[80vh]">
+      <div className="mb-3 flex flex-row justify-between">
         <Select
           size="small"
           key={woParam}
@@ -184,6 +192,14 @@ export default function CreateRemake(props) {
           style={{ width: 250 }}
           value={selectedWONumber}
         />
+        <Button
+          size="small"
+          type="primary"
+          disabled={selectedRowKeys.length === 0}
+          onClick={()=>setShowNewRemakeForm(true)}
+        >
+          Remake
+        </Button>
         {/*
         {false &&
         <div className="mt-4 h-[10rem]" key={"VKTEST11"}>
@@ -207,9 +223,18 @@ export default function CreateRemake(props) {
         data={woItems ?? []}
         pagination={false}
         rowSelection={rowSelection}
+        scrollY={"calc(100vh - 280px)"}
         //loading={isLoading}
         //onChange={onTableChange}
       />
+      <Modal
+        open={showNewRemakeForm}
+        onCancel={() => setShowNewRemakeForm(false)}
+        width={1500}
+        centered
+      >
+        <NewRemakeForm selectedRows={selectedRows} />
+      </Modal>
     </div>
   );
 }

@@ -26,6 +26,8 @@ export default function RemakeItem(props) {
   const moduleName = "remake";
   const [inputData, setInputData] = useState([]);
 
+  // TODO: There should only be 1 source of truth - inputData has to be removed
+
   //// api calls
   //const fetchOrderDetailsAsync = async () => {
   //  if (orderId) {
@@ -143,7 +145,7 @@ export default function RemakeItem(props) {
   //}, [data, form]);
 
   useEffect(() => {
-    form.setFieldsValue(remake)
+    form?.setFieldsValue(remake)
   }, [remake, form]);
 
   //useEffect(() => {

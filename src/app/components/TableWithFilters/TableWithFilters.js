@@ -18,7 +18,8 @@ export default function TableWithFilters(props) {
     isLoading,
     onChange,
     rowSelection,
-    rowKey
+    rowKey,
+    scrollY
   } = props;
 
   const filterRow = columns.reduce(
@@ -87,7 +88,7 @@ export default function TableWithFilters(props) {
       tableLayout="fixed"
       scroll={{
         x: "max-content",
-        y: "calc(100vh - 250px)", // Adjust height as needed
+        y: scrollY || "calc(100vh - 250px)", // Adjust height as needed
       }}      
     />
   );
