@@ -31,7 +31,7 @@ import UserSelectField from "app/components/users/userSelect";
 import OrderStatus from "app/components/remake/orderStatus";
 import Tooltip from "app/components/tooltip/tooltip";
 //import CreateRemakeOrder from "app/features/remake/createRemakeOrder";
-import EditRemakeForm from "app/features/remake/editRemakeForm";
+import EditRemakeForm from "app/features/remake/EditRemakeForm";
 import CreateRemakeHome from "app/features/remake/CreateRemakeHome";
 import useRemakes from "app/hooks/useRemakes";
 
