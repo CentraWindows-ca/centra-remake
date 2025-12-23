@@ -13,13 +13,7 @@ export default function TableWithExternalFilters(props) {
       [dataIndex]: value,
     }));
   };
-
-  useEffect(() => {
-    if (filters) {
-      onFilterChange(filters);
-    }    
-  }, [filters, onFilterChange]);
-
+  
   const {
     data,
     columns,
@@ -28,6 +22,12 @@ export default function TableWithExternalFilters(props) {
     onFilterChange,
     rowSelection,
   } = props;
+
+  useEffect(() => {
+    if (filters && onFilterChange) {
+      onFilterChange(filters);
+    }
+  }, [filters, onFilterChange]);
 
   const filterRow = columns.reduce(
     (row, col) => {
