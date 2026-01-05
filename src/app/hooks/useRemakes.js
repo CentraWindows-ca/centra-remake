@@ -35,7 +35,7 @@ export default function useRemakes() {
     const payload = {
       ...(filters.length > 0 && { filters }),
       page: pageParam || '1',
-      pageSize: 2
+      pageSize: 4
     }
 
     const result = await fetchRemakeWorkOrders(payload);
