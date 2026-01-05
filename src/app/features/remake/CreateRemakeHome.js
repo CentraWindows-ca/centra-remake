@@ -233,6 +233,7 @@ export default function CreateRemakeHome(props) {
       <Modal
         open={showNewRemakeForm}
         onCancel={() => setShowNewRemakeForm(false)}
+        onOk={() => console.log("xxx")}
         width={1500}
         centered
         okText={"Submit"}

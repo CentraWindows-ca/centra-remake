@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import dayjs from "dayjs";
+//import dayjs from "dayjs";
 
-import {
-  fetchRemakeWorkOrderById,
-} from "app/api/remakeApis";
+//import {
+//  fetchRemakeWorkOrderById,
+//} from "app/api/remakeApis";
 
-import { useQuery } from "react-query";
+//import { useQuery } from "react-query";
 
 import { Form, Select, DatePicker, Space, Input } from "antd";
 const { TextArea } = Input;
@@ -18,13 +18,13 @@ import Attachments from "app/features/remake/Attachments";
 export default function RemakeItem(props) {
   const {
     orderId,
-    form,
-    setIsModified,
-    remakeItem
+    //setIsModified,
+    remakeItem,
+    field
   } = props;
 
-  const moduleName = "remake";
-  const [inputData, setInputData] = useState([]);
+  //const moduleName = "remake";
+  //const [inputData, setInputData] = useState([]);
 
   // TODO: There should only be 1 source of truth - inputData has to be removed
 
@@ -53,6 +53,12 @@ export default function RemakeItem(props) {
   //}, [data]);
 
   // for rendering dynamic options
+
+  // Watch this row's values from the Form (no local inputData needed)
+  const reasonCategory = Form.useWatch(["items", field.name, "reasonCategory"]);
+  const reason = Form.useWatch(["items", field.name, "reason"]);
+  const departmentResponsible = Form.useWatch(["items", field.name, "departmentResponsible"]);
+
   const remakeProductOptions = ProductionRemakeOptions.find(
     (x) => x.key === "product"
   )?.options?.map((group) => ({
@@ -82,32 +88,21 @@ export default function RemakeItem(props) {
   }));
 
   const remakeDepartmentResponsibleSectionOptions =
-    ProductionRemakeOptions.find(
-      (x) => x.key === "departmentResponsible"
-    )?.options?.find(
-      (x) => x.value === inputData?.departmentResponsible
-    )?.options;
+    ProductionRemakeOptions.find(x => x.key === "departmentResponsible")
+      ?.options?.find(x => x.value === departmentResponsible)
+      ?.options;
 
-  const remakeReasonOptions = ProductionRemakeOptions?.find(
-    (x) => x.key === "reasonCategory"
-  )?.options?.find((x) => x.value === inputData?.reasonCategory)?.options?.map((reasonCategory) => {
-    return {
-      key: reasonCategory.key,
-      value: reasonCategory.value,
-      label: reasonCategory.value,
-    }
-  });
+  const remakeReasonOptions =
+    ProductionRemakeOptions.find(x => x.key === "reasonCategory")
+      ?.options?.find(x => x.value === reasonCategory)
+      ?.options?.map(o => ({ key: o.key, value: o.value, label: o.value }));
 
-  const remakeReasonDetailOptions = ProductionRemakeOptions?.find(
-    (x) => x.key === "reasonCategory"
-  )?.options?.find((x) => x.value === inputData?.reasonCategory)
-    ?.options?.find((y) => y.value === inputData?.reason)?.options?.map((reasonDetail) => {
-      return {
-        key: reasonDetail.key,
-        value: reasonDetail.value,
-        label: reasonDetail.value,
-      };
-    });
+
+  const remakeReasonDetailOptions =
+    ProductionRemakeOptions.find(x => x.key === "reasonCategory")
+      ?.options?.find(x => x.value === reasonCategory)
+      ?.options?.find(y => y.value === reason)
+      ?.options?.map(o => ({ key: o.key, value: o.value, label: o.value }));
 
   // onClick events
   const handleInputChange = useCallback(
@@ -130,23 +125,23 @@ export default function RemakeItem(props) {
     }));
   }, []);
 
-  const handleSelectChange = (val, key) => {
-    if (val && key) {
-      setInputData((data) => {
-        let _data = { ...data };
-        _data[key] = val;
-        return _data;
-      });
-    }
-  };
+  //const handleSelectChange = (val, key) => {
+  //  if (val && key) {
+  //    //setInputData((data) => {
+  //    //  let _data = { ...data };
+  //    //  _data[key] = val;
+  //    //  return _data;
+  //    //});
+  //  }
+  //};
   
   //useEffect(() => {
   //  form.setFieldsValue(data)
   //}, [data, form]);
 
-  useEffect(() => {
-    form?.setFieldsValue(remakeItem)
-  }, [remakeItem, form]);
+  //useEffect(() => {
+  //  form?.setFieldsValue(remakeItem)
+  //}, [remakeItem, form]);
 
   //useEffect(() => {
   //  if (JSON.stringify(inputData) !== JSON.stringify(data)) {
@@ -156,7 +151,7 @@ export default function RemakeItem(props) {
   //  }
   //}, [inputData, data, form, setIsModified])
 
-  console.log("remakeItem", remakeItem)
+  console.log("remakeItem", remakeItem);
 
   return (
     <div className="flex flex-row gap-2">
@@ -224,17 +219,20 @@ export default function RemakeItem(props) {
               labelCol={{ flex: '100px' }}
               labelAlign="left"
               label="Product"
-              name="product"
+              name={[field.name, "product"]}
               className="mb-0"
               rules={[{ required: true }]}
             >
               <Select
                 size="small"
                 options={remakeProductOptions}
-                onChange={handleSelectChange}
+                //onChange={handleSelectChange}
+                label="Product"
+                name={[field.name, "product"]}
                 style={{ width: '11rem' }}
                 placeholder="Select Product"
-                value={inputData?.product}
+                //value={inputData?.product}
+                rules={[{ required: true }]}
               />
             </Form.Item>
 
@@ -242,14 +240,14 @@ export default function RemakeItem(props) {
               labelCol={{ flex: '120px' }}
               labelAlign="left"
               label="Scheduled Date"
-              name="scheduleDate"
+              name={[field.name, "scheduleDate"]}
               className="mb-0"
             >
               <span className="">
                 <DatePicker
                   size="small"
-                  onChange={handleDateChange}
-                  value={inputData?.scheduleDate ? dayjs(inputData.scheduleDate) : null}
+                  //onChange={handleDateChange}
+                  //value={inputData?.scheduleDate ? dayjs(inputData.scheduleDate) : null}
                   format="YYYY-MM-DD"
                   style={{ width: '11rem' }}
                 />
@@ -260,17 +258,17 @@ export default function RemakeItem(props) {
           <div className="flex flex-row justify-between">
             <Form.Item
               labelCol={{ flex: '100px' }}
-              name="departmentResponsible"
               className="mb-0"
               labelAlign="left"
               label="Department"
+              name={[field.name, "departmentResponsible"]}
               rules={[{ required: true }]}
             >
               <Select
                 size="small"
-                value={inputData?.departmentResponsible}
+                //value={inputData?.departmentResponsible}
                 options={departmentResponsibleOptions}
-                onChange={(val) => handleSelectChange(val, "departmentResponsible")}
+                //onChange={(val) => handleSelectChange(val, "departmentResponsible")}
                 style={{ width: '11rem' }}
                 placeholder="Dept. Responsible"
               />
@@ -278,7 +276,7 @@ export default function RemakeItem(props) {
 
             <Form.Item
               labelCol={{ flex: '120px' }}
-              name="departmentResponsibleSection"
+              name={[field.name, "departmentResponsibleSection"]}
               className="mb-0"
               labelAlign="left"
               label="Section"
@@ -286,9 +284,9 @@ export default function RemakeItem(props) {
               <Select
                 disabled={!remakeDepartmentResponsibleSectionOptions?.length > 0}
                 size="small"
-                value={inputData?.departmentResponsibleSection}
+                //value={inputData?.departmentResponsibleSection}
                 options={remakeDepartmentResponsibleSectionOptions}
-                onChange={(val) => handleSelectChange(val, "departmentResponsibleSection")}
+                //onChange={(val) => handleSelectChange(val, "departmentResponsibleSection")}
                 style={{ width: '11rem' }}
                 placeholder="Section Responsible"
               />
@@ -299,8 +297,8 @@ export default function RemakeItem(props) {
             <div className="flex-[3] w-full">
               <Form.Item
                 labelAlign="left"
-                label="Reason"
-                name="reasonCategory"
+                label="Reason"   
+                name={[field.name, "reasonCategory"]}
                 className="mb-0"
                 labelCol={{ flex: '100px' }}
                 rules={[{ required: true }]}
@@ -308,8 +306,8 @@ export default function RemakeItem(props) {
                 <Select
                   size="small"
                   options={reasonCategoryOptions}
-                  value={inputData?.reasonCategory}
-                  onChange={(val) => handleSelectChange(val, "reasonCategory")}
+                  //value={inputData?.reasonCategory}
+                  //onChange={(val) => handleSelectChange(val, "reasonCategory")}
                   placeholder="Category"
                 />
               </Form.Item>
@@ -318,14 +316,14 @@ export default function RemakeItem(props) {
               <Form.Item
                 labelAlign="left"
                 label=""
-                name="reason"
+                name={[field.name, "reason"]}
                 className="mb-0"
               >
                 <Select
                   size="small"
                   options={remakeReasonOptions}
-                  value={inputData?.reason}
-                  onChange={(val) => handleSelectChange(val, "reason")}
+                  //value={inputData?.reason}
+                  //onChange={(val) => handleSelectChange(val, "reason")}
                   placeholder="Subcategory"
                 />
               </Form.Item>
@@ -335,14 +333,14 @@ export default function RemakeItem(props) {
                 <Form.Item
                   labelAlign="left"
                   label=""
-                  name="reasonDetail"
+                  name={[field.name, "reasonDetail"]}
                   className="mb-0"
                 >
                   <Select
                     size="small"
                     options={remakeReasonDetailOptions}
-                    value={inputData?.reasonDetail}
-                    onChange={(val) => handleSelectChange(val, "reasonDetail")}
+                    //value={inputData?.reasonDetail}
+                    //onChange={(val) => handleSelectChange(val, "reasonDetail")}
                     placeholder="Detail"
                   />
                 </Form.Item>
@@ -353,7 +351,7 @@ export default function RemakeItem(props) {
             <Form.Item
               labelAlign="left"
               label="Notes"
-              name="notes"
+              name={[field.name, "notes"]}
               className="mb-0"
               labelCol={{ flex: '100px' }}
             >
@@ -362,7 +360,7 @@ export default function RemakeItem(props) {
                 //value={inputData?.notes}
                 value={"test"}
                 rows={2}
-                onChange={handleInputChange}
+                //onChange={handleInputChange}
               />
             </Form.Item>
           </div>
@@ -372,7 +370,7 @@ export default function RemakeItem(props) {
       <section className="border rounded-sm w-1/5">
         <Attachments
           key={orderId}
-          orderId={inputData.id}
+          //orderId={inputData.id}
         />
       </section>                  
     </div>
