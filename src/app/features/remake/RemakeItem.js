@@ -171,7 +171,7 @@ export default function RemakeItem(props) {
                 Item No.:
               </label>
               <div className="flex-1">
-                {remakeItem?.itemNo}
+                {remakeItem?.item}
               </div>
             </div>
 
@@ -198,7 +198,7 @@ export default function RemakeItem(props) {
                 System:
               </label>
               <div className="flex-1">
-                {remakeItem?.systemValue}
+                {remakeItem?.system}
               </div>
             </div>
 

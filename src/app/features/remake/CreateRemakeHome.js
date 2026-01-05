@@ -172,6 +172,7 @@ export default function CreateRemakeHome(props) {
   const selectedRows = woItems?.filter(row => selectedSet.has(row.id));
 
   console.log("selectedRows ", selectedRows);
+  console.log("woSelectList ", woSelectList);
 
   return (
     <div className="max-h-[80vh]">
@@ -185,7 +186,7 @@ export default function CreateRemakeHome(props) {
           //onSearch={onSearch}
           onChange={onChange}
           onSearch={onSearch}
-          options={woSelectList?.map((wo) => {
+          options={woSelectList?.sort((a, b) => a.m_WorkOrderNo > b.m_WorkOrderNo ? 1 : -1).map((wo) => {
             return {
               value: wo.m_WorkOrderNo,
               label: wo.m_WorkOrderNo
@@ -234,6 +235,7 @@ export default function CreateRemakeHome(props) {
         onCancel={() => setShowNewRemakeForm(false)}
         width={1500}
         centered
+        okText={"Submit"}
       >
         <NewRemakeForm selectedRows={selectedRows} />
       </Modal>

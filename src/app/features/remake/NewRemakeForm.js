@@ -12,7 +12,8 @@ export default function NewRemakeForm(props) {
 
 	return (
 		<div>
-			<div className="mb-2">New Remake Form</div>
+			<div className="mb-2 font-semibold text-blue-600">{`New Remake`}</div>
+			<div className="mb-2">{`Original WO#: ${selectedRows?.[0].workOrderNo}`}</div>
 			{selectedRows?.map((remakeItem, index) =>
 			<RemakeItem
 				remakeItem={remakeItem }
