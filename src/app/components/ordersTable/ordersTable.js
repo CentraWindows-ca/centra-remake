@@ -8,13 +8,13 @@ import TableWithExternalFilters from "app/components/TableWithExternalFilters/Ta
 //import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
 
 import {
-  updatePageNumber,
-  updatePageSize,
+  //updatePageNumber,
+  //updatePageSize,
   updateSortOrder,
   openCreateModal
 } from "app/redux/orders";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch/*, useSelector*/ } from "react-redux";
 
 export default function OrdersTable(props) {
   const {
@@ -35,7 +35,7 @@ export default function OrdersTable(props) {
 
   const dispatch = useDispatch();
 
-  const { pageNumber, pageSize, total } = useSelector((state) => state.orders);
+  //const { pageNumber, pageSize, total } = useSelector((state) => state.orders);
 
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRows(newSelectedRowKeys);
