@@ -20,7 +20,7 @@ export default function RemakeItem(props) {
     orderId,
     form,
     setIsModified,
-    remake
+    remakeItem
   } = props;
 
   const moduleName = "remake";
@@ -145,8 +145,8 @@ export default function RemakeItem(props) {
   //}, [data, form]);
 
   useEffect(() => {
-    form?.setFieldsValue(remake)
-  }, [remake, form]);
+    form?.setFieldsValue(remakeItem)
+  }, [remakeItem, form]);
 
   //useEffect(() => {
   //  if (JSON.stringify(inputData) !== JSON.stringify(data)) {
@@ -156,7 +156,7 @@ export default function RemakeItem(props) {
   //  }
   //}, [inputData, data, form, setIsModified])
 
-  console.log("remake", remake)
+  console.log("remakeItem", remakeItem)
 
   return (
     <div className="flex flex-row gap-2">
@@ -171,7 +171,7 @@ export default function RemakeItem(props) {
                 Item No.:
               </label>
               <div className="flex-1">
-                {remake?.itemNo}
+                {remakeItem?.itemNo}
               </div>
             </div>
 
@@ -180,7 +180,7 @@ export default function RemakeItem(props) {
                 Sub Qty:
               </label>
               <div className="flex-1">
-                {remake?.subQty}
+                {remakeItem?.subQty}
               </div>
             </div>
 
@@ -189,7 +189,7 @@ export default function RemakeItem(props) {
                 Description:
               </label>
               <div className="flex-1">
-                {remake?.description}
+                {remakeItem?.description}
               </div>
             </div>
 
@@ -198,7 +198,7 @@ export default function RemakeItem(props) {
                 System:
               </label>
               <div className="flex-1">
-                {remake?.systemValue}
+                {remakeItem?.systemValue}
               </div>
             </div>
 
@@ -207,7 +207,7 @@ export default function RemakeItem(props) {
                 Size:
               </label>
               <div className="flex-1">
-                {remake?.size}
+                {remakeItem?.size}
               </div>
             </div>
           </div>

@@ -7,6 +7,8 @@ import { useQuery } from "react-query";
 
 import { Select, Button, Modal } from "antd";
 
+import { camelize } from "app/utils/utils";
+
 import {
   fetchProductionWindowsByWOFilter,
   fetchProductionWindowByWO,
@@ -77,7 +79,7 @@ export default function CreateRemakeHome(props) {
         const result = await fetchWindowItems(wo?.value?.w?.w_Id);
         console.log("result1 ", result)
         if (result) {
-          setWOItems(result?.data)
+          setWOItems(camelize(result?.data))
         }
       };
 
@@ -96,32 +98,32 @@ export default function CreateRemakeHome(props) {
   const columns = [
     {
       title: `Item`,
-      dataIndex: "Item",
-      key: "Item",
+      dataIndex: "item",
+      key: "item",
       width: 120
     },
     {
       title: `SubQty`,
-      dataIndex: "SubQty",
-      key: "SubQty",
+      dataIndex: "subQty",
+      key: "subQty",
       width: 70
     },
     {
       title: `System`,
-      dataIndex: "System",
-      key: "System",
+      dataIndex: "system",
+      key: "system",
       width: 120,
     },
     {
       title: `Size`,
-      dataIndex: "Size",
-      key: "Size",
+      dataIndex: "size",
+      key: "size",
       width: 200,
     },
     {
       title: `Description`,
-      dataIndex: "Description",
-      key: "Description",
+      dataIndex: "description",
+      key: "description",
       ellipsis: true,
     },
     //{
@@ -132,8 +134,8 @@ export default function CreateRemakeHome(props) {
     //},
     {
       title: "Status",
-      dataIndex: "Status",
-      key: "Status",
+      dataIndex: "status",
+      key: "status",
       width: 150,
       fixed: 'right',
       //render: (status, order, index) => {
@@ -167,7 +169,7 @@ export default function CreateRemakeHome(props) {
 
   const selectedSet = new Set(selectedRowKeys);
 
-  const selectedRows = woItems?.filter(row => selectedSet.has(row.Id));
+  const selectedRows = woItems?.filter(row => selectedSet.has(row.id));
 
   console.log("selectedRows ", selectedRows);
 
@@ -218,7 +220,7 @@ export default function CreateRemakeHome(props) {
         */}
       </div>
       <TableWithFilters
-        rowKey="Id"
+        rowKey="id"
         columns={columns}
         data={woItems ?? []}
         pagination={false}

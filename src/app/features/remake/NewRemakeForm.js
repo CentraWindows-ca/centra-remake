@@ -13,8 +13,9 @@ export default function NewRemakeForm(props) {
 	return (
 		<div>
 			<div className="mb-2">New Remake Form</div>
-			{selectedRows?.map((wo, index) =>
-				<RemakeItem
+			{selectedRows?.map((remakeItem, index) =>
+			<RemakeItem
+				remakeItem={remakeItem }
 					key={index}
 					form={newRemakeForm}
 					selectedRows={selectedRows}

@@ -791,3 +791,23 @@ export const generateFilterOptions = () => { };
 export const capitalizeWords = (str) => {
   return str.replace(/\b\w/g, c => c.toUpperCase());
 }
+
+const toCamel = str =>
+  str.charAt(0).toLowerCase() + str.slice(1);
+
+export const camelize = data => {
+  if (Array.isArray(data)) {
+    return data.map(camelize);
+  }
+
+  if (data !== null && typeof data === "object" && data.constructor === Object) {
+    return Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [
+        toCamel(key),
+        camelize(value)
+      ])
+    );
+  }
+
+  return data;
+};
