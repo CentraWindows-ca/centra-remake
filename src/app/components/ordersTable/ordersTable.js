@@ -1,6 +1,6 @@
 import styles from "./ordersTable.module.css";
 
-import React, { useEffect  } from "react";
+import React, { useEffect, useCallback  } from "react";
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { Pagination, Tag } from "antd";
 import { Button } from "react-bootstrap";
@@ -46,16 +46,6 @@ export default function OrdersTable(props) {
     onChange: onSelectChange,
   };
 
-  const onChangeProps = (page, pageSize) => {
-    //dispatch(updatePageNumber(page));
-    //dispatch(updatePageSize(pageSize));
-    console.log("page ", page)
-    console.log("pageSize ", pageSize)
-
-    params.set("page", page);
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  };
-
   const onTableChange = (pagination, filters, sorter) => {
     if (sorter.hasOwnProperty("column")) {
       dispatch(
@@ -67,9 +57,17 @@ export default function OrdersTable(props) {
     }
   };
 
-  const onFilterChange = (filters) => {
+  const onPageChange = useCallback((page, pageSize) => {
+    //dispatch(updatePageNumber(page));
+    //dispatch(updatePageSize(pageSize));
+    //console.log("page ", page)
+    //console.log("pageSize ", pageSize)
+    params.set("page", page);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  }, []);
+  
+  const onFilterChange = useCallback((filters) => {
     const params = new URLSearchParams();
-
     Object.entries(filters).forEach(([key, value]) => {
       if (value !== '' && value !== null && value !== undefined) {
         params.set(key, String(value));
@@ -77,7 +75,7 @@ export default function OrdersTable(props) {
     });
 
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  };
+  },[]);
 
   useEffect(() => {
     if (!noOfPages) return;
@@ -105,7 +103,7 @@ export default function OrdersTable(props) {
           </div>         
           <div className="flex justify-end items-center">
             <Pagination
-              onChange={onChangeProps}
+              onChange={onPageChange}
               total={noOfPages}
               //showTotal={(total) => (
               //  <div className="text-sm font-semibold mt-2">{` ${total.toLocaleString()} Total`}</div>

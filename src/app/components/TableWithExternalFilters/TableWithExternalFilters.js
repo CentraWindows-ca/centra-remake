@@ -4,16 +4,7 @@ import { Table, Input, Tag, Typography } from "antd";
 const { Text } = Typography;
 import { capitalizeWords } from "app/utils/utils";
 
-export default function TableWithExternalFilters(props) {
-  const [filters, setFilters] = useState({});
-
-  const handleFilterChange = (dataIndex, value) => {
-    setFilters((prev) => ({
-      ...prev,
-      [dataIndex]: value,
-    }));
-  };
-  
+export default function TableWithExternalFilters(props) {  
   const {
     data,
     columns,
@@ -23,8 +14,17 @@ export default function TableWithExternalFilters(props) {
     rowSelection,
   } = props;
 
+  const [filters, setFilters] = useState({});
+
+  const handleFilterChange = (dataIndex, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [dataIndex]: value,
+    }));
+  };
+
   useEffect(() => {
-    if (filters && onFilterChange) {
+    if (Object.keys(filters).length > 0) {
       onFilterChange(filters);
     }
   }, [filters, onFilterChange]);
@@ -73,10 +73,6 @@ export default function TableWithExternalFilters(props) {
     filterRow,
     ...(Array.isArray(data) ? data : [])
   ];
-
-  useEffect(() => {
-    console.log("filters ", filters)
-  }, [filters]);
 
   const removeFilter = (key) => {
     setFilters(prev => {
