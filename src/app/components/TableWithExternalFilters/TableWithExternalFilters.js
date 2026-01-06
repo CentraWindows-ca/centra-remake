@@ -81,6 +81,8 @@ export default function TableWithExternalFilters(props) {
     });
   };
 
+  const hasFilters = !Object.values(filters).every(v => v == null || v === '' || (Array.isArray(v) && !v.length))
+
   return (
     <div className={"bg-white rounded-sm flex flex-col justify-between h-[calc(100vh-185px)]"}>
       <Table
@@ -112,7 +114,7 @@ export default function TableWithExternalFilters(props) {
           y: "calc(100vh - 250px)", // Adjust height as needed
         }}
       />
-      {!Object.values(filters).every(v => v == null || v === '' || (Array.isArray(v) && !v.length)) &&
+      {hasFilters &&
         <footer className="w-full p-1 text-sm rounded-sm border-t border-b">
           <Text className="pr-2">Filters:</Text>
           {filters &&

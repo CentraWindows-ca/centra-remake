@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { /*useState, useEffect,*/ useCallback } from "react";
 //import dayjs from "dayjs";
 
 //import {
@@ -15,13 +15,7 @@ import { ProductionRemakeOptions } from "app/utils/constants";
 
 import Attachments from "app/features/remake/Attachments";
 
-export default function RemakeItem(props) {
-  const {
-    orderId,
-    //setIsModified,
-    remakeItem,
-    field
-  } = props;
+export default function RemakeItem({ orderId, remakeItem, field }) {
 
   //const moduleName = "remake";
   //const [inputData, setInputData] = useState([]);
