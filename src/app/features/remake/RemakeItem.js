@@ -1,5 +1,5 @@
 "use client";
-import React, { /*useState, useEffect,*/ useCallback } from "react";
+import React, { useCallback } from "react";
 //import dayjs from "dayjs";
 
 //import {
@@ -15,13 +15,10 @@ import { ProductionRemakeOptions } from "app/utils/constants";
 
 import Attachments from "app/features/remake/Attachments";
 
-export default function RemakeItem({ orderId, remakeItem, field }) {
-
-  //const moduleName = "remake";
-  //const [inputData, setInputData] = useState([]);
-
+export default function RemakeItem({ orderId, remakeItem, field, isEdit = false }) {
   // TODO: There should only be 1 source of truth - inputData has to be removed
 
+  // IF Edit, fetch then set values
   //// api calls
   //const fetchOrderDetailsAsync = async () => {
   //  if (orderId) {
@@ -42,13 +39,6 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
   //  refetchOnWindowFocus: false,
   //});
 
-  //useEffect(() => {
-  //  if (data) setInputData(data);
-  //}, [data]);
-
-  // for rendering dynamic options
-
-  // Watch this row's values from the Form (no local inputData needed)
   const reasonCategory = Form.useWatch(["items", field.name, "reasonCategory"]);
   const reason = Form.useWatch(["items", field.name, "reason"]);
   const departmentResponsible = Form.useWatch(["items", field.name, "departmentResponsible"]);
@@ -97,37 +87,6 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
       ?.options?.find(x => x.value === reasonCategory)
       ?.options?.find(y => y.value === reason)
       ?.options?.map(o => ({ key: o.key, value: o.value, label: o.value }));
-
-  // onClick events
-  const handleInputChange = useCallback(
-    (e, type = null) => {
-      if (!e?.target) return;
-      const name = e.target.name;
-      setInputData((d) => {
-        let _d = { ...d };
-        _d[name] = e.target.value;
-        return _d;
-      });
-    },
-    []
-  );
-
-  const handleDateChange = useCallback((date, dateString) => {
-    setInputData((d) => ({
-      ...d,
-      scheduleDate: date ? date.toISOString() : null,  // store as ISO string
-    }));
-  }, []);
-
-  //const handleSelectChange = (val, key) => {
-  //  if (val && key) {
-  //    //setInputData((data) => {
-  //    //  let _data = { ...data };
-  //    //  _data[key] = val;
-  //    //  return _data;
-  //    //});
-  //  }
-  //};
   
   //useEffect(() => {
   //  form.setFieldsValue(data)
@@ -161,6 +120,9 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
               </label>
               <div className="flex-1">
                 {remakeItem?.item}
+                <Form.Item name={[field.name, "item"]} hidden initialValue={remakeItem?.item}>
+                  <Input />
+                </Form.Item>
               </div>
             </div>
 
@@ -170,6 +132,9 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
               </label>
               <div className="flex-1">
                 {remakeItem?.subQty}
+                <Form.Item name={[field.name, "subQty"]} hidden initialValue={remakeItem?.subQty}>
+                  <Input />
+                </Form.Item>
               </div>
             </div>
 
@@ -179,6 +144,9 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
               </label>
               <div className="flex-1">
                 {remakeItem?.description}
+                <Form.Item name={[field.name, "description"]} hidden initialValue={remakeItem?.description}>
+                  <Input />
+                </Form.Item>
               </div>
             </div>
 
@@ -188,6 +156,9 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
               </label>
               <div className="flex-1">
                 {remakeItem?.system}
+                <Form.Item name={[field.name, "system"]} hidden initialValue={remakeItem?.system}>
+                  <Input />
+                </Form.Item>
               </div>
             </div>
 
@@ -197,9 +168,15 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
               </label>
               <div className="flex-1">
                 {remakeItem?.size}
+                <Form.Item name={[field.name, "size"]} hidden initialValue={remakeItem?.size}>
+                  <Input />
+                </Form.Item>
+                <Form.Item name={[field.name, "originalWorkOrderNo"]} hidden initialValue={remakeItem?.workOrderNo}>
+                  <Input />
+                </Form.Item>
               </div>
             </div>
-          </div>
+          </div>          
         </div>
       </section>
 
@@ -220,12 +197,10 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
               <Select
                 size="small"
                 options={remakeProductOptions}
-                //onChange={handleSelectChange}
                 label="Product"
                 name={[field.name, "product"]}
                 style={{ width: '11rem' }}
                 placeholder="Select Product"
-                //value={inputData?.product}
                 rules={[{ required: true }]}
               />
             </Form.Item>
@@ -236,16 +211,12 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
               label="Scheduled Date"
               name={[field.name, "scheduleDate"]}
               className="mb-0"
-            >
-              <span className="">
-                <DatePicker
-                  size="small"
-                  //onChange={handleDateChange}
-                  //value={inputData?.scheduleDate ? dayjs(inputData.scheduleDate) : null}
-                  format="YYYY-MM-DD"
-                  style={{ width: '11rem' }}
-                />
-              </span>
+            >              
+              <DatePicker
+                size="small"
+                format="YYYY-MM-DD"
+                style={{ width: '11rem' }}
+              />              
             </Form.Item>
           </div>
 
