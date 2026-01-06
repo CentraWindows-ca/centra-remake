@@ -175,7 +175,7 @@ export default function CreateRemakeHome(props) {
   console.log("woSelectList ", woSelectList);
 
   return (
-    <div className="max-h-[80vh]">
+    <div className="h-[80vh]">
       <div className="mb-3 flex flex-row justify-between">
         <Select
           size="small"
@@ -203,22 +203,6 @@ export default function CreateRemakeHome(props) {
         >
           Remake
         </Button>
-        {/*
-        {false &&
-        <div className="mt-4 h-[10rem]" key={"VKTEST11"}>
-          <iframe
-            key={`iframe-${sss}`}
-            src={`http://localhost:3005/event-list?wo=${sss}`}
-            style={{
-              width: '100%',
-              height: '300px',
-              border: 'none',
-            }}
-            title="Example Iframe"
-          />
-        </div>
-        }
-        */}
       </div>
       <TableWithFilters
         rowKey="id"
@@ -235,7 +219,7 @@ export default function CreateRemakeHome(props) {
         onCancel={() => setShowNewRemakeForm(false)}
         width={1500}
         centered
-        okText={"Submit"}
+        footer={null}
       >
         <NewRemakeForm selectedRows={selectedRows} />
       </Modal>

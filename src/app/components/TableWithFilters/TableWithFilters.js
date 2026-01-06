@@ -1,6 +1,8 @@
 "use client"
 import React, { useState } from "react";
-import { Table, Input } from "antd";
+import { Table, Input, Tag, Typography } from "antd";
+const { Text } = Typography;
+import { capitalizeWords } from "app/utils/utils";
 
 export default function TableWithFilters(props) {
   const [filters, setFilters] = useState({});
@@ -60,10 +62,18 @@ export default function TableWithFilters(props) {
     ...(Array.isArray(filteredData) ? filteredData : []),
   ];
 
+  const removeFilter = (key) => {
+    setFilters(prev => {
+      const { [key]: _, ...rest } = prev;
+      return rest;
+    });
+  };
+
   return (
-    <Table
-      rowKey={rowKey}
-      className="
+    <div className={"bg-white rounded-sm flex flex-col justify-between"}>
+      <Table
+        rowKey={rowKey}
+        className="
         my-custom-table
         [&_.ant-table]:!text-[12px]
         [&_.ant-table-tbody_tr_td]:!text-[12px]
@@ -77,19 +87,40 @@ export default function TableWithFilters(props) {
         [&_tr[data-row-key='filter-row']_td.ant-table-cell-fix-left]:z-[11]
         [&_tr[data-row-key='filter-row']_td.ant-table-cell-fix-right]:z-[11]
       "
-      columns={columns}
-      dataSource={displayData}
-      size="small"
-      pagination={false}
-      loading={isLoading}
-      rowSelection={rowSelection}
-      onChange={onChange}
-      sticky
-      tableLayout="fixed"
-      scroll={{
-        x: "max-content",
-        y: scrollY || "calc(100vh - 250px)", // Adjust height as needed
-      }}      
-    />
+        columns={columns}
+        dataSource={displayData}
+        size="small"
+        pagination={false}
+        loading={isLoading}
+        rowSelection={rowSelection}
+        onChange={onChange}
+        sticky
+        tableLayout="fixed"
+        scroll={{
+          x: "max-content",
+          y: scrollY || "calc(100vh - 280px)",
+        }}
+      />
+      {!Object.values(filters).every(v => v == null || v === '' || (Array.isArray(v) && !v.length)) &&
+        <footer className="w-full p-1 text-sm rounded-sm">
+          <Text className="pr-2">Filters:</Text>
+          {filters &&
+            Object.entries(filters)
+              .filter(([, value]) => value !== '' && value !== null && value !== undefined)
+              .map(([key, value]) => (
+                <Tag
+                  color="geekblue"
+                  key={key}
+                  closeIcon={<i className="fa-solid fa-xmark" />}
+                  onClose={() => removeFilter(key)}
+                >
+                  <span className="text-blue-600 pr-1">
+                    {capitalizeWords(key)}: {String(value)}
+                  </span>
+                </Tag>
+              ))}
+        </footer>
+      }
+    </div>
   );
 }
