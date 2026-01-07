@@ -414,18 +414,18 @@ export default function Remakes() {
       key: "description",
       ellipsis: true,
     },
-    {
-      title: `Window Product`,
-      dataIndex: "windowProduct",
-      key: "windowProduct",
-      width: 150,
-    },
-    {
-      title: `Door Product`,
-      dataIndex: "doorProduct",
-      key: "doorProduct",
-      width: 150,
-    },
+    //{
+    //  title: `Window Product`,
+    //  dataIndex: "windowProduct",
+    //  key: "windowProduct",
+    //  width: 150,
+    //},
+    //{
+    //  title: `Door Product`,
+    //  dataIndex: "doorProduct",
+    //  key: "doorProduct",
+    //  width: 150,
+    //},
     //{
     //  title: "City",
     //  dataIndex: "city",
