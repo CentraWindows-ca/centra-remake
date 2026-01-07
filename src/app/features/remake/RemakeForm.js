@@ -80,11 +80,11 @@ export default function RemakeForm(props) {
 
     // Currently only tracking item 1
 
-    //const res = await createRemake(payload);
+    const res = await createRemake(payload);
     
-    //if (res?.success) {
-    //  setShowNewRemakeForm(false);
-    //}    
+    if (res?.success) {
+      setShowNewRemakeForm(false);
+    }    
   }
 
   return (
