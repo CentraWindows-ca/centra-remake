@@ -9,7 +9,7 @@ import {
 import { Form, Button } from "antd";
 
 export default function RemakeForm(props) {
-  const { selectedRows, originalWO } = props;
+  const { selectedRows, originalWO, setShowNewRemakeForm } = props;
 
   const [newRemakeForm] = Form.useForm();
   // TODO: Extract form outside
@@ -52,7 +52,10 @@ export default function RemakeForm(props) {
           reasonDetail: "string",
           requestedBy: "string",
           assignedTo: "string",
-          originalWorkOrderNo: "test"
+          originalWorkOrderNo: "test",
+          requestedBy: "requestedBy",
+          description: r.description
+          // TODO: Checked who's logged-in
         }))
       });
     }
@@ -62,34 +65,26 @@ export default function RemakeForm(props) {
     populateForm(selectedRows);
   }, [selectedRows]);
 
-  const handleOnSubmit = (values) => {
+  const handleOnSubmit = async (values) => {
     console.log("values: ", values);
     console.log("date ", values.items[0].scheduleDate?.format("YYYY-MM-DD"));
     console.log("originalWO ", originalWO);
 
-    const masterInfo = { ...originalWO?.value?.m }
-
-    const baseInfo = {
-        branchName: masterInfo.m_Branch,
-        moduleSource: "Remake Portal",
-        customerName: masterInfo.m_CustomerName,
-        jobType: masterInfo.m_JobType,
-        requestedBy: "requestedBy", // TODO: Checked who's logged-in
-        //windowProduct: "",
-        //doorProduct: "",             
-        //assignedTo: ""
-    }
-
     const payload = {
       ...values?.items?.[0],
-      //...baseInfo,
-      scheduleDate: values.items[0].scheduleDate?.format("YYYY-MM-DD")
+      scheduleDate: values.items[0].scheduleDate?.format("YYYY-MM-DD"),
+      windowProduct: values.items[0].product // TODO: This is only temporary
     };
 
-    console.log("xxx ", payload)
+    console.log("payload ", payload)
+
     // Currently only tracking item 1
 
-    createRemake(payload);
+    //const res = await createRemake(payload);
+    
+    //if (res?.success) {
+    //  setShowNewRemakeForm(false);
+    //}    
   }
 
   return (
@@ -97,7 +92,7 @@ export default function RemakeForm(props) {
       form={newRemakeForm}
       onFinish={handleOnSubmit}
     >
-      
+
       <div className="mb-2">
         {false && <i className="fa-solid fa-circle-plus text-gray-400"></i>}
         <span className="text-blue-700 font-semibold">{`Create Remake`}</span>

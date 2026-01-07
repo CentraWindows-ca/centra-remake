@@ -230,7 +230,8 @@ export default function CreateRemakeHome(props) {
       >
         <RemakeForm
           originalWO={wo}
-          selectedRows={selectedRows}          
+          selectedRows={selectedRows}
+          setShowNewRemakeForm={setShowNewRemakeForm}
         />
       </Modal>
     </div>
