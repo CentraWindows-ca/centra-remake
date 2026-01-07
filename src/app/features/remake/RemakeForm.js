@@ -108,7 +108,7 @@ export default function RemakeForm(props) {
           {(fields) => (
             <>
               {fields?.map((field, index) =>
-                <div className="pt-2">
+                <div className="pt-2" key={`${field.key}-${index}`}>
                   <RemakeItem
                     key={field.key}
                     field={field}
