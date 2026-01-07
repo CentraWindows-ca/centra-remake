@@ -343,7 +343,7 @@ export default function Remakes() {
           </span>
         </Popover>
       ),
-      sorter: (a, b) => parseInt(a.remakeId) - parseInt(b.remakeId),
+      //sorter: (a, b) => parseInt(a.remakeId) - parseInt(b.remakeId),
     },
     {
       title: `Original WO #`,
@@ -414,6 +414,12 @@ export default function Remakes() {
       key: "description",
       ellipsis: true,
     },
+    {
+      title: `Notes`,
+      dataIndex: "notes",
+      key: "notes",
+      ellipsis: true,
+    },
     //{
     //  title: `Window Product`,
     //  dataIndex: "windowProduct",
@@ -446,8 +452,8 @@ export default function Remakes() {
             </div>
           ),
       defaultSortOrder: "descend",
-      sorter: (a, b) =>
-        moment(a.scheduleDate).valueOf() - moment(b.scheduleDate).valueOf(),
+      //sorter: (a, b) =>
+      //  moment(a.scheduleDate).valueOf() - moment(b.scheduleDate).valueOf(),
     },
     {
       title: "Assigned To",

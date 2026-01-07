@@ -52,7 +52,7 @@ export default function RemakeForm(props) {
           reasonDetail: "string",
           requestedBy: "string",
           assignedTo: "string",
-          originalWorkOrderNo: "test",
+          originalWorkOrderNo: masterInfo.m_WorkOrderNo,
           requestedBy: "requestedBy",
           description: r.description
           // TODO: Checked who's logged-in
