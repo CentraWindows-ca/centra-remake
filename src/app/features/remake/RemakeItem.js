@@ -1,5 +1,5 @@
 "use client";
-import React, { /*useState, useEffect,*/ useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 //import dayjs from "dayjs";
 
 //import {
@@ -15,13 +15,10 @@ import { ProductionRemakeOptions } from "app/utils/constants";
 
 import Attachments from "app/features/remake/Attachments";
 
-export default function RemakeItem({ orderId, remakeItem, field }) {
-
-  //const moduleName = "remake";
-  //const [inputData, setInputData] = useState([]);
-
+export default function RemakeItem({ orderId, remakeItem, field, isEdit = false }) {
   // TODO: There should only be 1 source of truth - inputData has to be removed
 
+  // IF Edit, fetch then set values
   //// api calls
   //const fetchOrderDetailsAsync = async () => {
   //  if (orderId) {
@@ -42,13 +39,6 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
   //  refetchOnWindowFocus: false,
   //});
 
-  //useEffect(() => {
-  //  if (data) setInputData(data);
-  //}, [data]);
-
-  // for rendering dynamic options
-
-  // Watch this row's values from the Form (no local inputData needed)
   const reasonCategory = Form.useWatch(["items", field.name, "reasonCategory"]);
   const reason = Form.useWatch(["items", field.name, "reason"]);
   const departmentResponsible = Form.useWatch(["items", field.name, "departmentResponsible"]);
@@ -97,45 +87,10 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
       ?.options?.find(x => x.value === reasonCategory)
       ?.options?.find(y => y.value === reason)
       ?.options?.map(o => ({ key: o.key, value: o.value, label: o.value }));
-
-  // onClick events
-  const handleInputChange = useCallback(
-    (e, type = null) => {
-      if (!e?.target) return;
-      const name = e.target.name;
-      setInputData((d) => {
-        let _d = { ...d };
-        _d[name] = e.target.value;
-        return _d;
-      });
-    },
-    []
-  );
-
-  const handleDateChange = useCallback((date, dateString) => {
-    setInputData((d) => ({
-      ...d,
-      scheduleDate: date ? date.toISOString() : null,  // store as ISO string
-    }));
-  }, []);
-
-  //const handleSelectChange = (val, key) => {
-  //  if (val && key) {
-  //    //setInputData((data) => {
-  //    //  let _data = { ...data };
-  //    //  _data[key] = val;
-  //    //  return _data;
-  //    //});
-  //  }
-  //};
   
   //useEffect(() => {
   //  form.setFieldsValue(data)
   //}, [data, form]);
-
-  //useEffect(() => {
-  //  form?.setFieldsValue(remakeItem)
-  //}, [remakeItem, form]);
 
   //useEffect(() => {
   //  if (JSON.stringify(inputData) !== JSON.stringify(data)) {
@@ -156,8 +111,17 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
           </div>
           <div className="p-2">
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
-                Item No.:
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
+                Original WO:
+              </label>
+              <div className="flex-1">
+                {remakeItem?.workOrderNo}                
+              </div>
+            </div>
+
+            <div className="flex items-center mb-2">
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
+                Item:
               </label>
               <div className="flex-1">
                 {remakeItem?.item}
@@ -165,7 +129,7 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 Sub Qty:
               </label>
               <div className="flex-1">
@@ -174,7 +138,7 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 Description:
               </label>
               <div className="flex-1">
@@ -183,7 +147,7 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 System:
               </label>
               <div className="flex-1">
@@ -192,14 +156,14 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 Size:
               </label>
               <div className="flex-1">
                 {remakeItem?.size}
               </div>
             </div>
-          </div>
+          </div>          
         </div>
       </section>
 
@@ -220,12 +184,10 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
               <Select
                 size="small"
                 options={remakeProductOptions}
-                //onChange={handleSelectChange}
                 label="Product"
                 name={[field.name, "product"]}
                 style={{ width: '11rem' }}
                 placeholder="Select Product"
-                //value={inputData?.product}
                 rules={[{ required: true }]}
               />
             </Form.Item>
@@ -236,16 +198,12 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
               label="Scheduled Date"
               name={[field.name, "scheduleDate"]}
               className="mb-0"
-            >
-              <span className="">
-                <DatePicker
-                  size="small"
-                  //onChange={handleDateChange}
-                  //value={inputData?.scheduleDate ? dayjs(inputData.scheduleDate) : null}
-                  format="YYYY-MM-DD"
-                  style={{ width: '11rem' }}
-                />
-              </span>
+            >              
+              <DatePicker
+                size="small"
+                format="YYYY-MM-DD"
+                style={{ width: '11rem' }}
+              />              
             </Form.Item>
           </div>
 
@@ -260,31 +218,29 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
             >
               <Select
                 size="small"
-                //value={inputData?.departmentResponsible}
                 options={departmentResponsibleOptions}
-                //onChange={(val) => handleSelectChange(val, "departmentResponsible")}
                 style={{ width: '11rem' }}
                 placeholder="Dept. Responsible"
               />
             </Form.Item>
 
-            <Form.Item
-              labelCol={{ flex: '120px' }}
-              name={[field.name, "departmentResponsibleSection"]}
-              className="mb-0"
-              labelAlign="left"
-              label="Section"
-            >
-              <Select
-                disabled={!remakeDepartmentResponsibleSectionOptions?.length > 0}
-                size="small"
-                //value={inputData?.departmentResponsibleSection}
-                options={remakeDepartmentResponsibleSectionOptions}
-                //onChange={(val) => handleSelectChange(val, "departmentResponsibleSection")}
-                style={{ width: '11rem' }}
-                placeholder="Section Responsible"
-              />
-            </Form.Item>
+            {remakeDepartmentResponsibleSectionOptions?.length > 0 && 
+              <Form.Item
+                labelCol={{ flex: '120px' }}
+                name={[field.name, "departmentResponsibleSection"]}
+                className="mb-0"
+                labelAlign="left"
+                label="Section"
+              >
+                <Select
+                  disabled={!remakeDepartmentResponsibleSectionOptions?.length > 0}
+                  size="small"
+                  options={remakeDepartmentResponsibleSectionOptions}
+                  style={{ width: '11rem' }}
+                  placeholder="Section Responsible"
+                />
+              </Form.Item>
+            }
           </div>
 
           <Space.Compact style={{ width: '100%', display: 'flex', marginTop: "0.5rem" }}>
@@ -300,8 +256,6 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
                 <Select
                   size="small"
                   options={reasonCategoryOptions}
-                  //value={inputData?.reasonCategory}
-                  //onChange={(val) => handleSelectChange(val, "reasonCategory")}
                   placeholder="Category"
                 />
               </Form.Item>
@@ -316,8 +270,6 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
                 <Select
                   size="small"
                   options={remakeReasonOptions}
-                  //value={inputData?.reason}
-                  //onChange={(val) => handleSelectChange(val, "reason")}
                   placeholder="Subcategory"
                 />
               </Form.Item>
@@ -333,8 +285,6 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
                   <Select
                     size="small"
                     options={remakeReasonDetailOptions}
-                    //value={inputData?.reasonDetail}
-                    //onChange={(val) => handleSelectChange(val, "reasonDetail")}
                     placeholder="Detail"
                   />
                 </Form.Item>
@@ -351,10 +301,8 @@ export default function RemakeItem({ orderId, remakeItem, field }) {
             >
               <TextArea
                 name={"notes"}
-                //value={inputData?.notes}
                 value={"test"}
                 rows={2}
-                //onChange={handleInputChange}
               />
             </Form.Item>
           </div>

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import TableWithFilters from "app/components/TableWithFilters/TableWithFilters";
-import NewRemakeForm from "app/features/remake/NewRemakeForm";
+import RemakeForm from "app/features/remake/RemakeForm";
 import { useQuery } from "react-query";
 
 import { Select, Button, Modal } from "antd";
@@ -103,6 +103,12 @@ export default function CreateRemakeHome(props) {
       width: 120
     },
     {
+      title: `Qty`,
+      dataIndex: "quantity",
+      key: "quantity",
+      width: 70
+    },
+    {
       title: `SubQty`,
       dataIndex: "subQty",
       key: "subQty",
@@ -173,6 +179,7 @@ export default function CreateRemakeHome(props) {
 
   console.log("selectedRows ", selectedRows);
   console.log("woSelectList ", woSelectList);
+  console.log("yyyyyy ", wo);
 
   return (
     <div className="h-[80vh]">
@@ -221,7 +228,10 @@ export default function CreateRemakeHome(props) {
         centered
         footer={null}
       >
-        <NewRemakeForm selectedRows={selectedRows} />
+        <RemakeForm
+          originalWO={wo}
+          selectedRows={selectedRows}          
+        />
       </Modal>
     </div>
   );

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { updateDrawerOpen } from "app/redux/app";
 
-import CreateRemakeHome from "app/features/remake/CreateRemakeHome";
+import CreateRemake from "app/features/remake/CreateRemake";
 
 export default function CreateRemakeLanding(props) {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ export default function CreateRemakeLanding(props) {
 
   return (
     <div className="bg-white p-4">
-      <CreateRemakeHome />
+      <CreateRemake />
     </div>
   );
 }
