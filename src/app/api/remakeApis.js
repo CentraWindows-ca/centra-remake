@@ -5,7 +5,6 @@ import { BASE_URL, BASE_URL_OM, Production } from "../utils/constants";
 
 const BASE_URL_REMAKE = process.env.NEXT_PUBLIC_REMAKE_API_URL;
 
-
 function getConfig(loggedInUserEmail) {
   return {
     headers: { Authorization: `Bearer ${store?.getState()?.app?.userToken}` },
@@ -91,6 +90,39 @@ export async function updateRemakeWorkOrderState(newStatus, moduleId) {
 export async function fetchRemakeWorkOrderById(id) {
   const url = `${BASE_URL_REMAKE}/Remake/GetRemakeById?remakeId=${id}`;
   return axios.get(url, getConfig());
+}
+
+export async function createRemake(payload) {
+  const url = `${BASE_URL_REMAKE}/Remake/CreateRemake`;
+
+  console.log("payload ", payload)
+
+  try {
+    const response = await axios.post(url, payload, getConfig());
+
+    if (response.data) {
+      store.dispatch(
+        updateResult({
+          type: "success",
+          message: "Remake created successfully.",
+          source: "Remake Work Order",
+        })
+      );
+    } else {
+      store.dispatch(
+        updateResult({
+          type: "error",
+          message: "Create remake failed.",
+          source: "Remake Work Order",
+        })
+      );
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating remake:", error);
+    throw error;
+  }
 }
 
 export async function updateRemakeWorkOrder(data) {

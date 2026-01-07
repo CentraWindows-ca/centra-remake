@@ -32,7 +32,7 @@ import OrderStatus from "app/components/remake/orderStatus";
 import Tooltip from "app/components/tooltip/tooltip";
 //import CreateRemakeOrder from "app/features/remake/createRemakeOrder";
 import EditRemakeForm from "app/features/remake/EditRemakeForm";
-import CreateRemakeHome from "app/features/remake/CreateRemakeHome";
+import CreateRemake from "app/features/remake/CreateRemake";
 import useRemakes from "app/hooks/useRemakes";
 
 import {
@@ -346,7 +346,7 @@ export default function Remakes() {
       sorter: (a, b) => parseInt(a.remakeId) - parseInt(b.remakeId),
     },
     {
-      title: `WO #`,
+      title: `Original WO #`,
       dataIndex: "workOrderNo",
       key: "workOrderNo",
       width: 120,
@@ -363,7 +363,26 @@ export default function Remakes() {
             </div>
           </Tooltip>
         )
-      },    
+    },
+    {
+      title: `WO #`,
+      dataIndex: "workOrderNo",
+      key: "workOrderNo",
+      width: 120,
+      render: (originalWorkOrderNo, order, index) =>
+        index === 0
+          ? originalWorkOrderNo
+          :
+          (<Tooltip title={`Open ${originalWorkOrderNo} in New Tab`}>
+            <div
+              className="flex items-center hover:text-centraBlue cursor-pointer hover:underline min-h-[30px]"
+              onClick={() => openWOLink(originalWorkOrderNo)}
+            >
+              {originalWorkOrderNo || ""}
+            </div>
+          </Tooltip>
+          )
+    }, 
     {
       title: `Item`,
       dataIndex: "itemNo",
@@ -619,7 +638,7 @@ export default function Remakes() {
         footer={null}
         centered
       >
-        <CreateRemakeHome />
+        <CreateRemake />
       </CustomModal>
 
       <CustomModal

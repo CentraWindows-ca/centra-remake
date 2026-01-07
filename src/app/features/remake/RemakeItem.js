@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 //import dayjs from "dayjs";
 
 //import {
@@ -93,10 +93,6 @@ export default function RemakeItem({ orderId, remakeItem, field, isEdit = false 
   //}, [data, form]);
 
   //useEffect(() => {
-  //  form?.setFieldsValue(remakeItem)
-  //}, [remakeItem, form]);
-
-  //useEffect(() => {
   //  if (JSON.stringify(inputData) !== JSON.stringify(data)) {
   //    setIsModified(true);
   //  } else {
@@ -115,65 +111,56 @@ export default function RemakeItem({ orderId, remakeItem, field, isEdit = false 
           </div>
           <div className="p-2">
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
-                Item No.:
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
+                Original WO:
               </label>
               <div className="flex-1">
-                {remakeItem?.item}
-                <Form.Item name={[field.name, "item"]} hidden initialValue={remakeItem?.item}>
-                  <Input />
-                </Form.Item>
+                {remakeItem?.workOrderNo}                
               </div>
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
+                Item:
+              </label>
+              <div className="flex-1">
+                {remakeItem?.item}
+              </div>
+            </div>
+
+            <div className="flex items-center mb-2">
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 Sub Qty:
               </label>
               <div className="flex-1">
                 {remakeItem?.subQty}
-                <Form.Item name={[field.name, "subQty"]} hidden initialValue={remakeItem?.subQty}>
-                  <Input />
-                </Form.Item>
               </div>
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 Description:
               </label>
               <div className="flex-1">
                 {remakeItem?.description}
-                <Form.Item name={[field.name, "description"]} hidden initialValue={remakeItem?.description}>
-                  <Input />
-                </Form.Item>
               </div>
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 System:
               </label>
               <div className="flex-1">
                 {remakeItem?.system}
-                <Form.Item name={[field.name, "system"]} hidden initialValue={remakeItem?.system}>
-                  <Input />
-                </Form.Item>
               </div>
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 Size:
               </label>
               <div className="flex-1">
                 {remakeItem?.size}
-                <Form.Item name={[field.name, "size"]} hidden initialValue={remakeItem?.size}>
-                  <Input />
-                </Form.Item>
-                <Form.Item name={[field.name, "originalWorkOrderNo"]} hidden initialValue={remakeItem?.workOrderNo}>
-                  <Input />
-                </Form.Item>
               </div>
             </div>
           </div>          
@@ -231,31 +218,29 @@ export default function RemakeItem({ orderId, remakeItem, field, isEdit = false 
             >
               <Select
                 size="small"
-                //value={inputData?.departmentResponsible}
                 options={departmentResponsibleOptions}
-                //onChange={(val) => handleSelectChange(val, "departmentResponsible")}
                 style={{ width: '11rem' }}
                 placeholder="Dept. Responsible"
               />
             </Form.Item>
 
-            <Form.Item
-              labelCol={{ flex: '120px' }}
-              name={[field.name, "departmentResponsibleSection"]}
-              className="mb-0"
-              labelAlign="left"
-              label="Section"
-            >
-              <Select
-                disabled={!remakeDepartmentResponsibleSectionOptions?.length > 0}
-                size="small"
-                //value={inputData?.departmentResponsibleSection}
-                options={remakeDepartmentResponsibleSectionOptions}
-                //onChange={(val) => handleSelectChange(val, "departmentResponsibleSection")}
-                style={{ width: '11rem' }}
-                placeholder="Section Responsible"
-              />
-            </Form.Item>
+            {remakeDepartmentResponsibleSectionOptions?.length > 0 && 
+              <Form.Item
+                labelCol={{ flex: '120px' }}
+                name={[field.name, "departmentResponsibleSection"]}
+                className="mb-0"
+                labelAlign="left"
+                label="Section"
+              >
+                <Select
+                  disabled={!remakeDepartmentResponsibleSectionOptions?.length > 0}
+                  size="small"
+                  options={remakeDepartmentResponsibleSectionOptions}
+                  style={{ width: '11rem' }}
+                  placeholder="Section Responsible"
+                />
+              </Form.Item>
+            }
           </div>
 
           <Space.Compact style={{ width: '100%', display: 'flex', marginTop: "0.5rem" }}>
@@ -271,8 +256,6 @@ export default function RemakeItem({ orderId, remakeItem, field, isEdit = false 
                 <Select
                   size="small"
                   options={reasonCategoryOptions}
-                  //value={inputData?.reasonCategory}
-                  //onChange={(val) => handleSelectChange(val, "reasonCategory")}
                   placeholder="Category"
                 />
               </Form.Item>
@@ -287,8 +270,6 @@ export default function RemakeItem({ orderId, remakeItem, field, isEdit = false 
                 <Select
                   size="small"
                   options={remakeReasonOptions}
-                  //value={inputData?.reason}
-                  //onChange={(val) => handleSelectChange(val, "reason")}
                   placeholder="Subcategory"
                 />
               </Form.Item>
@@ -304,8 +285,6 @@ export default function RemakeItem({ orderId, remakeItem, field, isEdit = false 
                   <Select
                     size="small"
                     options={remakeReasonDetailOptions}
-                    //value={inputData?.reasonDetail}
-                    //onChange={(val) => handleSelectChange(val, "reasonDetail")}
                     placeholder="Detail"
                   />
                 </Form.Item>
@@ -322,10 +301,8 @@ export default function RemakeItem({ orderId, remakeItem, field, isEdit = false 
             >
               <TextArea
                 name={"notes"}
-                //value={inputData?.notes}
                 value={"test"}
                 rows={2}
-                //onChange={handleInputChange}
               />
             </Form.Item>
           </div>
