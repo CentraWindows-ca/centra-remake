@@ -1,4 +1,4 @@
-import styles from "./ordersTable.module.css";
+//import styles from "./remakeTable.module.css";
 
 import React, { useEffect, useCallback  } from "react";
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -16,7 +16,7 @@ import {
 
 import { useDispatch/*, useSelector*/ } from "react-redux";
 
-export default function OrdersTable(props) {
+export default function RemakeTable(props) {
   const {
     data,
     columns,
@@ -91,6 +91,8 @@ export default function OrdersTable(props) {
       });
     }
   }, [noOfPages, pageParam, searchParams, pathname, router]);
+
+  console.log("data ", data)
 
   return (
     <div className={"bg-white rounded-sm p-3 flex flex-col justify-between h-[calc(100vh-120px)]"}>

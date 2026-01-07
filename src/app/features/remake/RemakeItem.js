@@ -188,7 +188,6 @@ export default function RemakeItem({ orderId, remakeItem, field, isEdit = false 
                 name={[field.name, "product"]}
                 style={{ width: '11rem' }}
                 placeholder="Select Product"
-                rules={[{ required: true }]}
               />
             </Form.Item>
 

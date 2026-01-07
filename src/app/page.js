@@ -26,7 +26,7 @@ import { updateResult } from "app/redux/orders";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { AppModes, RemakeRowStates } from "app/utils/constants";
 import OrdersHeader from "app/components/ordersHeader/ordersHeader";
-import OrdersTable from "app/components/ordersTable/ordersTable";
+import RemakeTable from "app/components/remakeTable/remakeTable";
 import UserSelectField from "app/components/users/userSelect";
 import OrderStatus from "app/components/remake/orderStatus";
 import Tooltip from "app/components/tooltip/tooltip";
@@ -347,22 +347,22 @@ export default function Remakes() {
     },
     {
       title: `Original WO #`,
-      dataIndex: "workOrderNo",
-      key: "workOrderNo",
+      dataIndex: "originalWorkOrderNo",
+      key: "originalWorkOrderNo",
       width: 120,
-      render: (originalWorkOrderNo, order, index) => 
-        index === 0
-          ? originalWorkOrderNo
-          :
-        (<Tooltip title={`Open ${originalWorkOrderNo} in New Tab`}>
-            <div
-              className="flex items-center hover:text-centraBlue cursor-pointer hover:underline min-h-[30px]"
-              onClick={() => openWOLink(originalWorkOrderNo)}
-            >
-              {originalWorkOrderNo || ""}
-            </div>
-          </Tooltip>
-        )
+      //render: (originalWorkOrderNo, order, index) => 
+      //  index === 0
+      //    ? originalWorkOrderNo
+      //    :
+      //  (<Tooltip title={`Open ${originalWorkOrderNo} in New Tab`}>
+      //      <div
+      //        className="flex items-center hover:text-centraBlue cursor-pointer hover:underline min-h-[30px]"
+      //        onClick={() => openWOLink(originalWorkOrderNo)}
+      //      >
+      //        {originalWorkOrderNo || ""}
+      //      </div>
+      //    </Tooltip>
+      //  )
     },
     {
       title: `WO #`,
@@ -385,8 +385,8 @@ export default function Remakes() {
     }, 
     {
       title: `Item`,
-      dataIndex: "itemNo",
-      key: "itemNo",
+      dataIndex: "item",
+      key: "item",
       width: 120
     },
     {
@@ -398,8 +398,8 @@ export default function Remakes() {
     },
     {
       title: `System`,
-      dataIndex: "systemValue",
-      key: "systemValue",
+      dataIndex: "system",
+      key: "system",
       width: 120,
     },
     {
@@ -415,9 +415,15 @@ export default function Remakes() {
       ellipsis: true,
     },
     {
-      title: `Product`,
-      dataIndex: "product",
-      key: "product",
+      title: `Window Product`,
+      dataIndex: "windowProduct",
+      key: "windowProduct",
+      width: 150,
+    },
+    {
+      title: `Door Product`,
+      dataIndex: "doorProduct",
+      key: "doorProduct",
       width: 150,
     },
     //{
@@ -608,7 +614,7 @@ export default function Remakes() {
         selectedStatus={statusView}
         states={RemakeRowStates}
       />
-      <OrdersTable
+      <RemakeTable
         columns={columns}
         data={filteredOrders}
         selectedRows={selectedRows}
