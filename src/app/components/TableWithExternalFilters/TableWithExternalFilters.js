@@ -64,10 +64,10 @@ export default function TableWithExternalFilters(props) {
     })
   );
 
-  const displayData = [
-    filterRow,
-    ...(Array.isArray(filteredData) ? filteredData : []),
-  ];
+  //const displayData = [
+  //  filterRow,
+  //  ...(Array.isArray(filteredData) ? filteredData : []),
+  //];
 
   const tableData = [
     filterRow,
@@ -82,6 +82,8 @@ export default function TableWithExternalFilters(props) {
   };
 
   const hasFilters = !Object.values(filters).every(v => v == null || v === '' || (Array.isArray(v) && !v.length))
+
+  console.log("tableData", tableData)
 
   return (
     <div className={"bg-white rounded-sm flex flex-col justify-between h-[calc(100vh-185px)]"}>

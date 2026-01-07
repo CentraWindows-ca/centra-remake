@@ -52,7 +52,7 @@ export default function RemakeForm(props) {
           reasonDetail: "string",
           requestedBy: "string",
           assignedTo: "string",
-          originalWorkOrderNo: "test",
+          originalWorkOrderNo: masterInfo.m_WorkOrderNo,
           requestedBy: "requestedBy",
           description: r.description
           // TODO: Checked who's logged-in
@@ -80,11 +80,11 @@ export default function RemakeForm(props) {
 
     // Currently only tracking item 1
 
-    //const res = await createRemake(payload);
+    const res = await createRemake(payload);
     
-    //if (res?.success) {
-    //  setShowNewRemakeForm(false);
-    //}    
+    if (res?.success) {
+      setShowNewRemakeForm(false);
+    }    
   }
 
   return (
