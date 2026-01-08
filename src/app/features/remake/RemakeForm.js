@@ -6,7 +6,7 @@ import {
   createRemake
 } from "app/api/remakeApis";
 
-import { Form, Button } from "antd";
+import { Form, Button, Alert } from "antd";
 
 export default function RemakeForm(props) {
   const { selectedRows, originalWO, setShowNewRemakeForm } = props;
@@ -87,15 +87,21 @@ export default function RemakeForm(props) {
     }    
   }
 
+  const handleFailed = (x) => {
+    console.log(x)
+  }
+
   return (
     <Form
       form={newRemakeForm}
       onFinish={handleOnSubmit}
+      onFinishFailed={handleFailed}
     >
 
       <div className="mb-2">
         {false && <i className="fa-solid fa-circle-plus text-gray-400"></i>}
         <span className="text-blue-700 font-semibold">{`Create Remake`}</span>
+        <Alert message="One or more required fields are empty. Please review the highlighted fields." type="error" size="small" className="p-1 mt-2"/>
         {false && <span className="font-semibold text-blue-500 text-base">{`${selectedRows?.[0].workOrderNo}`}</span>}
       </div>
       <div className="max-h-[75vh] overflow-y-auto">

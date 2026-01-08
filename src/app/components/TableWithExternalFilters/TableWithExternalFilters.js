@@ -4,7 +4,7 @@ import { Table, Input, Tag, Typography } from "antd";
 const { Text } = Typography;
 import { capitalizeWords } from "app/utils/utils";
 
-export default function TableWithExternalFilters(props) {  
+export default function TableWithExternalFilters(props) {
   const {
     data,
     columns,
@@ -42,7 +42,7 @@ export default function TableWithExternalFilters(props) {
             e.preventDefault();
             handleFilterChange(colKey, e.target.value);
           }}
-          bordered={false}          
+          bordered={false}
           className="text-xs text-blue-700 p-0"
         />
       );
@@ -50,24 +50,6 @@ export default function TableWithExternalFilters(props) {
     },
     { key: "filter-row" }
   );
-
-  const filteredData = data?.filter((row) =>
-    columns.every((col) => {
-      const value = filters[col.dataIndex];
-      if (!value) return true; // no filter on this column
-
-      const rowValue = row[col.dataIndex];
-      return (
-        rowValue != null &&
-        rowValue.toString().toLowerCase().includes(value.toLowerCase())
-      );
-    })
-  );
-
-  //const displayData = [
-  //  filterRow,
-  //  ...(Array.isArray(filteredData) ? filteredData : []),
-  //];
 
   const tableData = [
     filterRow,
@@ -82,8 +64,6 @@ export default function TableWithExternalFilters(props) {
   };
 
   const hasFilters = !Object.values(filters).every(v => v == null || v === '' || (Array.isArray(v) && !v.length))
-
-  console.log("tableData", tableData)
 
   return (
     <div className={"bg-white rounded-sm flex flex-col justify-between h-[calc(100vh-185px)]"}>

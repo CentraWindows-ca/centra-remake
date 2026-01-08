@@ -206,7 +206,7 @@ export default function CreateRemakeHome(props) {
           size="small"
           type="primary"
           disabled={selectedRowKeys.length === 0}
-          onClick={()=>setShowNewRemakeForm(true)}
+          onClick={() => setShowNewRemakeForm(true)}
         >
           Remake
         </Button>

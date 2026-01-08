@@ -93,7 +93,7 @@ export async function fetchRemakeWorkOrderById(id) {
 }
 
 export async function createRemake(payload) {
-  const url = `${BASE_URL_REMAKE}/Remake/CreateRemake`;
+  const url = `${BASE_URL_REMAKE}/Remake/CreateRemakes`;
 
   console.log("payload ", payload)
 

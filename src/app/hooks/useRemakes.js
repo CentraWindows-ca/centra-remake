@@ -9,6 +9,8 @@ export default function useRemakes() {
   const params = Object.fromEntries(searchParams.entries());
   const orderIdParam = searchParams.get("orderId");  
   const pageParam = searchParams.get("page") ?? "";
+  const sortByParam = searchParams.get("sort-by") ?? "";
+  const sortDirectionParam = searchParams.get("sort-direction") ?? "";
 
   // This should run automatically based on the params
   const fetchRemakes = async (params, pageParam) => {
@@ -17,6 +19,8 @@ export default function useRemakes() {
       'pageSize',
       'sort',
       'order',
+      'sort-by',
+      'sort-direction'
     ]);
 
     const filters = Object.entries(params)
@@ -32,10 +36,16 @@ export default function useRemakes() {
         operator: "contains",
       }));
 
+    const sorting = [{
+      columnName: sortByParam,
+      descending: sortDirectionParam !== "asc"
+    }];
+
     const payload = {
       ...(filters.length > 0 && { filters }),
       page: pageParam || '1',
-      pageSize: 10
+      pageSize: 10,
+      sortOrders: sorting
     }
 
     const result = await fetchRemakeWorkOrders(payload);
