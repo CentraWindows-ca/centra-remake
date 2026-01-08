@@ -1,12 +1,12 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
-import dayjs from "dayjs";
+import React, { useEffect, useCallback } from "react";
+//import dayjs from "dayjs";
 
-import {
-  fetchRemakeWorkOrderById,
-} from "app/api/remakeApis";
+//import {
+//  fetchRemakeWorkOrderById,
+//} from "app/api/remakeApis";
 
-import { useQuery } from "react-query";
+//import { useQuery } from "react-query";
 
 import { Form, Select, DatePicker, Space, Input } from "antd";
 const { TextArea } = Input;
@@ -15,41 +15,34 @@ import { ProductionRemakeOptions } from "app/utils/constants";
 
 import Attachments from "app/features/remake/Attachments";
 
-export default function RemakeItem(props) {
-  const {
-    orderId,
-    form,
-    setIsModified
-  } = props;
+export default function RemakeItem({ orderId, remakeItem, field, isEdit = false }) {
+  // TODO: There should only be 1 source of truth - inputData has to be removed
 
-  const moduleName = "remake";
-  const [inputData, setInputData] = useState([]);
+  // IF Edit, fetch then set values
+  //// api calls
+  //const fetchOrderDetailsAsync = async () => {
+  //  if (orderId) {
+  //    const result = await fetchRemakeWorkOrderById(orderId, false);
+  //    return result.data;
+  //  } else {
+  //    return null;
+  //  }
+  //};
 
-  // api calls
-  const fetchOrderDetailsAsync = async () => {
-    if (orderId) {
-      const result = await fetchRemakeWorkOrderById(orderId, false);
-      return result.data;
-    } else {
-      return null;
-    }
-  };
+  //// useQuery call to fetch remake details
+  //const {
+  //  isLoading: isLoadingDetails,
+  //  data: data,
+  //  refetch: refetchOrder,
+  //  isFetching: isFetchingDetails,
+  //} = useQuery([`${moduleName}OrderDetails`, orderId], fetchOrderDetailsAsync, {
+  //  refetchOnWindowFocus: false,
+  //});
 
-  // useQuery call to fetch remake details
-  const {
-    isLoading: isLoadingDetails,
-    data: data,
-    refetch: refetchOrder,
-    isFetching: isFetchingDetails,
-  } = useQuery([`${moduleName}OrderDetails`, orderId], fetchOrderDetailsAsync, {
-    refetchOnWindowFocus: false,
-  });
+  const reasonCategory = Form.useWatch(["items", field.name, "reasonCategory"]);
+  const reason = Form.useWatch(["items", field.name, "reason"]);
+  const departmentResponsible = Form.useWatch(["items", field.name, "departmentResponsible"]);
 
-  useEffect(() => {
-    if (data) setInputData(data);
-  }, [data]);
-
-  // for rendering dynamic options
   const remakeProductOptions = ProductionRemakeOptions.find(
     (x) => x.key === "product"
   )?.options?.map((group) => ({
@@ -79,75 +72,35 @@ export default function RemakeItem(props) {
   }));
 
   const remakeDepartmentResponsibleSectionOptions =
-    ProductionRemakeOptions.find(
-      (x) => x.key === "departmentResponsible"
-    )?.options?.find(
-      (x) => x.value === inputData?.departmentResponsible
-    )?.options;
+    ProductionRemakeOptions.find(x => x.key === "departmentResponsible")
+      ?.options?.find(x => x.value === departmentResponsible)
+      ?.options;
 
-  const remakeReasonOptions = ProductionRemakeOptions?.find(
-    (x) => x.key === "reasonCategory"
-  )?.options?.find((x) => x.value === inputData?.reasonCategory)?.options?.map((reasonCategory) => {
-    return {
-      key: reasonCategory.key,
-      value: reasonCategory.value,
-      label: reasonCategory.value,
-    }
-  });
+  const remakeReasonOptions =
+    ProductionRemakeOptions.find(x => x.key === "reasonCategory")
+      ?.options?.find(x => x.value === reasonCategory)
+      ?.options?.map(o => ({ key: o.key, value: o.value, label: o.value }));
 
-  const remakeReasonDetailOptions = ProductionRemakeOptions?.find(
-    (x) => x.key === "reasonCategory"
-  )?.options?.find((x) => x.value === inputData?.reasonCategory)
-    ?.options?.find((y) => y.value === inputData?.reason)?.options?.map((reasonDetail) => {
-      return {
-        key: reasonDetail.key,
-        value: reasonDetail.value,
-        label: reasonDetail.value,
-      };
-    });
 
-  // onClick events
-  const handleInputChange = useCallback(
-    (e, type = null) => {
-      if (!e?.target) return;
-      const name = e.target.name;
-      setInputData((d) => {
-        let _d = { ...d };
-        _d[name] = e.target.value;
-        return _d;
-      });
-    },
-    []
-  );
-
-  const handleDateChange = useCallback((date, dateString) => {
-    setInputData((d) => ({
-      ...d,
-      scheduleDate: date ? date.toISOString() : null,  // store as ISO string
-    }));
-  }, []);
-
-  const handleSelectChange = (val, key) => {
-    if (val && key) {
-      setInputData((data) => {
-        let _data = { ...data };
-        _data[key] = val;
-        return _data;
-      });
-    }
-  };
+  const remakeReasonDetailOptions =
+    ProductionRemakeOptions.find(x => x.key === "reasonCategory")
+      ?.options?.find(x => x.value === reasonCategory)
+      ?.options?.find(y => y.value === reason)
+      ?.options?.map(o => ({ key: o.key, value: o.value, label: o.value }));
   
-  useEffect(() => {
-    form.setFieldsValue(data)
-  }, [data]);
+  //useEffect(() => {
+  //  form.setFieldsValue(data)
+  //}, [data, form]);
 
-  useEffect(() => {
-    if (JSON.stringify(inputData) !== JSON.stringify(data)) {
-      setIsModified(true);
-    } else {
-      setIsModified(false);
-    }
-  }, [inputData, data])
+  //useEffect(() => {
+  //  if (JSON.stringify(inputData) !== JSON.stringify(data)) {
+  //    setIsModified(true);
+  //  } else {
+  //    setIsModified(false);
+  //  }
+  //}, [inputData, data, form, setIsModified])
+
+  console.log("remakeItem", remakeItem);
 
   return (
     <div className="flex flex-row gap-2">
@@ -158,50 +111,59 @@ export default function RemakeItem(props) {
           </div>
           <div className="p-2">
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
-                Item No.:
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
+                Original WO:
               </label>
               <div className="flex-1">
-                {data?.itemNo}
+                {remakeItem?.workOrderNo}                
               </div>
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
+                Item:
+              </label>
+              <div className="flex-1">
+                {remakeItem?.item}
+              </div>
+            </div>
+
+            <div className="flex items-center mb-2">
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 Sub Qty:
               </label>
               <div className="flex-1">
-                {data?.subQty}
+                {remakeItem?.subQty}
               </div>
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 Description:
               </label>
               <div className="flex-1">
-                {data?.description}
+                {remakeItem?.description}
               </div>
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 System:
               </label>
               <div className="flex-1">
-                {data?.systemValue}
+                {remakeItem?.system}
               </div>
             </div>
 
             <div className="flex items-center mb-2">
-              <label className="flex-none" style={{ width: '90px', textAlign: 'left' }}>
+              <label className="flex-none" style={{ width: '100px', textAlign: 'left' }}>
                 Size:
               </label>
               <div className="flex-1">
-                {data?.size}
+                {remakeItem?.size}
               </div>
             </div>
-          </div>
+          </div>          
         </div>
       </section>
 
@@ -215,17 +177,17 @@ export default function RemakeItem(props) {
               labelCol={{ flex: '100px' }}
               labelAlign="left"
               label="Product"
-              name="product"
+              name={[field.name, "product"]}
               className="mb-0"
               rules={[{ required: true }]}
             >
               <Select
                 size="small"
                 options={remakeProductOptions}
-                onChange={handleSelectChange}
+                label="Product"
+                name={[field.name, "product"]}
                 style={{ width: '11rem' }}
                 placeholder="Select Product"
-                value={inputData?.product}
               />
             </Form.Item>
 
@@ -233,65 +195,59 @@ export default function RemakeItem(props) {
               labelCol={{ flex: '120px' }}
               labelAlign="left"
               label="Scheduled Date"
-              name="scheduleDate"
+              name={[field.name, "scheduleDate"]}
               className="mb-0"
-            >
-              <span className="">
-                <DatePicker
-                  size="small"
-                  onChange={handleDateChange}
-                  value={inputData?.scheduleDate ? dayjs(inputData.scheduleDate) : null}
-                  format="YYYY-MM-DD"
-                  style={{ width: '11rem' }}
-                />
-              </span>
+            >              
+              <DatePicker
+                size="small"
+                format="YYYY-MM-DD"
+                style={{ width: '11rem' }}
+              />              
             </Form.Item>
           </div>
 
           <div className="flex flex-row justify-between">
             <Form.Item
               labelCol={{ flex: '100px' }}
-              name="departmentResponsible"
               className="mb-0"
               labelAlign="left"
               label="Department"
+              name={[field.name, "departmentResponsible"]}
               rules={[{ required: true }]}
             >
               <Select
                 size="small"
-                value={inputData?.departmentResponsible}
                 options={departmentResponsibleOptions}
-                onChange={(val) => handleSelectChange(val, "departmentResponsible")}
                 style={{ width: '11rem' }}
                 placeholder="Dept. Responsible"
               />
             </Form.Item>
 
-            <Form.Item
-              labelCol={{ flex: '120px' }}
-              name="departmentResponsibleSection"
-              className="mb-0"
-              labelAlign="left"
-              label="Section"
-            >
-              <Select
-                disabled={!remakeDepartmentResponsibleSectionOptions?.length > 0}
-                size="small"
-                value={inputData?.departmentResponsibleSection}
-                options={remakeDepartmentResponsibleSectionOptions}
-                onChange={(val) => handleSelectChange(val, "departmentResponsibleSection")}
-                style={{ width: '11rem' }}
-                placeholder="Section Responsible"
-              />
-            </Form.Item>
+            {remakeDepartmentResponsibleSectionOptions?.length > 0 && 
+              <Form.Item
+                labelCol={{ flex: '120px' }}
+                name={[field.name, "departmentResponsibleSection"]}
+                className="mb-0"
+                labelAlign="left"
+                label="Section"
+              >
+                <Select
+                  disabled={!remakeDepartmentResponsibleSectionOptions?.length > 0}
+                  size="small"
+                  options={remakeDepartmentResponsibleSectionOptions}
+                  style={{ width: '11rem' }}
+                  placeholder="Section Responsible"
+                />
+              </Form.Item>
+            }
           </div>
 
           <Space.Compact style={{ width: '100%', display: 'flex', marginTop: "0.5rem" }}>
             <div className="flex-[3] w-full">
               <Form.Item
                 labelAlign="left"
-                label="Reason"
-                name="reasonCategory"
+                label="Reason"   
+                name={[field.name, "reasonCategory"]}
                 className="mb-0"
                 labelCol={{ flex: '100px' }}
                 rules={[{ required: true }]}
@@ -299,8 +255,6 @@ export default function RemakeItem(props) {
                 <Select
                   size="small"
                   options={reasonCategoryOptions}
-                  value={inputData?.reasonCategory}
-                  onChange={(val) => handleSelectChange(val, "reasonCategory")}
                   placeholder="Category"
                 />
               </Form.Item>
@@ -309,14 +263,12 @@ export default function RemakeItem(props) {
               <Form.Item
                 labelAlign="left"
                 label=""
-                name="reason"
+                name={[field.name, "reason"]}
                 className="mb-0"
               >
                 <Select
                   size="small"
                   options={remakeReasonOptions}
-                  value={inputData?.reason}
-                  onChange={(val) => handleSelectChange(val, "reason")}
                   placeholder="Subcategory"
                 />
               </Form.Item>
@@ -326,14 +278,12 @@ export default function RemakeItem(props) {
                 <Form.Item
                   labelAlign="left"
                   label=""
-                  name="reasonDetail"
+                  name={[field.name, "reasonDetail"]}
                   className="mb-0"
                 >
                   <Select
                     size="small"
                     options={remakeReasonDetailOptions}
-                    value={inputData?.reasonDetail}
-                    onChange={(val) => handleSelectChange(val, "reasonDetail")}
                     placeholder="Detail"
                   />
                 </Form.Item>
@@ -344,15 +294,14 @@ export default function RemakeItem(props) {
             <Form.Item
               labelAlign="left"
               label="Notes"
-              name="notes"
+              name={[field.name, "notes"]}
               className="mb-0"
               labelCol={{ flex: '100px' }}
             >
               <TextArea
                 name={"notes"}
-                value={inputData?.notes}
+                value={"test"}
                 rows={2}
-                onChange={handleInputChange}
               />
             </Form.Item>
           </div>
@@ -362,7 +311,7 @@ export default function RemakeItem(props) {
       <section className="border rounded-sm w-1/5">
         <Attachments
           key={orderId}
-          orderId={inputData.id}
+          //orderId={inputData.id}
         />
       </section>                  
     </div>

@@ -3,7 +3,7 @@ import store from "../redux/store.js";
 import {
   updateResult,
   updateStateChangeResult,
-  updateError,
+  //updateError,
   updateWorkOrderData,
 } from "../redux/orders";
 
@@ -35,7 +35,7 @@ function getConfigOM() {
 
 export async function fetchProductionWorkOrders(startDate, endDate, token) {
   const url = `${BASE_URL}/Production/GetProductionsByRange?startDay=${startDate}&endDay=${endDate}`;
-  store.dispatch(updateError(null)); // Make sure error state is empty before performing a new fetch
+  //store.dispatch(updateError(null)); // Make sure error state is empty before performing a new fetch
 
   //const tokenString = localStorage.getItem("authnav_user");
   //const tokenObject = JSON.parse(tokenString);
@@ -44,7 +44,7 @@ export async function fetchProductionWorkOrders(startDate, endDate, token) {
 
   return axios.get(url, getConfig()).catch((err) => {
     console.log("error: ", err);
-    store.dispatch(updateError(err?.message));
+    //store.dispatch(updateError(err?.message));
     throw new Error(err);
   });
 }

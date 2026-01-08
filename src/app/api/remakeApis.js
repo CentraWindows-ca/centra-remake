@@ -1,7 +1,9 @@
 import axios from "axios";
 import store from "../redux/store.js";
 import { updateResult } from "../redux/orders";
-import { BASE_URL } from "../utils/constants";
+import { BASE_URL, BASE_URL_OM, Production } from "../utils/constants";
+
+const BASE_URL_REMAKE = process.env.NEXT_PUBLIC_REMAKE_API_URL;
 
 function getConfig(loggedInUserEmail) {
   return {
@@ -10,6 +12,27 @@ function getConfig(loggedInUserEmail) {
     "centra-login-email": loggedInUserEmail,
   };
 }
+function getConfigOM() {
+  const token = localStorage.getItem("centra_token");
+
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'centra-login-email': store?.getState()?.app?.userData?.email
+    }
+  }
+}
+
+export async function fetchRemakeWorkOrders(payload) {
+  const url = `${BASE_URL_REMAKE}/Remake/QueryRemakes`;
+  return axios.post(url, payload, getConfig());
+}
+
+export async function fetchRemakeById(payload) {
+  const url = `${BASE_URL_REMAKE}/Remake/QueryRemakes`;
+  return axios.post(url, payload, getConfig());
+}
 
 export async function fetchAllRemakeWorkOrders() {
   const url = `${BASE_URL}/Remake/GetRemakes`;
@@ -17,24 +40,25 @@ export async function fetchAllRemakeWorkOrders() {
 }
 
 export async function fetchRemakeCountByStatus(status) {
-  const url = `${BASE_URL}/Remake/GetRemakeCountByStatus${
-    status && status.length > 0 ? `?status=${status}` : ""
-  }`;
+  const url = `${BASE_URL_REMAKE}/RemakeV2023/GetRemakeCountByStatus${status && status.length > 0 ? `?status=${status}` : ""
+    }`;
+
   return axios.get(url, getConfig());
 }
 
-export async function fetchRemakeWorkOrders(
-  pageNumber,
-  pageSize,
-  status,
-  sortBy,
-  isDescending
-) {
-  const url = `${BASE_URL}/Remake/GetRemakesPaginated?pageNumber=${pageNumber}&pageSize=${pageSize}&status=${status}&sortBy=${sortBy}&isDescending=${
-    isDescending ? "true" : "false"
-  }`;
-  return axios.get(url, getConfig());
-}
+/*
+  export async function fetchRemakeWorkOrders(
+    pageNumber,
+    pageSize,
+    status,
+    sortBy,
+    isDescending
+  ) {
+    const url = `${BASE_URL}/Remake/GetRemakesPaginated?pageNumber=${pageNumber}&pageSize=${pageSize}&status=${status}&sortBy=${sortBy}&isDescending=${isDescending ? "true" : "false"
+      }`;
+    return axios.get(url, getConfig());
+  }
+*/
 
 export async function updateRemakeWorkOrderState(newStatus, moduleId) {
   const url = `${BASE_URL}/Common/Transit`;
@@ -64,8 +88,41 @@ export async function updateRemakeWorkOrderState(newStatus, moduleId) {
 }
 
 export async function fetchRemakeWorkOrderById(id) {
-  const url = `${BASE_URL}/Remake/GetRemakeById?remakeId=${id}`;
+  const url = `${BASE_URL_REMAKE}/Remake/GetRemakeById?remakeId=${id}`;
   return axios.get(url, getConfig());
+}
+
+export async function createRemake(payload) {
+  const url = `${BASE_URL_REMAKE}/Remake/CreateRemakes`;
+
+  console.log("payload ", payload)
+
+  try {
+    const response = await axios.post(url, payload, getConfig());
+
+    if (response.data) {
+      store.dispatch(
+        updateResult({
+          type: "success",
+          message: "Remake created successfully.",
+          source: "Remake Work Order",
+        })
+      );
+    } else {
+      store.dispatch(
+        updateResult({
+          type: "error",
+          message: "Create remake failed.",
+          source: "Remake Work Order",
+        })
+      );
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating remake:", error);
+    throw error;
+  }
 }
 
 export async function updateRemakeWorkOrder(data) {
@@ -125,5 +182,23 @@ export async function deleteRemakeWorkOrder(loggedInUserEmail, data) {
   } catch (error) {
     console.error("Error deleting Remake:", error);
     throw error;
+  }
+}
+
+export async function fetchProductionWindowAvailableForRemake() {
+  const url = `${BASE_URL_OM}/ProdData/GetWindowsWorkOrderFieldsAsync?columns=m_MasterId&columns=m_WorkOrderNo&columns=w_Status&status=In-Progress`;
+
+  try {
+    const response = await axios.get(url, {
+      ...getConfigOM()
+    });
+
+    return {
+      list: response.data,
+      department: Production
+    };
+  } catch (error) {
+    //logger.error("error: ", err);
+    console.error("Error fetching production windows by WO:", error);
   }
 }

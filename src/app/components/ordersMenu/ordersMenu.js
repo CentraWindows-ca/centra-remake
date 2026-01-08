@@ -29,6 +29,7 @@ export default function OrdersMenu(props) {
   return (
     <>
       <div style={{ ...style }} className={styles.ordersMenuContainer}>
+        {/*
         {drawerOpen ? (
           <div className={styles.accordionRoot}>
             <div className="flex flex-col space-y-2 text-sm mt-4">
@@ -41,6 +42,7 @@ export default function OrdersMenu(props) {
             </div>
           </div>
         ) : (
+          */}
           <div className="flex flex-col space-y-2 text-sm mt-[9px] ml-[5px] mt-4">
             <OrdersMenuList
               selectedStatus={statusView}
@@ -49,7 +51,7 @@ export default function OrdersMenu(props) {
               statusOptions={statusOptions}
             />
           </div>
-        )}
+        {/*)}*/}
       </div>
     </>
   );

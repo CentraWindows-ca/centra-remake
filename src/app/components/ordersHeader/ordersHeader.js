@@ -185,37 +185,38 @@ export default function OrdersHeader(props) {
               />
             </div>
           </div>
-          <div>
-            <Popover
-              content={() => <Filters setShowFilter={setShowFilter} />}
-              trigger="click"
-              open={showFilter}
-              onOpenChange={handleFilterClick}
-              placement="bottomRight"
-            >
-              <Badge
-                title="Some filters have been applied."
-                dot={
-                  appliedFilteredWorkOrders?.length > 0 || isAFilterApplied()
-                }
-                className="ml-[8px] mt-[4px]"
+          {false &&
+            <div>
+              <Popover
+                content={() => <Filters setShowFilter={setShowFilter} />}
+                trigger="click"
+                open={showFilter}
+                onOpenChange={handleFilterClick}
+                placement="bottomRight"
               >
-                <Tooltip title="Filters">
-                  <Button
-                    style={{ outline: "none" }}
-                    className="pt-0 pb-0 pr-[5px] pl-[5px] border-none"
-                    type="secondary"
-                  >
-                    <i
-                      className={`fa-solid fa-filter ${
-                        showFilter ? "text-blue-500" : "text-gray-500"
-                      } hover:text-blue-500`}
-                    ></i>
-                  </Button>
-                </Tooltip>
-              </Badge>
-            </Popover>
-          </div>
+                <Badge
+                  title="Some filters have been applied."
+                  dot={
+                    appliedFilteredWorkOrders?.length > 0 || isAFilterApplied()
+                  }
+                  className="ml-[8px] mt-[4px]"
+                >
+                  <Tooltip title="Filters">
+                    <Button
+                      style={{ outline: "none" }}
+                      className="pt-0 pb-0 pr-[5px] pl-[5px] border-none"
+                      type="secondary"
+                    >
+                      <i
+                        className={`fa-solid fa-filter ${showFilter ? "text-blue-500" : "text-gray-500"
+                          } hover:text-blue-500`}
+                      ></i>
+                    </Button>
+                  </Tooltip>
+                </Badge>
+              </Popover>
+            </div>
+          }
         </div>
 
         <div

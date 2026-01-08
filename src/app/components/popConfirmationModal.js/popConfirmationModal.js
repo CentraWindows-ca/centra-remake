@@ -25,9 +25,7 @@ export default function PopConfirmationModal(props) {
 
   const { isReadOnly } = useSelector((state) => state.app);
 
-  return (
-    <div></div>
-    {/*
+  {/*
     <Modal
       open={open}
       onClose={onCancel}
@@ -97,5 +95,8 @@ export default function PopConfirmationModal(props) {
       </Box>
     </Modal>
     */}
+
+  return (
+    <div></div>
   );
 }

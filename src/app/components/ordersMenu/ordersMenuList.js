@@ -17,8 +17,9 @@ export default function OrdersMenuList(props) {
   const [totalCount, setTotalCount] = useState(0);
 
   const handleStatusFilterChange = (status, assignedToMe = false) => {
+    console.log("status ", status)
     if (status.length > 0)
-      router.push(`?status=${status}`, undefined, {
+      router.push(`?RemakeStatus=${status}`, undefined, {
         shallow: true,
       });
     else {
@@ -95,7 +96,7 @@ export default function OrdersMenuList(props) {
           <OrdersMenuItem
             key={`menu_item_status_${index}_filter`}
             selected={statusView === status.key && !assignedToMe}
-            onClick={() => handleStatusFilterChange(status.key)}
+            onClick={() => handleStatusFilterChange(status.value)}
           >
             {drawerOpen ? (
               <>

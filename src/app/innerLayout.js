@@ -6,7 +6,11 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Sidebar from "app/components/sidebar/sidebar";
 import Tooltip from "app/components/tooltip/tooltip";
 
-import AuthNav from "@centrawindows-ca/authnav";
+
+import dynamic from "next/dynamic";
+const AuthNav = dynamic(() => import("@centrawindows-ca/authnav"), {
+ ssr: false,
+  });
 import { useAuthData } from "../context/authContext";
 
 import {

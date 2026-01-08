@@ -9,7 +9,6 @@ import { Popconfirm, Popover, Modal, Form } from "antd";
 import styles from "./home.module.css";
 
 import { updateAppMode, updateDrawerOpen } from "app/redux/app";
-import { useQuery } from "react-query";
 
 import {
   updateDepartment,
@@ -19,7 +18,7 @@ import {
   closeModal,
   updateOrders,
   updateStatusCount,
-  updateTotal
+  updateTotal  
 } from "app/redux/orders";
 
 import { updateResult } from "app/redux/orders";
@@ -27,18 +26,17 @@ import { updateResult } from "app/redux/orders";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { AppModes, RemakeRowStates } from "app/utils/constants";
 import OrdersHeader from "app/components/ordersHeader/ordersHeader";
-import OrdersTable from "app/components/ordersTable/ordersTable";
+import RemakeTable from "app/components/remakeTable/remakeTable";
 import UserSelectField from "app/components/users/userSelect";
 import OrderStatus from "app/components/remake/orderStatus";
 import Tooltip from "app/components/tooltip/tooltip";
-import CreateRemakeOrder from "app/features/remake/createRemakeOrder";
-import EditRemakeOrder from "app/features/remake/editRemakeOrder";
+//import CreateRemakeOrder from "app/features/remake/createRemakeOrder";
+import EditRemakeForm from "app/features/remake/EditRemakeForm";
 import CreateRemake from "app/features/remake/CreateRemake";
+import useRemakes from "app/hooks/useRemakes";
 
 import {
-  fetchAllRemakeWorkOrders,
   fetchRemakeCountByStatus,
-  fetchRemakeWorkOrders,
   updateRemakeWorkOrderState,
   deleteRemakeWorkOrder,
   updateRemakeWorkOrder
@@ -88,8 +86,8 @@ const CustomModal = styled(Modal).attrs({
 `;
 
 export default function Remakes() {
-  const moduleName = "Remake";
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useDispatch();
 
   const [editRemakeForm] = Form.useForm();
@@ -117,6 +115,7 @@ export default function Remakes() {
   const modeParam = searchParams.get("mode") ?? "";
   const orderIdParam = searchParams.get("orderId") ?? "";
   const openCreateRemakeParam = searchParams.get("create-remake") ?? false;
+  const sortDirectionParam = searchParams.get("sort-direction") || "asc";
 
   const statusOptions = getStatusOptions("Remake");
   const statusOptionsRef = useRef(statusOptions); //TODO: see if we still need this
@@ -133,51 +132,13 @@ export default function Remakes() {
     pageSize,
   } = useSelector((state) => state.orders);
 
-  const fetchOrders = async () => {
-    //const result = await fetchRemakeWorkOrders(
-    //  pageNumber,
-    //  pageSize,
-    //  statusView ? statusOptions.find((x) => x.key === statusView).value : "",
-    //  sort.sortBy,
-    //  sort.isDescending
-    //);
-
-    const result = await fetchAllRemakeWorkOrders();
-
-    console.log("result ", result)
-
-    let _statusCountPromises = statusOptions.map(async (_status) => {
-      let _count = await fetchStatusCount(_status.value);
-
-      return {
-        status: _status.value,
-        count: _count,
-      };
-    });
-
-    // Wait for all promises to resolve
-    let _statusCount = await Promise.all(_statusCountPromises);
-
-    dispatch(updateStatusCount(_statusCount));
-    dispatch(updateTotal(result.data.totalCount));
-    //return result.data.data;
-    return result.data;
-  };
-
-  const fetchStatusCount = async (status) => {
-    const result = await fetchRemakeCountByStatus(status);
-    return result.data;
-  };
-
   const {
-    isLoading: isLoadingOrders,
-    data: ordersData,
-    isFetching: isFetchingOrders,
-    refetch: refetchOrders,
-  } = useQuery(["remake_workorders", department, statusView], fetchOrders, {
-    refetchOnWindowFocus: false,
-  });
-
+    remakes,
+    isLoadingOrders,
+    isFetchingOrders,
+    refetchOrders
+  } = useRemakes();
+   
   const isLoading = isLoadingOrders || isFetchingOrders;
 
   // when user updates order status
@@ -197,6 +158,7 @@ export default function Remakes() {
   // when user clicks on an order
   const onEditClick = useCallback(
     (orderId) => {
+      console.log("orderId ", orderId)
       router.push(
         `${statusView.length > 0 ? `?status=${statusView}&` : "?"
         }orderId=${orderId}&mode=edit`,
@@ -219,7 +181,7 @@ export default function Remakes() {
     }
     setPopupOpen(false);
     setSelectedOrderId(null);
-  }, [selectedRemakeOrderId, deleteRemakeWorkOrder, loggedInUser]);
+  }, [selectedRemakeOrderId, loggedInUser]);
 
   const handlePopupCancel = useCallback(() => {
     setPopupOpen(false);
@@ -276,9 +238,9 @@ export default function Remakes() {
     setOpenPopoverId(orderId);
   };
 
-  const handleClosePopover = () => {
+  const handleClosePopover = useCallback(() => {
     setOpenPopoverId(null);
-  };
+  }, [setOpenPopoverId]);
 
   const PopoverContent = useCallback((order) => {
     return (
@@ -286,7 +248,7 @@ export default function Remakes() {
         <div
           className="text-xs w-full hover:underline hover:text-sky-700 p-1 hover:cursor-pointer rounded"
           onClick={() => {
-            onEditClick(order.id);            
+            onEditClick(order.remakeId);            
             handleClosePopover(); // close popover
           }}
         >
@@ -296,7 +258,7 @@ export default function Remakes() {
         <div
           className="text-xs w-full hover:underline hover:text-sky-700 p-1 hover:cursor-pointer rounded"
           onClick={() => {
-            onEditClick(order.id);
+            onEditClick(order.remakeId);
             setRemakeItem(order);
             handleClosePopover(); // close popover
           }}
@@ -328,7 +290,7 @@ export default function Remakes() {
         </div>
       </div>
     );
-  }, [onEditClick, onShareLinkClick, onDeleteClick, handleClosePopover, moduleName]);
+  }, [onEditClick, onShareLinkClick, onDeleteClick, handleClosePopover]);
 
   const handleAssignedToChange = useCallback((user, order) => {
     setFilteredOrders((prevOrders) => {
@@ -351,7 +313,7 @@ export default function Remakes() {
         refetchOrders();
       });
     }
-  }, [filteredOrders]);
+  }, [filteredOrders, refetchOrders]);
 
   const columns = [
     {
@@ -360,37 +322,63 @@ export default function Remakes() {
       key: `id`,
       width: 90,
       fixed: 'left',
-      render: (remakeId, order) => (
+      render: (remakeId, row) => (
         <Popover
           placement="right"
           title=""
-          content={PopoverContent(order)}
+          content={PopoverContent(row)}
           trigger="click"
-          open={openPopoverId === order?.id}
-          onOpenChange={(visible) => {
-            setOpenPopoverId(visible ? order?.id : null);
+          open={openPopoverId === row?.key && row?.key !== "filter-row"}
+          onOpenChange={(visible) => {            
+            setOpenPopoverId(visible ? row?.key : null);
           }}
         >
           <span
             className="text-sky-700 hover:underline hover:cursor-pointer"
-            onClick={() => handlePopoverToggle(order?.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handlePopoverToggle(row?.key)
+            }}
           >
             {remakeId}
           </span>
         </Popover>
       ),
-      sorter: (a, b) => parseInt(a.remakeId) - parseInt(b.remakeId),
+      //sorter: (a, b) => parseInt(a.remakeId) - parseInt(b.remakeId),
+      sorter: true
+    },
+    {
+      title: `Original WO #`,
+      dataIndex: "originalWorkOrderNo",
+      key: "originalWorkOrderNo",
+      width: 120,
+      sorter: true
+      //render: (originalWorkOrderNo, order, index) => 
+      //  index === 0
+      //    ? originalWorkOrderNo
+      //    :
+      //  (<Tooltip title={`Open ${originalWorkOrderNo} in New Tab`}>
+      //      <div
+      //        className="flex items-center hover:text-centraBlue cursor-pointer hover:underline min-h-[30px]"
+      //        onClick={() => openWOLink(originalWorkOrderNo)}
+      //      >
+      //        {originalWorkOrderNo || ""}
+      //      </div>
+      //    </Tooltip>
+      //  )
     },
     {
       title: `WO #`,
       dataIndex: "workOrderNo",
       key: "workOrderNo",
       width: 120,
-      render: (originalWorkOrderNo, order, index) => 
+      sorter: true,
+      render: (originalWorkOrderNo, order, index) =>
         index === 0
           ? originalWorkOrderNo
           :
-        (<Tooltip title={`Open ${originalWorkOrderNo} in New Tab`}>
+          (<Tooltip title={`Open ${originalWorkOrderNo} in New Tab`}>
             <div
               className="flex items-center hover:text-centraBlue cursor-pointer hover:underline min-h-[30px]"
               onClick={() => openWOLink(originalWorkOrderNo)}
@@ -398,12 +386,12 @@ export default function Remakes() {
               {originalWorkOrderNo || ""}
             </div>
           </Tooltip>
-        )
-      },    
+          )
+    }, 
     {
       title: `Item`,
-      dataIndex: "itemNo",
-      key: "itemNo",
+      dataIndex: "item",
+      key: "item",
       width: 120
     },
     {
@@ -415,9 +403,10 @@ export default function Remakes() {
     },
     {
       title: `System`,
-      dataIndex: "systemValue",
-      key: "systemValue",
+      dataIndex: "system",
+      key: "system",
       width: 120,
+      sorter: true
     },
     {
       title: `Size`,
@@ -430,13 +419,26 @@ export default function Remakes() {
       dataIndex: "description",
       key: "description",
       ellipsis: true,
+      sorter: true
     },
     {
-      title: `Product`,
-      dataIndex: "product",
-      key: "product",
-      width: 150,
+      title: `Notes`,
+      dataIndex: "notes",
+      key: "notes",
+      ellipsis: true,
     },
+    //{
+    //  title: `Window Product`,
+    //  dataIndex: "windowProduct",
+    //  key: "windowProduct",
+    //  width: 150,
+    //},
+    //{
+    //  title: `Door Product`,
+    //  dataIndex: "doorProduct",
+    //  key: "doorProduct",
+    //  width: 150,
+    //},
     //{
     //  title: "City",
     //  dataIndex: "city",
@@ -448,23 +450,26 @@ export default function Remakes() {
       dataIndex: "scheduleDate",
       key: "scheduleDate",
       width: 130,
-      render: (date, record, index) =>
-        index === 0
-          ? date
-          : (
-            <div className="text-gray-400">
-              {moment(date).format("ll")}
-            </div>
-          ),
+      render: (date, record, index) => {
+        if (!date) return null;
+
+        if (index === 0) return date;
+
+        return (
+          <div className="text-gray-400">
+            {moment(date).format("ll")}
+          </div>
+        );
+      },
       defaultSortOrder: "descend",
-      sorter: (a, b) =>
-        moment(a.scheduleDate).valueOf() - moment(b.scheduleDate).valueOf(),
+      sorter: true
     },
     {
       title: "Assigned To",
       dataIndex: "assignedTo",
       key: "assignedTo",
       width: 180,
+      sorter: true,
       render: (assignedTo, record, index) =>
         index === 0
           ? assignedTo
@@ -530,16 +535,16 @@ export default function Remakes() {
   }, [dispatch, openCreateRemakeParam]);
 
   // for fetching orders
-  useEffect(() => {
-    if (ordersData) {
-      dispatch(updateOrders(ordersData));
+  useEffect(() => {    
+    if (remakes) {
+      dispatch(updateOrders(remakes));
     }
-  }, [ordersData, dispatch]);
+  }, [remakes, dispatch]);
 
   // for status filter changes
   useEffect(() => {
     setSelectedRows([]);
-    if (orders && statusOptionsRef.current) {
+    if (orders && statusOptionsRef.current) {      
       setFilteredOrders(() => {
         let currentStatus =
           statusView.length > 0
@@ -548,12 +553,17 @@ export default function Remakes() {
 
         let _orders = currentStatus
           ? orders
-            .map((o, index) => ({
+            ?.data
+            ?.items
+            ?.map((o, index) => ({
               ...o,
               key: index,
             }))
             .filter((o) => o.status === currentStatus.value)
-          : orders.map((o, index) => ({
+          : orders
+            ?.data
+            ?.items
+            ?.map((o, index) => ({
             ...o,
             key: index,
           }));
@@ -597,11 +607,33 @@ export default function Remakes() {
       updateRemakeWorkOrder([_remakeItem]);
       onCloseClick();
     }
-  }, [remakeItem]);
+  }, [remakeItem, onCloseClick]);
 
   const handleFinishFailed = () => {
     console.log("Show error message")
   }
+
+  const onTableChange = (pagination, filters, sorter) => {
+    const s = Array.isArray(sorter)
+      ? sorter.find(x => x?.order) // pick the active one
+      : sorter;
+
+    // No active sort → remove params (or keep your defaults)
+    if (!s?.order) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("sort-by");
+      params.delete("sort-direction");
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("sort-by", String(s.field ?? s.columnKey));
+    params.set("sort-direction", s.order === "ascend" ? "asc" : "desc");
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  }
+  
+  const noOfPages = remakes?.data?.totalPages;
 
   return (
     <div className={styles.root}>
@@ -618,12 +650,14 @@ export default function Remakes() {
         selectedStatus={statusView}
         states={RemakeRowStates}
       />
-      <OrdersTable
+      <RemakeTable
         columns={columns}
         data={filteredOrders}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
         isLoading={tableLoading}
+        noOfPages={noOfPages}
+        onChange={onTableChange}
       />
 
       <CustomModal
@@ -644,6 +678,8 @@ export default function Remakes() {
         okText="Save"
         cancelText="Cancel"
         okButtonProps={{ disabled: !isEditFormModified }}
+        footer={null}
+        centered
       >
         <CreateRemake />
       </CustomModal>
@@ -657,8 +693,9 @@ export default function Remakes() {
         okText="Save"
         cancelText="Cancel"
         okButtonProps={{ disabled: !isEditFormModified }}
+        centered
       >
-        <EditRemakeOrder
+        <EditRemakeForm
           form={editRemakeForm}
           orderId={selectedOrderId}
           onClose={onCloseClick}

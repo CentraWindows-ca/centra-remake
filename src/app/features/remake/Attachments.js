@@ -70,7 +70,7 @@ export default function Attachments(props) {
         }
       }
     }
-  }, [uploadFileList, orderId]);
+  }, [uploadFileList, orderId, refetchAttachments, setShowUpload, setUploadFileList]);
 
   const getFileIcon = (fileType) => {
     if (fileType?.includes("pdf")) {
@@ -168,6 +168,7 @@ export default function Attachments(props) {
                   {isImage && false && (
                     <div style={{ display: 'none' }}>
                       <Image
+                        alt="test"
                         style={{ height: 0 }}
                         preview={{
                           visible: previewVisible,
