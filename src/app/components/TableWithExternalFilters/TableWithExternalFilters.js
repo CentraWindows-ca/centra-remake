@@ -1,7 +1,8 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Table, Input, Tag, Typography } from "antd";
 const { Text } = Typography;
+
 import { capitalizeWords } from "app/utils/utils";
 
 export default function TableWithExternalFilters(props) {
@@ -23,11 +24,20 @@ export default function TableWithExternalFilters(props) {
     }));
   };
 
+  const propagateFilters = useCallback((filters) => {
+    onFilterChange(filters);
+  }, [onFilterChange]);
+
+  const removeFilter = (key) => {
+    setFilters(prev => {
+      const { [key]: _, ...rest } = prev;
+      return rest;
+    });
+  };
+
   useEffect(() => {
-    if (Object.keys(filters).length > 0) {
-      onFilterChange(filters);
-    }
-  }, [filters, onFilterChange]);
+    propagateFilters(filters)
+  }, [filters]);
 
   const filterRow = columns.reduce(
     (row, col) => {
@@ -43,7 +53,7 @@ export default function TableWithExternalFilters(props) {
             handleFilterChange(colKey, e.target.value);
           }}
           bordered={false}
-          className="text-xs text-blue-700 p-0"
+          className="text-xs text-purple-700 p-0"
         />
       );
       return row;
@@ -55,14 +65,7 @@ export default function TableWithExternalFilters(props) {
     filterRow,
     ...(Array.isArray(data) ? data : [])
   ];
-
-  const removeFilter = (key) => {
-    setFilters(prev => {
-      const { [key]: _, ...rest } = prev;
-      return rest;
-    });
-  };
-
+  
   const hasFilters = !Object.values(filters).every(v => v == null || v === '' || (Array.isArray(v) && !v.length))
 
   return (
@@ -104,12 +107,12 @@ export default function TableWithExternalFilters(props) {
               .filter(([, value]) => value !== '' && value !== null && value !== undefined)
               .map(([key, value]) => (
                 <Tag
-                  color="geekblue"
+                  color="purple"
                   key={key}
                   closeIcon={<i className="fa-solid fa-xmark" />}
                   onClose={() => removeFilter(key)}
                 >
-                  <span className="text-blue-600 pr-1">
+                  <span className="text-purple-600 pr-1">
                     {capitalizeWords(key)}: {String(value)}
                   </span>
                 </Tag>

@@ -91,9 +91,9 @@ export default function RemakeTable(props) {
             <Pagination
               onChange={onPageChange}
               total={noOfPages}
-              //showTotal={(total) => (
-              //  <div className="text-sm font-semibold mt-2">{` ${total.toLocaleString()} Total`}</div>
-              //)}
+              showTotal={(total) => (
+                <div className="text-sm font-semibold mt-2">{` ${total.toLocaleString()} Total`}</div>
+              )}
               current={Number.parseInt(pageParam || 1, 10) || 1}
               pageSize={1}
             />
