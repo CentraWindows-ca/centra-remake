@@ -1,5 +1,5 @@
 ﻿"use client";
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import RemakeItem from "app/features/remake/RemakeItem";
 
 import {
@@ -10,6 +10,7 @@ import { Form, Button, Alert } from "antd";
 
 export default function RemakeForm(props) {
   const { selectedRows, originalWO, setShowNewRemakeForm } = props;
+  const [ hasError, setHasError ] = useState(false);
 
   const [newRemakeForm] = Form.useForm();
   // TODO: Extract form outside
@@ -87,8 +88,9 @@ export default function RemakeForm(props) {
     }    
   }
 
-  const handleFailed = (x) => {
-    console.log(x)
+  const handleFailed = (err) => {
+    console.log("Error: ", err)
+    setHasError(true);
   }
 
   return (
@@ -101,7 +103,14 @@ export default function RemakeForm(props) {
       <div className="mb-2">
         {false && <i className="fa-solid fa-circle-plus text-gray-400"></i>}
         <span className="text-blue-700 font-semibold">{`Create Remake`}</span>
-        <Alert message="One or more required fields are empty. Please review the highlighted fields." type="error" size="small" className="p-1 mt-2"/>
+        {hasError &&
+          <Alert
+            message="One or more required fields are empty. Please review the highlighted fields."
+            type="error"
+            size="small"
+            className="p-1 mt-2"
+          />
+        }
         {false && <span className="font-semibold text-blue-500 text-base">{`${selectedRows?.[0].workOrderNo}`}</span>}
       </div>
       <div className="max-h-[75vh] overflow-y-auto">
