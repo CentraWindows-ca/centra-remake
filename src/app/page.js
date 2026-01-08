@@ -450,18 +450,19 @@ export default function Remakes() {
       dataIndex: "scheduleDate",
       key: "scheduleDate",
       width: 130,
-      render: (date, record, index) =>
-        index === 0
-          ? date
-          : (
-            <div className="text-gray-400">
-              {moment(date).format("ll")}
-            </div>
-          ),
+      render: (date, record, index) => {
+        if (!date) return null;
+
+        if (index === 0) return date;
+
+        return (
+          <div className="text-gray-400">
+            {moment(date).format("ll")}
+          </div>
+        );
+      },
       defaultSortOrder: "descend",
       sorter: true
-      //sorter: (a, b) =>
-      //  moment(a.scheduleDate).valueOf() - moment(b.scheduleDate).valueOf(),
     },
     {
       title: "Assigned To",
