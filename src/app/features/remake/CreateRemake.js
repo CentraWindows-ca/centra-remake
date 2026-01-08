@@ -179,8 +179,6 @@ export default function CreateRemakeHome(props) {
 
   console.log("selectedRows ", selectedRows);
   console.log("woSelectList ", woSelectList);
-  console.log("yyyyyy ", wo);
-
   return (
     <div className="h-[80vh]">
       <div className="mb-3 flex flex-row justify-between">
@@ -201,11 +199,12 @@ export default function CreateRemakeHome(props) {
           })}
           style={{ width: 250 }}
           value={selectedWONumber}
+          loading={woSelectList?.length === 0}
         />
         <Button
           size="small"
           type="primary"
-          disabled={selectedRowKeys.length === 0}
+          disabled={!selectedRows || selectedRows.length === 0}
           onClick={() => setShowNewRemakeForm(true)}
         >
           Remake
@@ -227,6 +226,7 @@ export default function CreateRemakeHome(props) {
         width={1500}
         centered
         footer={null}
+        destroyOnClose
       >
         <RemakeForm
           originalWO={wo}
