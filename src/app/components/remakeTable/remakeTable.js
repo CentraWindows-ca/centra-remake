@@ -23,8 +23,8 @@ export default function RemakeTable(props) {
     selectedRows,
     setSelectedRows,
     isLoading,
-    onCreateClick,
-    noOfPages,
+    noOfPages,    
+    onChange
   } = props;
 
   const router = useRouter();
@@ -46,25 +46,11 @@ export default function RemakeTable(props) {
     onChange: onSelectChange,
   };
 
-  const onTableChange = (pagination, filters, sorter) => {
-    if (sorter.hasOwnProperty("column")) {
-      dispatch(
-        updateSortOrder({
-          sortBy: sorter.field,
-          isDescending: sorter.order === "descend",
-        })
-      );
-    }
-  };
-
   const onPageChange = useCallback((page, pageSize) => {
-    //dispatch(updatePageNumber(page));
-    //dispatch(updatePageSize(pageSize));
-    //console.log("page ", page)
-    //console.log("pageSize ", pageSize)
+    const params = new URLSearchParams(searchParams.toString());
     params.set("page", page);
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  }, []);
+  }, [searchParams, router, pathname]);
   
   const onFilterChange = useCallback((filters) => {
     const params = new URLSearchParams();
@@ -75,8 +61,8 @@ export default function RemakeTable(props) {
     });
 
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  },[]);
-
+  }, []);
+  
   useEffect(() => {
     if (!noOfPages) return;
 
@@ -91,8 +77,6 @@ export default function RemakeTable(props) {
       });
     }
   }, [noOfPages, pageParam, searchParams, pathname, router]);
-
-  console.log("data ", data)
 
   return (
     <div className={"bg-white rounded-sm p-3 flex flex-col justify-between h-[calc(100vh-120px)]"}>
@@ -120,7 +104,7 @@ export default function RemakeTable(props) {
           data={data}
           pagination={false}
           loading={isLoading}
-          onChange={onTableChange}
+          onChange={onChange}
           onFilterChange={onFilterChange}
         />
       </div>

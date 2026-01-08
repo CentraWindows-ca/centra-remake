@@ -87,6 +87,7 @@ const CustomModal = styled(Modal).attrs({
 
 export default function Remakes() {
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useDispatch();
 
   const [editRemakeForm] = Form.useForm();
@@ -114,6 +115,7 @@ export default function Remakes() {
   const modeParam = searchParams.get("mode") ?? "";
   const orderIdParam = searchParams.get("orderId") ?? "";
   const openCreateRemakeParam = searchParams.get("create-remake") ?? false;
+  const sortDirectionParam = searchParams.get("sort-direction") || "asc";
 
   const statusOptions = getStatusOptions("Remake");
   const statusOptionsRef = useRef(statusOptions); //TODO: see if we still need this
@@ -344,12 +346,14 @@ export default function Remakes() {
         </Popover>
       ),
       //sorter: (a, b) => parseInt(a.remakeId) - parseInt(b.remakeId),
+      sorter: true
     },
     {
       title: `Original WO #`,
       dataIndex: "originalWorkOrderNo",
       key: "originalWorkOrderNo",
       width: 120,
+      sorter: true
       //render: (originalWorkOrderNo, order, index) => 
       //  index === 0
       //    ? originalWorkOrderNo
@@ -369,6 +373,7 @@ export default function Remakes() {
       dataIndex: "workOrderNo",
       key: "workOrderNo",
       width: 120,
+      sorter: true,
       render: (originalWorkOrderNo, order, index) =>
         index === 0
           ? originalWorkOrderNo
@@ -401,6 +406,7 @@ export default function Remakes() {
       dataIndex: "system",
       key: "system",
       width: 120,
+      sorter: true
     },
     {
       title: `Size`,
@@ -413,6 +419,7 @@ export default function Remakes() {
       dataIndex: "description",
       key: "description",
       ellipsis: true,
+      sorter: true
     },
     {
       title: `Notes`,
@@ -452,6 +459,7 @@ export default function Remakes() {
             </div>
           ),
       defaultSortOrder: "descend",
+      sorter: true
       //sorter: (a, b) =>
       //  moment(a.scheduleDate).valueOf() - moment(b.scheduleDate).valueOf(),
     },
@@ -460,6 +468,7 @@ export default function Remakes() {
       dataIndex: "assignedTo",
       key: "assignedTo",
       width: 180,
+      sorter: true,
       render: (assignedTo, record, index) =>
         index === 0
           ? assignedTo
@@ -603,6 +612,26 @@ export default function Remakes() {
     console.log("Show error message")
   }
 
+  const onTableChange = (pagination, filters, sorter) => {
+    const s = Array.isArray(sorter)
+      ? sorter.find(x => x?.order) // pick the active one
+      : sorter;
+
+    // No active sort → remove params (or keep your defaults)
+    if (!s?.order) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("sort-by");
+      params.delete("sort-direction");
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("sort-by", String(s.field ?? s.columnKey));
+    params.set("sort-direction", s.order === "ascend" ? "asc" : "desc");
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  }
+  
   const noOfPages = remakes?.data?.totalPages;
 
   return (
@@ -627,6 +656,7 @@ export default function Remakes() {
         setSelectedRows={setSelectedRows}
         isLoading={tableLoading}
         noOfPages={noOfPages}
+        onChange={onTableChange}
       />
 
       <CustomModal
